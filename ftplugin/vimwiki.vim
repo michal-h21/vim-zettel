@@ -11,7 +11,12 @@ function! s:get_fzf_filename(line)
 endfunction
 
 " make fulltext search in all VimWiki files using FZF
-command! -bang -nargs=* Zettel call fzf#vim#ag(<q-args>, '--skip-vcs-ignores', {'down': '~40%','sink':function('<sid>get_fzf_filename'),'dir':g:zettel_dir,'options':'--exact'})
+command! -bang -nargs=* Zettel call fzf#vim#ag(<q-args>, 
+      \'--skip-vcs-ignores', {
+      \'down': '~40%',
+      \'sink':function('<sid>get_fzf_filename'),
+      \'dir':g:zettel_dir,
+      \'options':'--exact'})
 
 
 " remap [[ to start fulltext search

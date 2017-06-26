@@ -11,7 +11,7 @@ function! s:get_fzf_filename(line)
 endfunction
 
 " make fulltext search in all VimWiki files using FZF
-command! -bang -nargs=* Zettel call fzf#vim#ag(<q-args>, 
+command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
       \'--skip-vcs-ignores', {
       \'down': '~40%',
       \'sink':function('<sid>get_fzf_filename'),
@@ -20,5 +20,5 @@ command! -bang -nargs=* Zettel call fzf#vim#ag(<q-args>,
 
 
 " remap [[ to start fulltext search
-inoremap [[ [[<esc>:Zettel<CR>
+inoremap [[ [[<esc>:ZettelSearch<CR>
 

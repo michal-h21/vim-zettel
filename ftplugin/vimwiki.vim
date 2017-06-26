@@ -18,6 +18,13 @@ command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>,
       \'dir':g:zettel_dir,
       \'options':'--exact'})
 
+function! s:zettel_new()
+  let format = strftime("%y%m%d-%H%M")
+  " this doesn't work
+  execute 'normal :e' format
+endfunction
+
+command! ZettelNew execute <sid>zettel_new()
 
 " remap [[ to start fulltext search
 inoremap [[ [[<esc>:ZettelSearch<CR>

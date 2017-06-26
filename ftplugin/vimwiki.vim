@@ -6,8 +6,11 @@ let g:zettel_dir = VimwikiGet('path',g:vimwiki_current_idx)
 function! s:get_fzf_filename(line)
   " the filename is separated by : from rest of the line
   let parts =  split(a:line,":")
+  " remove the extension
+  let filename = parts[0]
+  let fileparts = split(filename, '\V.')
   " insert the filename into current buffer
-  execute 'normal a' parts[0]
+  execute 'normal a' fileparts[0]
 endfunction
 
 " make fulltext search in all VimWiki files using FZF

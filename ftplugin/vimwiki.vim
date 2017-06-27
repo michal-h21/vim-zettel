@@ -26,7 +26,8 @@ function! s:get_fzf_filename(line)
   let filename = parts[0]
   let title = <sid>get_zettel_title(filename)
   let fileparts = split(filename, '\V.')
-  " insert the filename into current buffer
+  " insert the filename and title into the current buffer
+  " ToDo: make the format of inserted link configurable
   execute 'normal a' join(fileparts[0:-2],".") . "|" . title
 endfunction
 

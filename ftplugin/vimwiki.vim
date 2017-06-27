@@ -1,6 +1,9 @@
 " get active VimWiki directory
 let g:zettel_dir = VimwikiGet('path',g:vimwiki_current_idx)
-let g:zettel_format = "%y%m%d-%H%M"
+" format of a new zettel filename
+if !exists('g:zettel_format')
+  let g:zettel_format = "%y%m%d-%H%M.wiki"
+endif
 
 " vimwiki files can have titles in the form of %title title content
 function! s:get_zettel_title(filename)

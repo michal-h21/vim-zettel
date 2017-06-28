@@ -3,7 +3,7 @@ function! zettel#vimwiki#zettel_new()
   echom("new zettel". format)
   " this doesn't work
   " execute 'normal :e' format
-  execute "edit " . format
+  execute "edit " . g:zettel_dir . format
 endfunction
 
 echom("Nahrávám autoload")

@@ -1,0 +1,11 @@
+%title Poznámka uložená bez plně nahrané vimwiki
+
+Tuhle poznámku jsem vytvořil pomocí 
+
+{{{ 
+vim -c "set ft=vimwiki" 
+}}}
+
+Funkce ZettelNew je potom přístupná
+
+

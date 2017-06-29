@@ -48,4 +48,3 @@ command! ZettelNew call zettel#vimwiki#zettel_new()
 " remap [[ to start fulltext search
 inoremap [[ [[<esc>:ZettelSearch<CR>
 
-echom("Nahrávám ftplugin")

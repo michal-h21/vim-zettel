@@ -3,7 +3,8 @@ function! zettel#vimwiki#zettel_new()
   echom("new zettel". format)
   " this doesn't work
   " execute 'normal :e' format
-  execute "edit " . g:zettel_dir . format
+  " execute "edit " . g:zettel_dir . format
+  call vimwiki#base#open_link(':e ', format)
 endfunction
 
 echom("Nahrávám autoload")

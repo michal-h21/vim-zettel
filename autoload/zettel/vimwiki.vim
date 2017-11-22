@@ -7,4 +7,3 @@ function! zettel#vimwiki#zettel_new()
   call vimwiki#base#open_link(':e ', format)
 endfunction
 
-echom("Nahrávám autoload")

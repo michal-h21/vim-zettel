@@ -43,7 +43,7 @@ command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>,
       \'options':'--exact'})
 
 
-command! ZettelNew call zettel#vimwiki#zettel_new()
+command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
 
 " remap [[ to start fulltext search
 inoremap [[ [[<esc>:ZettelSearch<CR>

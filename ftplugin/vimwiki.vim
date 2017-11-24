@@ -27,18 +27,29 @@ function! s:get_fzf_filename(line)
   let parts =  split(a:line,":")
   " we need to remove the extension
   let filename = parts[0]
+  return filename
+endfunction
+
+" get clean wiki name from a filename
+function! s:get_wiki_file(filename)
+  let fileparts = split(a:filename, '\V.')
+  return join(fileparts[0:-2],".")
+endfunction
+
+function! s:wiki_search(line)
+  let filename = <sid>get_fzf_filename(a:line)
   let title = <sid>get_zettel_title(filename)
-  let fileparts = split(filename, '\V.')
   " insert the filename and title into the current buffer
   " ToDo: make the format of inserted link configurable
-  execute 'normal a' join(fileparts[0:-2],".") . "|" . title
+  let wikiname = <sid>get_wiki_file(filename)
+  execute 'normal a'. wikiname  . "|" . title
 endfunction
 
 " make fulltext search in all VimWiki files using FZF
 command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
       \'--skip-vcs-ignores', {
       \'down': '~40%',
-      \'sink':function('<sid>get_fzf_filename'),
+      \'sink':function('<sid>wiki_search'),
       \'dir':g:zettel_dir,
       \'options':'--exact'})
 

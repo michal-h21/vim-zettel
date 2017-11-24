@@ -47,4 +47,4 @@ command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
 
 " remap [[ to start fulltext search
 inoremap [[ [[<esc>:ZettelSearch<CR>
-
+xnoremap z :call zettel#vimwiki#zettel_new_selected()<CR>

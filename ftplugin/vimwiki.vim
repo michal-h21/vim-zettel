@@ -1,4 +1,4 @@
-" get active VimWiki directory
+ " get active VimWiki directory
 let g:zettel_dir = VimwikiGet('path',g:vimwiki_current_idx)
 " format of a new zettel filename
 if !exists('g:zettel_format')
@@ -56,6 +56,16 @@ command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>,
 
 command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
 
-" remap [[ to start fulltext search
-inoremap [[ [[<esc>:ZettelSearch<CR>
-xnoremap z :call zettel#vimwiki#zettel_new_selected()<CR>
+if !exists('g:zettel_default_mappings')
+  let g:zettel_default_mappings=1
+endif
+
+nnoremap <silent> <Plug>ZettelSearchMap :ZettelSearch<cr>
+xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
+
+if g:zettel_default_mappings==1
+  " inoremap [[ [[<esc>:ZettelSearch<CR>
+  imap <silent> [[ [[<esc><Plug>ZettelSearchMap
+  " xnoremap z :call zettel#vimwiki#zettel_new_selected()<CR>
+  xmap z <Plug>ZettelNewSelectedMap
+endif

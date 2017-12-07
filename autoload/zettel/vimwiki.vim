@@ -49,3 +49,29 @@ function! zettel#vimwiki#zettel_new_selected()
   execute "normal! :'<,'>s/\\%V.*/[[". name. "|\\0]]\<cr>\<C-o>"
   call zettel#vimwiki#zettel_new(title)
 endfunction
+
+" make new zettel from a file. the file contents will be copied to a new
+" zettel, the originatl contents will be replaced with the zettel filename
+" use temporary file if you want to keep the original file
+function! zettel#vimwiki#zettel_capture(wnum,...)
+  let origfile = expand("%")
+  execute ":set ft=vimwiki"
+  if a:wnum > len(g:vimwiki_list)
+    echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
+    return
+  endif
+  if a:wnum > 0
+    let idx = a:wnum - 1
+  else
+    let idx = 0
+  endif
+  let format = zettel#vimwiki#new_zettel_name()
+  " let link_info = vimwiki#base#resolve_link(format)
+  let newfile = VimwikiGet('path', idx) . format . VimwikiGet('ext', idx)
+  execute ":w " . newfile
+  execute "normal! ggdG"
+  execute "normal! i" . newfile 
+  " call vimwiki#base#open_link(':e ', format)
+  execute ":e " . newfile
+endfunction
+

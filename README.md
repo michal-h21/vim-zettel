@@ -44,6 +44,6 @@ basic wiki and navigate it.
   ```
 
   It will replace the original file contents with a path to the new wiki file,
-  so it should be used with temporaty files!
+  so it should be used with temporary files!
 
 

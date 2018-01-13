@@ -25,8 +25,10 @@ basic wiki and navigate it.
   `%y%m%d-%H%M.wiki` (it is possible to change the file name format using
   `g:zettel_format` variable). The file uses basic template in the form
 
-    %title Note title
-    %date current date
+  ```
+  %title Note title
+  %date current date
+  ```
 
 - `z` command in the visual mode - create a new wiki file using selected text
   for the note title 
@@ -37,7 +39,9 @@ basic wiki and navigate it.
 
 - `:VimwikiCapture` - create a new Zettel from a file. Usaful for scripting. It can be used in this way
 
-    vim -c VimwikiCapture filename
+  ```
+  vim -c VimwikiCapture filename
+  ```
 
   It will replace the original file contents with a path to the new wiki file,
   so it should be used with temporaty files!

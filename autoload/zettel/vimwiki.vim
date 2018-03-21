@@ -57,7 +57,7 @@ function! zettel#vimwiki#zettel_new_selected()
   let title = <sid>get_visual_selection()
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
-  execute "normal! :'<,'>s/\\%V.*\\%V./[[". name. "|\\0]]\<cr>\<C-o>"
+  execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\0") ."\<cr>\<C-o>"
   call zettel#vimwiki#zettel_new(title)
 endfunction
 

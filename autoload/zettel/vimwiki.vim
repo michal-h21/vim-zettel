@@ -23,6 +23,15 @@ function! zettel#vimwiki#new_zettel_name()
   return strftime(g:zettel_format)
 endfunction
 
+" use different link style for wiki and markdown syntaxes
+function! zettel#vimwiki#format_link(file, title)
+  if VimwikiGet('syntax') ==? 'markdown'
+    return '['.a:title.'](' . a:file . ')'
+  else
+    return '[[' . a:file . '|' . a:title .']]'
+  endif
+end
+
 " create new zettel note
 " there is one optional argument, the zettel title
 function! zettel#vimwiki#zettel_new(...)

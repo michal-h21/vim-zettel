@@ -49,7 +49,8 @@ function! s:wiki_yank_name()
   let filename = expand("%")
   let title = <sid>get_zettel_title(filename)
   let wikiname = <sid>get_wiki_file(filename)
-  let link= "[[" . wikiname . "|" . title . "]]"
+  " let link= "[[" . wikiname . "|" . title . "]]"
+  let link= zettel#vimwiki#format_link(wikiname, title)
   let @" = link
   return link
 endfunction

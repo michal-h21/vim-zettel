@@ -32,8 +32,7 @@ endfunction
 
 " get clean wiki name from a filename
 function! s:get_wiki_file(filename)
-  let fileparts = split(a:filename, '\V.')
-  return join(fileparts[0:-2],".")
+  return expand("%:t:r")
 endfunction
 
 function! s:wiki_search(line)

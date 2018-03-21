@@ -30,7 +30,7 @@ function! zettel#vimwiki#format_link(file, title)
   else
     return '[[' . a:file . '|' . a:title .']]'
   endif
-end
+endfunction
 
 " create new zettel note
 " there is one optional argument, the zettel title

@@ -15,8 +15,15 @@ endfunction
 
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)
-  call append(line("1"), "%date " . a:date)
-  call append(line("1"), "%title ". a:title)
+  if VimwikiGet('syntax') ==? 'markdown'
+    call append(line("1"), "---")
+    call append(line("1"), "date: " . a:date)
+    call append(line("1"), "title: ". a:title)
+    call append(line("1"), "---")
+  else
+    call append(line("1"), "%date " . a:date)
+    call append(line("1"), "%title ". a:title)
+  end
 endfunction
 
 function! zettel#vimwiki#new_zettel_name()

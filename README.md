@@ -37,10 +37,10 @@ basic wiki and navigate it.
 
 - `T` command in the nomal mode - yank the current note filename and title as a Vimwiki link
 
-- `:VimwikiCapture` - create a new Zettel from a file. Usaful for scripting. It can be used in this way
+- `:ZettelCapture` - create a new Zettel from a file. Usaful for scripting. It can be used in this way
 
   ```
-  vim -c VimwikiCapture filename
+  vim -c ZettelCapture filename
   ```
 
   It will replace the original file contents with a path to the new wiki file,

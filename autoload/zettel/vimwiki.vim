@@ -15,7 +15,7 @@ endfunction
 
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)
-  if VimwikiGet('syntax') ==? 'markdown'
+  if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
     call append(line("1"), "---")
     call append(line("1"), "date: " . a:date)
     call append(line("1"), "title: ". a:title)
@@ -32,7 +32,7 @@ endfunction
 
 " use different link style for wiki and markdown syntaxes
 function! zettel#vimwiki#format_link(file, title)
-  if VimwikiGet('syntax') ==? 'markdown'
+  if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
     return '['.a:title.'](' . a:file . ')'
   else
     return '[[' . a:file . '|' . a:title .']]'

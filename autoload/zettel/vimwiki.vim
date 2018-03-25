@@ -74,18 +74,19 @@ endfunction
 function! zettel#vimwiki#zettel_capture(wnum,...)
   let origfile = expand("%")
   execute ":set ft=vimwiki"
-  if a:wnum > len(g:vimwiki_list)
-    echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
-    return
-  endif
-  if a:wnum > 0
-    let idx = a:wnum - 1
-  else
-    let idx = 0
-  endif
+  " This probably doesn't work with current vimwiki code
+  " if a:wnum > len(g:vimwiki_list)
+  "   echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
+  "   return
+  " endif
+  " if a:wnum > 0
+  "   let idx = a:wnum - 1
+  " else
+  "   let idx = 0
+  " endif
   let format = zettel#vimwiki#new_zettel_name()
   " let link_info = vimwiki#base#resolve_link(format)
-  let newfile = VimwikiGet('path', idx) . format . VimwikiGet('ext', idx)
+  let newfile = vimwiki#vars#get_wikilocal('path' ) . format . vimwiki#vars#get_wikilocal('ext' )
   execute ":w " . newfile
   execute "normal! ggdG"
   execute "normal! i" . newfile 

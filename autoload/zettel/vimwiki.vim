@@ -69,28 +69,32 @@ function! zettel#vimwiki#zettel_new_selected()
 endfunction
 
 " make new zettel from a file. the file contents will be copied to a new
-" zettel, the originatl contents will be replaced with the zettel filename
+" zettel, the original file contents will be replaced with the zettel filename
 " use temporary file if you want to keep the original file
 function! zettel#vimwiki#zettel_capture(wnum,...)
   let origfile = expand("%")
   execute ":set ft=vimwiki"
   " This probably doesn't work with current vimwiki code
-  " if a:wnum > len(g:vimwiki_list)
-  "   echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
-  "   return
-  " endif
-  " if a:wnum > 0
-  "   let idx = a:wnum - 1
-  " else
-  "   let idx = 0
-  " endif
+  if a:wnum >= vimwiki#vars#number_of_wikis()
+    echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
+    return
+  endif
+  if a:wnum > 0
+    let idx = a:wnum - 1
+  else
+    let idx = 0
+  endif
   let format = zettel#vimwiki#new_zettel_name()
   " let link_info = vimwiki#base#resolve_link(format)
-  let newfile = vimwiki#vars#get_wikilocal('path' ) . format . vimwiki#vars#get_wikilocal('ext' )
+  let newfile = vimwiki#vars#get_wikilocal('path',idx ) . format . vimwiki#vars#get_wikilocal('ext',idx )
+  " copy the captured file to a new zettel
   execute ":w " . newfile
+  " delete contents of the captured file
   execute "normal! ggdG"
+  " replace it with a address of the zettel file
   execute "normal! i" . newfile 
-  " call vimwiki#base#open_link(':e ', format)
+  execute ":w"
+  " open the new zettel
   execute ":e " . newfile
 endfunction
 

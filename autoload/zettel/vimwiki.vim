@@ -13,17 +13,34 @@ function! s:get_visual_selection()
   return join(lines, "\n")
 endfunction
 
+" variables that depend on the wiki syntax
+if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
+  let s:header_format = "%s: %s"
+  let s:header_delimiter = "---"
+else
+  let s:header_format = "%%%s %s"
+  let s:header_delimiter = ""
+end
+
+" helper function to insert a text line to a new zettel
+function! s:add_line(text)
+  if len(a:text) > 0
+    call append(line("1"), a:text)
+  endif
+endfunction
+
+" add a variable to the zettel header
+function! s:add_to_header(key, value)
+  call <sid>add_line(printf(s:header_format, a:key, a:value))
+endfunction
+
+
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)
-  if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
-    call append(line("1"), "---")
-    call append(line("1"), "date: " . a:date)
-    call append(line("1"), "title: ". a:title)
-    call append(line("1"), "---")
-  else
-    call append(line("1"), "%date " . a:date)
-    call append(line("1"), "%title ". a:title)
-  end
+  call <sid>add_line(s:header_delimiter)
+  call <sid>add_to_header("date", a:date)
+  call <sid>add_to_header("title", a:title)
+  call <sid>add_line(s:header_delimiter)
 endfunction
 
 function! zettel#vimwiki#new_zettel_name()

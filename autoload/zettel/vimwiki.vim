@@ -15,9 +15,11 @@ endfunction
 
 " variables that depend on the wiki syntax
 if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
+  let s:link_format = "[%title](%link)"
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
 else
+  let s:link_format = "[[%link|%title]]"
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
 end
@@ -49,11 +51,9 @@ endfunction
 
 " use different link style for wiki and markdown syntaxes
 function! zettel#vimwiki#format_link(file, title)
-  if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
-    return '['.a:title.'](' . a:file . ')'
-  else
-    return '[[' . a:file . '|' . a:title .']]'
-  endif
+  let link = substitute(s:link_format, "%title", a:title, "")
+  let link = substitute(link, "%link", a:file, "")
+  return link
 endfunction
 
 " create new zettel note
@@ -81,7 +81,7 @@ function! zettel#vimwiki#zettel_new_selected()
   let title = <sid>get_visual_selection()
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
-  execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\0") ."\<cr>\<C-o>"
+  execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\\\0") ."\<cr>\<C-o>"
   call zettel#vimwiki#zettel_new(title)
 endfunction
 

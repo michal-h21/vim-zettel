@@ -100,13 +100,17 @@ function! zettel#vimwiki#zettel_new(...)
   call vimwiki#base#open_link(':e ', format)
   " add basic template to the new file
   if wiki_not_exists
-    call zettel#vimwiki#template(a:1, date_format, g:zettel_front_matter)
+    let front_matter = zettel#vimwiki#get_option("front_matter")
+    if empty(front_matter)
+      let front_matter = {}
+    endif
+    call zettel#vimwiki#template(a:1, date_format, front_matter)
   endif
-  echom(vimwiki#vars#get_wikilocal("zettel_template"))
-  " insert the template text from a template file if g:zettel_template_file
-  " exists
-  if exists('g:zettel_template_file')
-    execute "read " . g:zettel_template_file
+  " insert the template text from a template file if it is configured in
+  " g:zettel_options for the current wiki
+  let template = zettel#vimwiki#get_option("template")
+  if !empty(template)
+    execute "read " . template
   endif
 endfunction
 

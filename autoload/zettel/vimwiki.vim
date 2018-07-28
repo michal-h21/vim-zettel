@@ -13,6 +13,25 @@ function! s:get_visual_selection()
   return join(lines, "\n")
 endfunction
 
+" get user option for the current wiki
+" it seems that it is not possible to set custom options in g:vimwiki_list
+" so we need to use our own options
+function! zettel#vimwiki#get_option(name)
+  if !exists('g:zettel_options')
+    return 0
+  end
+  " the options for particular wikis must be in the same order as wiki
+  " definitions in g:vimwiki_list
+  let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
+  let option_number = "g:zettel_options[" . idx . "]"
+  if exists(option_number)
+    if exists(option_number . "." . a:name)
+      return g:zettel_options[idx][a:name]
+    endif
+  endif
+  return 0
+endfunction
+
 " variables that depend on the wiki syntax
 if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:link_format = "[%title](%link)"
@@ -82,6 +101,12 @@ function! zettel#vimwiki#zettel_new(...)
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date_format, g:zettel_front_matter)
+  endif
+  echom(vimwiki#vars#get_wikilocal("zettel_template"))
+  " insert the template text from a template file if g:zettel_template_file
+  " exists
+  if exists('g:zettel_template_file')
+    execute "read " . g:zettel_template_file
   endif
 endfunction
 

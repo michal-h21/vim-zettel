@@ -13,6 +13,7 @@ CONTENTS                               *ZettelContents*
 1. Usage..........................|ZettelUsage|
 2. Commands.......................|ZettelCommands|
 3. Mappings.......................|ZettelMappings|
+4. Variables......................|ZettelVariables|
 
 
 =====================================================
@@ -21,6 +22,11 @@ section: Usage                            *ZettelUsage*
 section: Commands                      *ZettelCommands*
 =====================================================
 section: Mappings                      *ZettelMappings*
+
+The default mappings can be disabled by setting 
+
+=====================================================
+section: Variables                    *ZettelVariables*
 
 
 I should write some documentation

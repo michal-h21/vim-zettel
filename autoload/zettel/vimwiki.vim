@@ -18,7 +18,7 @@ endfunction
 " so we need to use our own options
 function! zettel#vimwiki#get_option(name)
   if !exists('g:zettel_options')
-    return 0
+    return ""
   end
   " the options for particular wikis must be in the same order as wiki
   " definitions in g:vimwiki_list
@@ -29,7 +29,7 @@ function! zettel#vimwiki#get_option(name)
       return g:zettel_options[idx][a:name]
     endif
   endif
-  return 0
+  return ""
 endfunction
 
 " variables that depend on the wiki syntax

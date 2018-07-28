@@ -26,6 +26,7 @@ end
 
 " helper function to insert a text line to a new zettel
 function! s:add_line(text)
+  " don't append anything if the argument is empty string
   if len(a:text) > 0
     call append(line("1"), a:text)
   endif
@@ -62,7 +63,7 @@ function! zettel#vimwiki#zettel_new(...)
   " name of the new note
   let format = zettel#vimwiki#new_zettel_name()
   let date_format = strftime("%Y-%m-%d %H:%M")
-  echom("new zettel". format)
+  echom("new zettel: ". format)
   let link_info = vimwiki#base#resolve_link(format)
   " detect if the wiki file exists
   let wiki_not_exists = empty(glob(link_info.filename)) 

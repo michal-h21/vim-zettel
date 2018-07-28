@@ -24,6 +24,12 @@ else
   let s:header_delimiter = ""
 end
 
+" user configurable fields that should be inserted to a front matter of a new
+" Zettel
+if !exists('g:zettel_front_matter')
+  let g:zettel_front_matter = {}
+endif
+
 " helper function to insert a text line to a new zettel
 function! s:add_line(text)
   " don't append anything if the argument is empty string
@@ -39,8 +45,11 @@ endfunction
 
 
 " title and date to a new zettel note
-function! zettel#vimwiki#template(title, date)
+function! zettel#vimwiki#template(title, date, fields)
   call <sid>add_line(s:header_delimiter)
+  for key in keys(a:fields)
+    call <sid>add_to_header(key, a:fields[key])
+  endfor
   call <sid>add_to_header("date", a:date)
   call <sid>add_to_header("title", a:title)
   call <sid>add_line(s:header_delimiter)
@@ -72,7 +81,7 @@ function! zettel#vimwiki#zettel_new(...)
   call vimwiki#base#open_link(':e ', format)
   " add basic template to the new file
   if wiki_not_exists
-    call zettel#vimwiki#template(a:1, date_format)
+    call zettel#vimwiki#template(a:1, date_format, g:zettel_front_matter)
   endif
 endfunction
 

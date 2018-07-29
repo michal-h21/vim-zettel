@@ -7,17 +7,7 @@ endif
 
 " vimwiki files can have titles in the form of %title title content
 function! s:get_zettel_title(filename)
-  let filename = a:filename
-  let title = ""
-  let lsource = readfile(filename)
-  " this code comes from vimwiki's html export plugin
-  for line in lsource 
-    if line =~# '^\s*%\=title'
-      let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
-      return title
-    endif
-  endfor 
-  return ""
+  return zettel#vimwiki#get_title(a:filename)
 endfunction
 
 " fzf returns selected filename and matched line from the file, we need to
@@ -47,11 +37,10 @@ endfunction
 
 function! s:wiki_yank_name()
   let filename = expand("%")
-  let title = <sid>get_zettel_title(filename)
-  " let wikiname = <sid>get_wiki_file(expand("%:t:r"))
-  let wikiname = expand("%:t:r")
-  " let link= "[[" . wikiname . "|" . title . "]]"
-  let link= zettel#vimwiki#format_link(wikiname, title)
+  " let title = <sid>get_zettel_title(filename)
+  " let wikiname = fnamemodify(filename, ":t:r")
+  " let link= zettel#vimwiki#format_link(wikiname, title)
+  let link = zettel#vimwiki#get_link(filename)
   let @" = link
   return link
 endfunction

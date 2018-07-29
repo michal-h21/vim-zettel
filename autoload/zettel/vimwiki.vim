@@ -78,11 +78,33 @@ function! zettel#vimwiki#new_zettel_name()
   return strftime(g:zettel_format)
 endfunction
 
+" find title in the zettel file and return correct link to it
+function! zettel#vimwiki#get_link(filename)
+  let title =zettel#vimwiki#get_title(a:filename)
+  let wikiname = fnamemodify(a:filename, ":t:r")
+  let link= zettel#vimwiki#format_link(wikiname, title)
+  return link
+endfunction
+
 " use different link style for wiki and markdown syntaxes
 function! zettel#vimwiki#format_link(file, title)
   let link = substitute(s:link_format, "%title", a:title, "")
   let link = substitute(link, "%link", a:file, "")
   return link
+endfunction
+
+function! zettel#vimwiki#get_title(filename)
+  let filename = a:filename
+  let title = ""
+  let lsource = readfile(filename)
+  " this code comes from vimwiki's html export plugin
+  for line in lsource 
+    if line =~# '^\s*%\=title'
+      let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
+      return title
+    endif
+  endfor 
+  return ""
 endfunction
 
 " create new zettel note

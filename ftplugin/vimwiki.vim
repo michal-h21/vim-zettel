@@ -32,7 +32,8 @@ endfunction
 
 " get clean wiki name from a filename
 function! s:get_wiki_file(filename)
-  return expand("%:t:r")
+   let fileparts = split(a:filename, '\V.')
+   return join(fileparts[0:-2],".")
 endfunction
 
 function! s:wiki_search(line)
@@ -47,7 +48,8 @@ endfunction
 function! s:wiki_yank_name()
   let filename = expand("%")
   let title = <sid>get_zettel_title(filename)
-  let wikiname = <sid>get_wiki_file(filename)
+  " let wikiname = <sid>get_wiki_file(expand("%:t:r"))
+  let wikiname = expand("%:t:r")
   " let link= "[[" . wikiname . "|" . title . "]]"
   let link= zettel#vimwiki#format_link(wikiname, title)
   let @" = link

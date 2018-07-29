@@ -26,6 +26,7 @@ Sample configuration:
     imap <silent> [[ [[<esc><Plug>ZettelSearchMap
     nmap T <Plug>ZettelYankNameMap
     xmap z <Plug>ZettelNewSelectedMap
+    nmap gZ <Plug>ZettelReplaceFileWithLink
 
     " Settings for Vimwiki
     let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]
@@ -55,9 +56,11 @@ basic wiki and navigate it.
 
 - `[[` command in the insert mode - create a link to a note. It uses FZF for the note searching.
 
-- `T` command in the nomal mode - yank the current note filename and title as a Vimwiki link
+- `T` command in the normal mode - yank the current note filename and title as a Vimwiki link
 
-- `:ZettelCapture` - create a new Zettel from a file. Usaful for scripting. It can be used in this way
+- `gZ` command in the normal mode - replace file path under cursor with Wiki link
+
+- `:ZettelCapture` - create a new Zettel from a file. Useful for scripting. It can be used in this way
 
   ```
   vim -c ZettelCapture filename

@@ -117,6 +117,16 @@ function! zettel#vimwiki#new_zettel_name()
   return strftime(g:zettel_format)
 endfunction
 
+" the optional argument is the wiki number
+function! zettel#vimwiki#save_wiki_page(format, ...)
+  let defaultidx = vimwiki#vars#get_bufferlocal('wiki_nr')
+  let idx = get(a:, 1, defaultidx)
+  let newfile = vimwiki#vars#get_wikilocal('path',idx ) . a:format . vimwiki#vars#get_wikilocal('ext',idx )
+  " copy the captured file to a new zettel
+  execute ":w! " . newfile
+  return newfile
+endfunction
+
 " find title in the zettel file and return correct link to it
 function! zettel#vimwiki#get_link(filename)
   let title =zettel#vimwiki#get_title(a:filename)
@@ -203,9 +213,7 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   endif
   let format = zettel#vimwiki#new_zettel_name()
   " let link_info = vimwiki#base#resolve_link(format)
-  let newfile = vimwiki#vars#get_wikilocal('path',idx ) . format . vimwiki#vars#get_wikilocal('ext',idx )
-  " copy the captured file to a new zettel
-  execute ":w " . newfile
+  let newfile = zettel#vimwiki#save_wiki_page(format, idx)
   " delete contents of the captured file
   execute "normal! ggdG"
   " replace it with a address of the zettel file

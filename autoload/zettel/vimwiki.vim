@@ -96,18 +96,19 @@ function! s:add_line(text)
   endif
 endfunction
 
+function! s:make_header_item(key, value)
+  return printf(s:header_format, a:key, a:value)
+endfunction
+
 " add a variable to the zettel header
 function! s:add_to_header(key, value)
-  call <sid>add_line(printf(s:header_format, a:key, a:value))
+  call <sid>add_line(s:make_header_item(a:key, a:value))
 endfunction
 
 
 " title and date to a new zettel note
-function! zettel#vimwiki#template(title, date, fields)
+function! zettel#vimwiki#template(title, date)
   call <sid>add_line(s:header_delimiter)
-  for key in keys(a:fields)
-    call <sid>add_to_header(key, a:fields[key])
-  endfor
   call <sid>add_to_header("date", a:date)
   call <sid>add_to_header("title", a:title)
   call <sid>add_line(s:header_delimiter)
@@ -156,9 +157,10 @@ function! zettel#vimwiki#get_title(filename)
   return ""
 endfunction
 
+
 " create new zettel note
 " there is one optional argument, the zettel title
-function! zettel#vimwiki#zettel_new(...)
+function! zettel#vimwiki#create(...)
   " name of the new note
   let format = zettel#vimwiki#new_zettel_name()
   let date_format = strftime("%Y-%m-%d %H:%M")
@@ -171,18 +173,38 @@ function! zettel#vimwiki#zettel_new(...)
   call vimwiki#base#open_link(':e ', format)
   " add basic template to the new file
   if wiki_not_exists
-    let front_matter = zettel#vimwiki#get_option("front_matter")
-    if empty(front_matter)
-      let front_matter = {}
-    endif
-    call zettel#vimwiki#template(a:1, date_format, front_matter)
+    call zettel#vimwiki#template(a:1, date_format)
+    return format
   endif
+  return 0
+endfunction
+
+function! zettel#vimwiki#zettel_new(...)
+  let filename = zettel#vimwiki#create(a:1)
+  " the wiki file already exists
+  if filename == 0
+    return 0
+  endif
+  " save the new wiki file
+  execute ":w"
+  let front_matter = zettel#vimwiki#get_option("front_matter")
+  if !empty(front_matter)
+    let newfile = zettel#vimwiki#save_wiki_page(filename)
+    let last_header_line = zettel#vimwiki#find_header_end(newfile)
+    echom(last_header_line)
+    for key in keys(front_matter)
+       " <sid>add_to_header(key, front_matter[key])
+       call append(last_header_line, <sid>make_header_item(key, front_matter[key]))
+    endfor
+  endif
+
   " insert the template text from a template file if it is configured in
   " g:zettel_options for the current wiki
   let template = zettel#vimwiki#get_option("template")
   if !empty(template)
     execute "read " . template
   endif
+
 endfunction
 
 " crate zettel link from a selected text

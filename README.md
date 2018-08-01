@@ -23,10 +23,13 @@ Sample configuration:
     " Disable default keymappings
     let g:zettel_default_mappings = 0 
     " This is basically the same as the default configuration
-    imap <silent> [[ [[<esc><Plug>ZettelSearchMap
-    nmap T <Plug>ZettelYankNameMap
-    xmap z <Plug>ZettelNewSelectedMap
-    nmap gZ <Plug>ZettelReplaceFileWithLink
+    augroup filetype_vimwiki
+      autocmd!
+      autocmd FileType vimwiki imap <silent> [[ [[<esc><Plug>ZettelSearchMap
+      autocmd FileType vimwiki nmap T <Plug>ZettelYankNameMap
+      autocmd FileType vimwiki xmap z <Plug>ZettelNewSelectedMap
+      autocmd FileType vimwiki nmap gZ <Plug>ZettelReplaceFileWithLink
+    augroup END
 
     " Settings for Vimwiki
     let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]

@@ -33,7 +33,7 @@ function! zettel#vimwiki#get_option(name)
 endfunction
 
 " markdown test for front matter end
-function! s:test_front_matter_end_md(line, i)
+function! s:test_header_end_md(line, i)
   if a:i > 0 
     let pos = matchstrpos(a:line, "^\s*---")
     return pos[1]
@@ -42,7 +42,7 @@ function! s:test_front_matter_end_md(line, i)
 endfunction
 
 " vimwiki test fot front matter end
-function! s:test_front_matter_end_wiki(line, i)
+function! s:test_header_end_wiki(line, i)
   " return false for all lines that start with % character
   let pos = matchstrpos(a:line,"^\s*%")
   if pos[1] > -1 
@@ -52,7 +52,7 @@ function! s:test_front_matter_end_wiki(line, i)
   return 0
 endfunction
 
-let s:test_front_matter_end = function(vimwiki#vars#get_wikilocal('syntax') ==? 'markdown' ? '<sid>test_front_matter_end_md' : '<sid>test_front_matter_end_wiki')
+let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax') ==? 'markdown' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
 
 
 " variables that depend on the wiki syntax
@@ -73,14 +73,14 @@ if !exists('g:zettel_front_matter')
 endif
 
 " find end of the front matter variables
-function! zettel#vimwiki#find_front_matter_end(filename)
+function! zettel#vimwiki#find_header_end(filename)
   echom("otevírám " . a:filename)
   let lines = readfile(a:filename)
   let i = 0
   for line in lines
-    let res = s:test_front_matter_end(line, i)
+    let res = s:test_header_end(line, i)
     if res > -1 
-      call append(i, "This is the end")
+      " call append(i, "This is the end")
       return i
     endif
     let i = i + 1

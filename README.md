@@ -71,7 +71,7 @@ basic wiki and navigate it.
 
 ## Related
 
-The following packages may be useful in conjuction with Vimwiki and Vim-zettel:
+The following packages may be useful in conjunction with Vimwiki and Vim-zettel:
 
 - [Notational FZF](https://github.com/alok/notational-fzf-vim) - fast searching notes with preview window.
 - [Vimwiki-sync](https://github.com/michal-h21/vimwiki-sync) - automatically commit changes in wiki and synchronize them with external Git repository.

@@ -58,10 +58,12 @@ let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax') ==? 'markd
 " variables that depend on the wiki syntax
 if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:link_format = "[%title](%link)"
+  let s:link_stub =  "[%title](%link"
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
 else
   let s:link_format = "[[%link|%title]]"
+  let s:link_stub = "[[%link|%title"
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
 end
@@ -136,11 +138,19 @@ function! zettel#vimwiki#get_link(filename)
   return link
 endfunction
 
-" use different link style for wiki and markdown syntaxes
-function! zettel#vimwiki#format_link(file, title)
-  let link = substitute(s:link_format, "%title", a:title, "")
+function! zettel#vimwiki#format_file_title(format, file, title)
+  let link = substitute(a:format, "%title", a:title, "")
   let link = substitute(link, "%link", a:file, "")
   return link
+endfunction
+
+" use different link style for wiki and markdown syntaxes
+function! zettel#vimwiki#format_link(file, title)
+  return zettel#vimwiki#format_file_title(s:link_format, a:file, a:title)
+endfunction
+
+function! zettel#vimwiki#format_search_link(file, title)
+  return zettel#vimwiki#format_file_title(s:link_stub, a:file, a:title)
 endfunction
 
 function! zettel#vimwiki#get_title(filename)

@@ -31,8 +31,11 @@ function! s:wiki_search(line)
   let title = <sid>get_zettel_title(filename)
   " insert the filename and title into the current buffer
   let wikiname = <sid>get_wiki_file(filename)
-  let link = zettel#vimwiki#format_link(wikiname, title)
-  execute 'normal! xxa'. link
+  let link = zettel#vimwiki#format_search_link(wikiname, title)
+  " delete the [[, insert current link with title and remove the closing
+  " parens, so the user can easily fix the missing title. Vimwiki may hide the
+  " link with missing title.
+  execute 'normal! xxa'. link 
 endfunction
 
 function! s:wiki_yank_name()

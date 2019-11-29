@@ -58,14 +58,16 @@ let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax') ==? 'markd
 " variables that depend on the wiki syntax
 if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:link_format = "[%title](%link)"
-  let s:link_stub =  "[%title](%link"
+  let s:link_stub =  "[%title](%link)"
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
+  let s:insert_mode_title_format = "``l"
 else
   let s:link_format = "[[%link|%title]]"
-  let s:link_stub = "[[%link|%title"
+  let s:link_stub = "[[%link|%title]]"
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
+  let s:insert_mode_title_format = "h"
 end
 
 " user configurable fields that should be inserted to a front matter of a new
@@ -151,6 +153,13 @@ endfunction
 
 function! zettel#vimwiki#format_search_link(file, title)
   return zettel#vimwiki#format_file_title(s:link_stub, a:file, a:title)
+endfunction
+
+" This function is executed when the page referenced by the inserted link
+" doesn't contain  title. The cursor is placed at the position where title 
+" should start, and insert mode is started
+function! zettel#vimwiki#insert_mode_in_title()
+  execute "normal! " .s:insert_mode_title_format | :startinsert
 endfunction
 
 function! zettel#vimwiki#get_title(filename)

@@ -14,6 +14,8 @@ Using Vundle:
     Plugin 'junegunn/fzf'
     Plugin 'junegunn/fzf.vim'
     Plugin 'michal-h21/vim-zettel'
+    
+[Silver Searcher](https://github.com/ggreer/the_silver_searcher) is used for searching in the notes.
 
 ## Configuration
 

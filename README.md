@@ -11,6 +11,7 @@ Using Vundle:
 
 
     Plugin 'vimwiki/vimwiki'
+    Plugin 'junegunn/fzf'
     Plugin 'junegunn/fzf.vim'
     Plugin 'michal-h21/vim-zettel'
 

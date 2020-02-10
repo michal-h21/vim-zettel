@@ -15,7 +15,8 @@ Using Vundle:
     Plugin 'junegunn/fzf.vim'
     Plugin 'michal-h21/vim-zettel'
     
-[Silver Searcher](https://github.com/ggreer/the_silver_searcher) is used for searching in the notes.
+[Silver Searcher](https://github.com/ggreer/the_silver_searcher) is used for searching in the notes by default. 
+The used command can be changed by setting the `g:zettel_fzf_command` variable.
 
 ## Configuration
 
@@ -23,6 +24,9 @@ Sample configuration:
 
     " Filename format. The filename is created using strftime() function
     let g:zettel_format = "%y%m%d-%H%M"
+    " command used for VimwikiSearch 
+    " possible values: "ag", "rg", "grep"
+    let g:zettel_fzf_command = "ag"
     " Disable default keymappings
     let g:zettel_default_mappings = 0 
     " This is basically the same as the default configuration

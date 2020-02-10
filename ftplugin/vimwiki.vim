@@ -1,5 +1,7 @@
  " get active VimWiki directory
 let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
+" FZF command used in the ZettelSearch command
+let g:zettel_fzf_command = "ag"
 " format of a new zettel filename
 if !exists('g:zettel_format')
   let g:zettel_format = "%y%m%d-%H%M"
@@ -57,8 +59,17 @@ function! s:replace_file_with_link()
   execute "normal BvExa" . link
 endfunction
 
+
+
+function! s:execute_fzf(a, b, options)
+  let Fzf_cmd = function("fzf#vim#" . g:zettel_fzf_command)
+  return Fzf_cmd(a:a, a:b, a:options)
+endfunction
+
+
 " make fulltext search in all VimWiki files using FZF
-command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
+" command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
+command! -bang -nargs=* ZettelSearch call <sid>execute_fzf(<q-args>, 
       \'--skip-vcs-ignores', {
       \'down': '~40%',
       \'sink':function('<sid>wiki_search'),

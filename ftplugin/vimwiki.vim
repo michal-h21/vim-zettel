@@ -49,7 +49,7 @@ endfunction
 function! s:wiki_yank_name()
   let filename = expand("%")
   let link = zettel#vimwiki#get_link(filename)
-  let @" = link
+  let @@ = link
   return link
 endfunction
 

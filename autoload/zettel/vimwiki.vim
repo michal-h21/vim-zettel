@@ -173,7 +173,7 @@ function! zettel#vimwiki#get_title(filename)
       return title
     endif
   endfor 
-  return ""
+  return g:zettel_no_title
 endfunction
 
 

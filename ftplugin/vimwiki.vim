@@ -6,6 +6,8 @@ let g:zettel_fzf_command = "ag"
 if !exists('g:zettel_format')
   let g:zettel_format = "%y%m%d-%H%M"
 endif
+" string used as title for Zettels that don't have one
+let g:zettel_no_title = "No title"
 
 " vimwiki files can have titles in the form of %title title content
 function! s:get_zettel_title(filename)

@@ -27,6 +27,8 @@ Sample configuration:
     " command used for VimwikiSearch 
     " possible values: "ag", "rg", "grep"
     let g:zettel_fzf_command = "ag"
+    " string used as title for Zettels that don't have one
+    let g:zettel_no_title = "No title"
     " Disable default keymappings
     let g:zettel_default_mappings = 0 
     " This is basically the same as the default configuration

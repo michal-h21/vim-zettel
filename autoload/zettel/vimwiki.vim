@@ -154,6 +154,10 @@ endfunction
 function! zettel#vimwiki#get_link(filename)
   let title =zettel#vimwiki#get_title(a:filename)
   let wikiname = fnamemodify(a:filename, ":t:r")
+  if title == ""
+    " use the Zettel filename as title if it is empty
+    let title = wikiname
+  endif
   let link= zettel#vimwiki#format_link(wikiname, title)
   return link
 endfunction
@@ -191,7 +195,7 @@ function! zettel#vimwiki#get_title(filename)
       return title
     endif
   endfor 
-  return g:zettel_no_title
+  return ""
 endfunction
 
 

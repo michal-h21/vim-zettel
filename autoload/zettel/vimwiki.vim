@@ -109,6 +109,24 @@ function! s:add_to_header(key, value)
   call <sid>add_line(s:make_header_item(a:key, a:value))
 endfunction
 
+let s:letters = "abcdefghijklmnopqrstuvwxyz"
+
+" convert number to str (1 -> a, 27 -> aa)
+function! s:numtoletter(num)
+  let numletter = strlen(s:letters)
+  let charindex = a:num % numletter
+  let quotient = a:num / numletter
+  if (charindex-1 == -1)
+    let charindex = numletter
+    let quotient = quotient - 1
+  endif
+
+  let result =  strpart(s:letters, charindex - 1, 1)
+  if (quotient>=1)
+    return <sid>numtoletter(float2nr(quotient)) . result
+  endif 
+  return result
+endfunction
 
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)

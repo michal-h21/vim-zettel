@@ -91,7 +91,7 @@ basic wiki and navigate it.
   The original file contents will be replaced with a path to the new wiki file.
   It should be used with temporary files!
 
-## Related packages
+# Related packages
 
 The following packages may be useful in conjunction with Vimwiki and Vim-zettel:
 

@@ -5,7 +5,7 @@ This is a Vim plugin that implements ideas of the
 in progress and it has just a basic features ATM. It supports both Vimwiki and
 Markdown syntaxes.
 
-## Install
+# Install
 
 Using Vundle:
 
@@ -18,12 +18,16 @@ Using Vundle:
 [Silver Searcher](https://github.com/ggreer/the_silver_searcher) is used for searching in the notes by default. 
 The used command can be changed by setting the `g:zettel_fzf_command` variable.
 
-## Configuration
+# Configuration
 
 First of all, it is necessary to configure Vimwiki, as `Vim-zettel` builds on top of it.
 
     " Settings for Vimwiki
     let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]
+
+To open the index page of your wiki, invoke Vim with the following parameters:
+
+    vim -c VimwikiIndex
 
 
 `Vim-zettel` also provides some custom configurations. The following sample
@@ -50,13 +54,13 @@ them in your `.vimrc` unless you want to use a different value.
     let g:zettel_options = [{},{"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}]
 
 
-## Usage
+# Usage
 
-It adds some commands and mappings on top of
-[Vimwiki](http://vimwiki.github.io/). See it's documentation on how to set up a
+`Vim-zettel` adds some commands and mappings on top of
+[Vimwiki](http://vimwiki.github.io/). See Vimwiki documentation on how to set up a
 basic wiki and navigate it.
 
-### Create new Zetteln
+## Commands available in the Vimwiki mode
 
 - `:ZettelNew` command - it will create a new wiki file named as
   `%y%m%d-%H%M.wiki` (it is possible to change the file name format using
@@ -76,16 +80,18 @@ basic wiki and navigate it.
 
 - `gZ` command in the normal mode - replace file path under cursor with Wiki link
 
-- `:ZettelCapture` - create a new Zettel from a file. Useful for scripting. It can be used in this way
+## Import text from the command line
+
+- `:ZettelCapture` - create a new Zettel from a file. This command is useful for scripting. It can be used in the following way:
 
   ```
   vim -c ZettelCapture filename
   ```
 
-  It will replace the original file contents with a path to the new wiki file,
-  so it should be used with temporary files!
+  The original file contents will be replaced with a path to the new wiki file.
+  It should be used with temporary files!
 
-## Related
+## Related packages
 
 The following packages may be useful in conjunction with Vimwiki and Vim-zettel:
 

@@ -20,7 +20,15 @@ The used command can be changed by setting the `g:zettel_fzf_command` variable.
 
 ## Configuration
 
-Sample configuration:
+First of all, it is necessary to configure Vimwiki, as `Vim-zettel` builds on top of it.
+
+    " Settings for Vimwiki
+    let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]
+
+
+`Vim-zettel` also provides some custom configurations. The following sample
+contains default values for  available settings. It is not necessary to use
+them in your `.vimrc` unless you want to use a different value.
 
     " Filename format. The filename is created using strftime() function
     let g:zettel_format = "%y%m%d-%H%M"
@@ -38,8 +46,6 @@ Sample configuration:
       autocmd FileType vimwiki nmap gZ <Plug>ZettelReplaceFileWithLink
     augroup END
 
-    " Settings for Vimwiki
-    let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]
     " Set template and custom header variable for the second Wiki
     let g:zettel_options = [{},{"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}]
 

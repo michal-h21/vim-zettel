@@ -80,6 +80,12 @@ basic wiki and navigate it.
 
 - `gZ` command in the normal mode - replace file path under cursor with Wiki link
 
+## Useful Vimwiki commands
+
+- `:VimwikiBacklinks` - display files that link to the current page
+- `:VimwikiCheckLinks`- display files that no other file links to
+- `:VimwikiGenerateTags`- generate index of notes sorted by tags in the current page
+
 ## Import text from the command line
 
 - `:ZettelCapture` - create a new Zettel from a file. This command is useful for scripting. It can be used in the following way:

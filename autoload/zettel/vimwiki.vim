@@ -324,8 +324,8 @@ function! zettel#vimwiki#generate_index()
 
   let bullet = repeat(' ', vimwiki#lst#get_list_margin()) . vimwiki#lst#default_symbol().' '
   for link in links
-    "let abs_filepath = vimwiki#path#abs_path_of_link(link)
-    let abs_filepath = link
+    let abs_filepath = vimwiki#path#abs_path_of_link(link)
+    "let abs_filepath = link
     "if !s:is_diary_file(abs_filepath)
       call add(lines, bullet.
             \ zettel#vimwiki#get_link(abs_filepath))
@@ -417,7 +417,7 @@ function! zettel#vimwiki#generate_tags(...) abort
             \ substitute(vimwiki#vars#get_syntaxlocal('rxH2_Template'), '__Header__', tagname, ''),
             \ '' ])
       for taglink in reverse(sort(tags_entries[tagname]))
-        call add(lines, bullet . zettel#vimwiki#get_link(taglink))
+        call add(lines, bullet . zettel#vimwiki#get_link(vimwiki#path#abs_path_of_link(taglink)))
       endfor
     endif
   endfor

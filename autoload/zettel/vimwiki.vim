@@ -162,6 +162,43 @@ function! zettel#vimwiki#get_link(filename)
   return link
 endfunction
 
+" copy of function from Vimwiki
+" Params: full path to a wiki file and its wiki number
+" Returns: a list of all links inside the wiki file
+" Every list item has the form
+" [target file, anchor, line number of the link in source file, column number]
+function! s:get_links(wikifile, idx)
+  if !filereadable(a:wikifile)
+    return []
+  endif
+
+  let syntax = vimwiki#vars#get_wikilocal('syntax', a:idx)
+  let rx_link = vimwiki#vars#get_syntaxlocal('wikilink', syntax)
+  let links = []
+  let lnum = 0
+
+  for line in readfile(a:wikifile)
+    let lnum += 1
+
+    let link_count = 1
+    while 1
+      let col = match(line, rx_link, 0, link_count)+1
+      let link_text = matchstr(line, rx_link, 0, link_count)
+      if link_text == ''
+        break
+      endif
+      let link_count += 1
+      let target = vimwiki#base#resolve_link(link_text, a:wikifile)
+      if target.filename != '' && target.scheme =~# '\mwiki\d\+\|diary\|file\|local'
+        call add(links, [target.filename, target.anchor, lnum, col])
+      endif
+    endwhile
+  endfor
+
+  return links
+endfunction
+
+
 function! zettel#vimwiki#format_file_title(format, file, title)
   let link = substitute(a:format, "%title", a:title, "")
   let link = substitute(link, "%link", a:file, "")
@@ -315,6 +352,23 @@ function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
   return result
 endfunction
 
+" add link with title of the file referenced in the second argument to the
+" array in the first argument
+function! s:add_bulleted_link(lines, abs_filepath)
+  let bullet = repeat(' ', vimwiki#lst#get_list_margin()) . vimwiki#lst#default_symbol().' '
+  call add(a:lines, bullet.
+        \ zettel#vimwiki#get_link(a:abs_filepath))
+  return a:lines
+endfunction
+  
+
+" insert list of links to the current page
+function! s:insert_link_array(title, lines)
+  let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
+  call vimwiki#base#update_listing_in_buffer(a:lines, a:title, links_rx, line('$')+1, 1)
+endfunction
+
+
 " based on vimwikis "generate links", adding the %title to the link
 function! zettel#vimwiki#generate_index()
   let lines = []
@@ -332,9 +386,37 @@ function! zettel#vimwiki#generate_index()
     "endif
   endfor
 
-  let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
 
-  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Index', links_rx, line('$')+1, 1)
+  call s:insert_link_array('Generated Index', lines)
+endfunction
+
+" based on vimwikis "backlinks"
+" insert backlinks of the current page in a section
+function! zettel#vimwiki#backlinks()
+  let current_filename = expand("%:p")
+  let locations = []
+  for idx in range(vimwiki#vars#number_of_wikis())
+    " it process all files, this isn't really efficient
+    let syntax = vimwiki#vars#get_wikilocal('syntax', idx)
+    let wikifiles = vimwiki#base#find_files(idx, 0)
+    for source_file in wikifiles
+      let links = s:get_links(source_file, idx)
+      for [target_file, _, lnum, col] in links
+        " don't include links from the current file to itself
+        if vimwiki#path#is_equal(target_file, current_filename) &&
+              \ !vimwiki#path#is_equal(target_file, source_file)
+          call s:add_bulleted_link(locations, source_file)
+        endif
+      endfor
+    endfor
+  endfor
+
+  if empty(locations)
+    echomsg 'Vimwiki: No other file links to this file'
+  else
+    call uniq(locations)
+    call s:insert_link_array('Backlinks', locations)
+  endif
 endfunction
 
 " based on vimwiki

@@ -73,7 +73,7 @@ basic wiki and navigate it.
 
 - `:ZettelGenerateIndex` command – insert list of all wiki pages in the current
   page. It needs updated tags database. It can be updated  using the
-  `:VimwikiRebuildTagsh` command.
+  `:VimwikiRebuildTags` command.
 
 - `:ZettelGenerateTags` command – insert list of tags and pages that used these tags in the current
   page. It needs updated tags database. It can be updated  using the `:VimwikiRebuildTagsh` command.
@@ -87,15 +87,11 @@ basic wiki and navigate it.
 
 - `gZ` command in the normal mode – replace file path under cursor with Wiki link
 
-## Generate index of tags or links
-
-
 
 ## Useful Vimwiki commands
 
 - `:VimwikiBacklinks` - display files that link to the current page
 - `:VimwikiCheckLinks`- display files that no other file links to
-- `:VimwikiGenerateTags`- generate index of notes sorted by tags in the current page
 
 ## Import text from the command line
 

@@ -81,6 +81,10 @@ command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
 
 command! -bang -nargs=* ZettelYankName call <sid>wiki_yank_name()
 
+command! -buffer ZettelGenerateIndex call zettel#vimwiki#generate_index()
+command! -buffer -nargs=* -complete=custom,vimwiki#tags#complete_tags
+      \ ZettelGenerateTags call zettel#vimwiki#generate_tags(<f-args>)
+
 if !exists('g:zettel_default_mappings')
   let g:zettel_default_mappings=1
 endif
@@ -89,6 +93,7 @@ nnoremap <silent> <Plug>ZettelSearchMap :ZettelSearch<cr>
 nnoremap <silent> <Plug>ZettelYankNameMap :ZettelYankName<cr> 
 nnoremap <silent> <Plug>ZettelReplaceFileWithLink :call <sid>replace_file_with_link()<cr> 
 xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
+
 
 if g:zettel_default_mappings==1
   " inoremap [[ [[<esc>:ZettelSearch<CR>

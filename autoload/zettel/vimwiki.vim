@@ -286,3 +286,145 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   execute ":e " . newfile
 endfunction
 
+" based on vimwikis "get wiki links", not stripping file extension
+function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
+  let files = vimwiki#base#find_files(a:wiki_nr, 0)
+  if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
+    let cwd = vimwiki#path#wikify_path(expand('%:p:h'))
+  elseif a:wiki_nr < 0
+    let cwd = vimwiki#vars#get_wikilocal('path') . vimwiki#vars#get_wikilocal('diary_rel_path')
+  else
+    let cwd = vimwiki#vars#get_wikilocal('path', a:wiki_nr)
+  endif
+  let result = []
+  for wikifile in files
+    let wikifile = vimwiki#path#relpath(cwd, wikifile)
+    call add(result, wikifile)
+  endfor
+  if a:also_absolute_links
+    for wikifile in files
+      if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
+        let cwd = vimwiki#vars#get_wikilocal('path')
+      elseif a:wiki_nr < 0
+        let cwd = vimwiki#vars#get_wikilocal('path') . vimwiki#vars#get_wikilocal('diary_rel_path')
+      endif
+      let wikifile = '/'.vimwiki#path#relpath(cwd, wikifile)
+      call add(result, wikifile)
+    endfor
+  endif
+  return result
+endfunction
+
+" based on vimwikis "generate links", adding the %title to the link
+function! zettel#vimwiki#generate_index()
+  let lines = []
+
+  let links = zettel#vimwiki#get_wikilinks(vimwiki#vars#get_bufferlocal('wiki_nr'), 0)
+  call reverse(sort(links))
+
+  let bullet = repeat(' ', vimwiki#lst#get_list_margin()) . vimwiki#lst#default_symbol().' '
+  for link in links
+    let abs_filepath = vimwiki#path#abs_path_of_link(link)
+    "let abs_filepath = link
+    "if !s:is_diary_file(abs_filepath)
+      call add(lines, bullet.
+            \ zettel#vimwiki#get_link(abs_filepath))
+    "endif
+  endfor
+
+  let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
+
+  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Index', links_rx, line('$')+1, 1)
+endfunction
+
+" based on vimwiki
+"   Loads tags metadata from file, returns a dictionary
+function! s:load_tags_metadata() abort
+  let metadata_path = vimwiki#tags#metadata_file_path()
+  if !filereadable(metadata_path)
+    return {}
+  endif
+  let metadata = {}
+  for line in readfile(metadata_path)
+    if line =~ '^!_TAG_FILE_'
+      continue
+    endif
+    let parts = matchlist(line, '^\(.\{-}\);"\(.*\)$')
+    if parts[0] == '' || parts[1] == '' || parts[2] == ''
+      throw 'VimwikiTags1: Metadata file corrupted'
+    endif
+    let std_fields = split(parts[1], '\t')
+    if len(std_fields) != 3
+      throw 'VimwikiTags2: Metadata file corrupted'
+    endif
+    let vw_part = parts[2]
+    if vw_part[0] != "\t"
+      throw 'VimwikiTags3: Metadata file corrupted'
+    endif
+    let vw_fields = split(vw_part[1:], "\t")
+    if len(vw_fields) != 1 || vw_fields[0] !~ '^vimwiki:'
+      throw 'VimwikiTags4: Metadata file corrupted'
+    endif
+    let vw_data = substitute(vw_fields[0], '^vimwiki:', '', '')
+    let vw_data = substitute(vw_data, '\\n', "\n", 'g')
+    let vw_data = substitute(vw_data, '\\r', "\r", 'g')
+    let vw_data = substitute(vw_data, '\\t', "\t", 'g')
+    let vw_data = substitute(vw_data, '\\\\', "\\", 'g')
+    let vw_fields = split(vw_data, "\t")
+    if len(vw_fields) != 2
+      throw 'VimwikiTags5: Metadata file corrupted'
+    endif
+    let pagename = vw_fields[0]
+    let entry = {}
+    let entry.tagname  = std_fields[0]
+    let entry.filename  = std_fields[1]
+    let entry.lineno   = std_fields[2]
+    let entry.link     = vw_fields[1]
+    if has_key(metadata, pagename)
+      call add(metadata[pagename], entry)
+    else
+      let metadata[pagename] = [entry]
+    endif
+  endfor
+  return metadata
+endfunction
+
+" based on vimwiki
+function! zettel#vimwiki#generate_tags(...) abort
+  let need_all_tags = (a:0 == 0)
+  let specific_tags = a:000
+
+  let metadata = s:load_tags_metadata()
+
+  " make a dictionary { tag_name: [tag_links, ...] }
+  let tags_entries = {}
+  for entries in values(metadata)
+    for entry in entries
+      if has_key(tags_entries, entry.tagname)
+        call add(tags_entries[entry.tagname], entry.filename)
+      else
+        let tags_entries[entry.tagname] = [entry.filename]
+      endif
+    endfor
+  endfor
+
+  let lines = []
+  let bullet = repeat(' ', vimwiki#lst#get_list_margin()).vimwiki#lst#default_symbol().' '
+  for tagname in sort(keys(tags_entries))
+    if need_all_tags || index(specific_tags, tagname) != -1
+      call extend(lines, [
+            \ '',
+            \ substitute(vimwiki#vars#get_syntaxlocal('rxH2_Template'), '__Header__', tagname, ''),
+            \ '' ])
+      for taglink in reverse(sort(tags_entries[tagname]))
+        call add(lines, bullet . zettel#vimwiki#get_link(vimwiki#path#abs_path_of_link(taglink)))
+      endfor
+    endif
+  endfor
+
+  let links_rx = '\m\%(^\s*$\)\|\%('.vimwiki#vars#get_syntaxlocal('rxH2').'\)\|\%(^\s*'
+        \ .vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
+        \ .vimwiki#vars#get_syntaxlocal('rxWikiLink').'$\)'
+
+  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Tags', links_rx, line('$')+1, 1)
+endfunction

@@ -62,7 +62,7 @@ basic wiki and navigate it.
 
 ## Commands available in the Vimwiki mode
 
-- `:ZettelNew` command - it will create a new wiki file named as
+- `:ZettelNew` command – it will create a new wiki file named as
   `%y%m%d-%H%M.wiki` (it is possible to change the file name format using
   `g:zettel_format` variable). The file uses basic template in the form
 
@@ -71,14 +71,25 @@ basic wiki and navigate it.
   %date current date
   ```
 
-- `z` command in the visual mode - create a new wiki file using selected text
+- `:ZettelGenerateIndex` command – insert list of all wiki pages in the current
+  page. It needs updated tags database. It can be updated  using the
+  `:VimwikiRebuildTagsh` command.
+
+- `:ZettelGenerateTags` command – insert list of tags and pages that used these tags in the current
+  page. It needs updated tags database. It can be updated  using the `:VimwikiRebuildTagsh` command.
+
+- `z` command in the visual mode – create a new wiki file using selected text
   for the note title 
 
-- `[[` command in the insert mode - create a link to a note. It uses FZF for the note searching.
+- `[[` command in the insert mode – create a link to a note. It uses FZF for the note searching.
 
-- `T` command in the normal mode - yank the current note filename and title as a Vimwiki link
+- `T` command in the normal mode – yank the current note filename and title as a Vimwiki link
 
-- `gZ` command in the normal mode - replace file path under cursor with Wiki link
+- `gZ` command in the normal mode – replace file path under cursor with Wiki link
+
+## Generate index of tags or links
+
+
 
 ## Useful Vimwiki commands
 

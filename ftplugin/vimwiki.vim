@@ -81,7 +81,7 @@ command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
 
 command! -bang -nargs=* ZettelYankName call <sid>wiki_yank_name()
 
-command! -buffer ZettelGenerateIndex call zettel#vimwiki#generate_index()
+command! -buffer ZettelGenerateLinks call zettel#vimwiki#generate_links()
 command! -buffer -nargs=* -complete=custom,vimwiki#tags#complete_tags
       \ ZettelGenerateTags call zettel#vimwiki#generate_tags(<f-args>)
 

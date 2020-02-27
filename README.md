@@ -71,12 +71,12 @@ basic wiki and navigate it.
   %date current date
   ```
 
-- `:ZettelGenerateIndex` command – insert list of all wiki pages in the current
-  page. It needs updated tags database. It can be updated  using the
+- `:ZettelGenerateLinks` command – insert list of all wiki pages in the current
+  page. It needs updated tags database. The tags database can be updated  using the
   `:VimwikiRebuildTags` command.
 
 - `:ZettelGenerateTags` command – insert list of tags and pages that used these tags in the current
-  page. It needs updated tags database. It can be updated  using the `:VimwikiRebuildTagsh` command.
+  page. It needs updated tags database. The tags database can be updated  using the `:VimwikiRebuildTagsh` command.
 
 - `z` command in the visual mode – create a new wiki file using selected text
   for the note title 

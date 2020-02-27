@@ -370,7 +370,7 @@ endfunction
 
 
 " based on vimwikis "generate links", adding the %title to the link
-function! zettel#vimwiki#generate_index()
+function! zettel#vimwiki#generate_links()
   let lines = []
 
   let links = zettel#vimwiki#get_wikilinks(vimwiki#vars#get_bufferlocal('wiki_nr'), 0)
@@ -385,8 +385,6 @@ function! zettel#vimwiki#generate_index()
             \ zettel#vimwiki#get_link(abs_filepath))
     "endif
   endfor
-
-
   call s:insert_link_array('Generated Index', lines)
 endfunction
 

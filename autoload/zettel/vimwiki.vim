@@ -316,7 +316,7 @@ function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
 endfunction
 
 " based on vimwikis "generate links", adding the %title to the link
-function! zettel#vimwiki#generate_index()
+function! zettel#vimwiki#generate_links()
   let lines = []
 
   let links = zettel#vimwiki#get_wikilinks(vimwiki#vars#get_bufferlocal('wiki_nr'), 0)
@@ -334,7 +334,7 @@ function! zettel#vimwiki#generate_index()
 
   let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
 
-  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Index', links_rx, line('$')+1, 1)
+  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Links', links_rx, line('$')+1, 1)
 endfunction
 
 " based on vimwiki

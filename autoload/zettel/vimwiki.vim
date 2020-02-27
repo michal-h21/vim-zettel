@@ -62,12 +62,14 @@ if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
+  let s:grep_link_pattern = "/(%s)/"
 else
   let s:link_format = "[[%link|%title]]"
   let s:link_stub = "[[%link|%title]]"
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
+  let s:grep_link_pattern = '/\[%s|/'
 end
 
 " user configurable fields that should be inserted to a front matter of a new
@@ -78,7 +80,6 @@ endif
 
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
-  echom("otevírám " . a:filename)
   let lines = readfile(a:filename)
   let i = 0
   for line in lines
@@ -184,6 +185,7 @@ function! s:get_links(wikifile, idx)
     while 1
       let col = match(line, rx_link, 0, link_count)+1
       let link_text = matchstr(line, rx_link, 0, link_count)
+      echomsg("link text " . line . " - " . link_text)
       if link_text == ''
         break
       endif
@@ -198,6 +200,25 @@ function! s:get_links(wikifile, idx)
   return links
 endfunction
 
+" return list of files that match a pattern
+function! zettel#vimwiki#wikigrep(pattern)
+  let paths = []
+  let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
+  let path = vimwiki#vars#get_wikilocal('path', idx)
+  let ext = vimwiki#vars#get_wikilocal('ext', idx)
+  try
+    let command = 'vimgrep ' . a:pattern . 'j ' . path . "*" . ext
+    noautocmd  execute  command
+  catch /^Vim\%((\a\+)\)\=:E480/   " No Match
+    "Ignore it, and move on to the next file
+  endtry
+  for d in getqflist()
+    let filename = fnamemodify(bufname(d.bufnr), ":p")
+    call add(paths, filename)
+  endfor
+  call uniq(paths)
+  return paths
+endfunction
 
 function! zettel#vimwiki#format_file_title(format, file, title)
   let link = substitute(a:format, "%title", a:title, "")
@@ -391,22 +412,13 @@ endfunction
 " based on vimwikis "backlinks"
 " insert backlinks of the current page in a section
 function! zettel#vimwiki#backlinks()
-  let current_filename = expand("%:p")
+  let current_filename = expand("%:t:r")
+  " find [filename| or [filename] to support both wiki and md syntax
+  let filenamepattern = printf(s:grep_link_pattern, current_filename)
   let locations = []
-  for idx in range(vimwiki#vars#number_of_wikis())
-    " it process all files, this isn't really efficient
-    let syntax = vimwiki#vars#get_wikilocal('syntax', idx)
-    let wikifiles = vimwiki#base#find_files(idx, 0)
-    for source_file in wikifiles
-      let links = s:get_links(source_file, idx)
-      for [target_file, _, lnum, col] in links
-        " don't include links from the current file to itself
-        if vimwiki#path#is_equal(target_file, current_filename) &&
-              \ !vimwiki#path#is_equal(target_file, source_file)
-          call s:add_bulleted_link(locations, source_file)
-        endif
-      endfor
-    endfor
+  let backfiles = zettel#vimwiki#wikigrep(filenamepattern)
+  for file in backfiles
+    call s:add_bulleted_link(locations, file)
   endfor
 
   if empty(locations)

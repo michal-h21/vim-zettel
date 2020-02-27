@@ -71,6 +71,8 @@ basic wiki and navigate it.
   %date current date
   ```
 
+- `:ZettelBackLinks` command – insert list of notes that link to the current note.
+
 - `:ZettelGenerateLinks` command – insert list of all wiki pages in the current
   page. It needs updated tags database. The tags database can be updated  using the
   `:VimwikiRebuildTags` command.

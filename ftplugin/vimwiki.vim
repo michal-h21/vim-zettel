@@ -86,6 +86,7 @@ command! -buffer -nargs=* -complete=custom,vimwiki#tags#complete_tags
       \ ZettelGenerateTags call zettel#vimwiki#generate_tags(<f-args>)
 
 command! -buffer ZettelBackLinks call zettel#vimwiki#backlinks()
+command! -buffer ZettelInbox call zettel#vimwiki#inbox()
 
 if !exists('g:zettel_default_mappings')
   let g:zettel_default_mappings=1

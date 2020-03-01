@@ -429,6 +429,22 @@ function! zettel#vimwiki#backlinks()
   endif
 endfunction
 
+function! zettel#vimwiki#inbox()
+  call vimwiki#base#check_links()
+  cclose
+  let paths = []
+  for d in getqflist()
+    let filename = fnamemodify(bufname(d.bufnr), ":p")
+    call add(paths, zettel#vimwiki#get_link(filename))
+  endfor
+  if empty(paths)
+  else
+    call uniq(paths)
+    call s:insert_link_array('Unlinked notes', paths)
+  endif
+
+endfunction
+
 " based on vimwiki
 "   Loads tags metadata from file, returns a dictionary
 function! s:load_tags_metadata() abort

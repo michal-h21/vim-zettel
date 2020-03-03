@@ -137,7 +137,11 @@ function! zettel#vimwiki#template(title, date)
   call <sid>add_line(s:header_delimiter)
 endfunction
 
-function! zettel#vimwiki#new_zettel_name()
+function! zettel#vimwiki#new_zettel_name(...)
+  if a:1 != ""
+      return strftime(g:zettel_format) . "-" . a:1
+  endif
+
   return strftime(g:zettel_format)
 endfunction
 
@@ -261,7 +265,7 @@ endfunction
 " there is one optional argument, the zettel title
 function! zettel#vimwiki#create(...)
   " name of the new note
-  let format = zettel#vimwiki#new_zettel_name()
+  let format = zettel#vimwiki#new_zettel_name(a:1)
   let date_format = strftime("%Y-%m-%d %H:%M")
   echom("new zettel: ". format)
   let link_info = vimwiki#base#resolve_link(format)

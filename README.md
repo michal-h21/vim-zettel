@@ -62,6 +62,7 @@ formats supported by the `strftime()` function.
 It is also possible to use other formatting strings:
 
 - `%title` -- insert sanitized title
+- `%raw_title` -- insert raw title
 
 To use filename based on current time and note title, you can use the following format:
 

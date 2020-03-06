@@ -147,12 +147,16 @@ endfunction
 function! zettel#vimwiki#new_zettel_name(...)
   " default title value
   let title = ""
+  let raw_title = ""
   if a:0 > 0 && a:1 != "" 
+    " title contains safe version of the original title
+    " raw_title is exact title
     let title = zettel#vimwiki#escape_filename(a:1)
-      " return strftime(g:zettel_format) . "-" . s:escape_filename(a:1)
+    let raw_title = a:1 
   endif
   " expand title in the zettel_format
   let newformat = substitute(g:zettel_format, "%title", title, "")
+  let newformat = substitute(newformat, "%raw_title", raw_title, "")
   return strftime(newformat)
 endfunction
 

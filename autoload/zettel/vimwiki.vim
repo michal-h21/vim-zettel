@@ -137,6 +137,7 @@ function! zettel#vimwiki#template(title, date)
   call <sid>add_line(s:header_delimiter)
 endfunction
 
+
 " sanitize title for filename
 function! zettel#vimwiki#escape_filename(name)
   let name = substitute(a:name, " ", "_","") " change spaces to underscores
@@ -144,19 +145,41 @@ function! zettel#vimwiki#escape_filename(name)
   return fnameescape(name)
 endfunction
 
+" count files that match pattern in the current wiki
+function! zettel#vimwiki#count_files(pattern)
+  let cwd = vimwiki#vars#get_wikilocal('path')
+  let filelist = split(globpath(cwd, a:pattern), '\n')
+  return len(filelist)
+endfunction
+
+function! zettel#vimwiki#next_counted_file()
+  " count notes in the current wiki and return 
+  let ext = vimwiki#vars#get_wikilocal('ext')
+  let next_file = zettel#vimwiki#count_files("*" . ext) + 1
+  return next_file
+endfunction
+
 function! zettel#vimwiki#new_zettel_name(...)
-  " default title value
-  let title = ""
-  let raw_title = ""
+  let newformat = g:zettel_format
   if a:0 > 0 && a:1 != "" 
     " title contains safe version of the original title
     " raw_title is exact title
     let title = zettel#vimwiki#escape_filename(a:1)
     let raw_title = a:1 
+    " expand title in the zettel_format
+    let newformat = substitute(g:zettel_format, "%title", title, "")
+    let newformat = substitute(newformat, "%raw_title", raw_title, "")
   endif
-  " expand title in the zettel_format
-  let newformat = substitute(g:zettel_format, "%title", title, "")
-  let newformat = substitute(newformat, "%raw_title", raw_title, "")
+  if matchstr(newformat, "%file_no") != ""
+    " file_no counts files in the current wiki and adds 1
+    let next_file = zettel#vimwiki#next_counted_file()
+    let newformat = substitute(newformat,"%file_no", next_file, "")
+  endif
+  if matchstr(newformat, "%file_alpha") != ""
+    " same as file_no, but convert numbers to letters
+    let next_file = s:numtoletter(zettel#vimwiki#next_counted_file())
+    let newformat = substitute(newformat,"%file_aplha", next_file, "")
+  endif
   return strftime(newformat)
 endfunction
 

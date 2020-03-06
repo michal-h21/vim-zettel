@@ -63,6 +63,8 @@ It is also possible to use other formatting strings:
 
 - `%title` -- insert sanitized title
 - `%raw_title` -- insert raw title
+- `file_no` -- sequentially number files in wiki
+- `file_alpha` -- sequentially number files in wiki, but use characters instead of numbers
 
 To use filename based on current time and note title, you can use the following format:
 

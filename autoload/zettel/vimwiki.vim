@@ -267,7 +267,7 @@ function! zettel#vimwiki#create(...)
   " name of the new note
   let format = zettel#vimwiki#new_zettel_name(a:1)
   let date_format = strftime("%Y-%m-%d %H:%M")
-  echom("new zettel: ". format)
+  echomsg("new zettel: ". format)
   let link_info = vimwiki#base#resolve_link(format)
   " detect if the wiki file exists
   let wiki_not_exists = empty(glob(link_info.filename)) 
@@ -312,8 +312,8 @@ endfunction
 
 " crate zettel link from a selected text
 function! zettel#vimwiki#zettel_new_selected()
-  let name = zettel#vimwiki#new_zettel_name()
   let title = <sid>get_visual_selection()
+  let name = zettel#vimwiki#new_zettel_name(title)
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
   execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\\\0") ."\<cr>\<C-o>"

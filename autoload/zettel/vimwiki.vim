@@ -137,8 +137,23 @@ function! zettel#vimwiki#template(title, date)
   call <sid>add_line(s:header_delimiter)
 endfunction
 
-function! zettel#vimwiki#new_zettel_name()
-  return strftime(g:zettel_format)
+" sanitize title for filename
+function! zettel#vimwiki#escape_filename(name)
+  let name = substitute(a:name, " ", "_","") " change spaces to underscores
+  let name = tolower(name)
+  return fnameescape(name)
+endfunction
+
+function! zettel#vimwiki#new_zettel_name(...)
+  " default title value
+  let title = ""
+  if a:0 > 0 && a:1 != "" 
+    let title = zettel#vimwiki#escape_filename(a:1)
+      " return strftime(g:zettel_format) . "-" . s:escape_filename(a:1)
+  endif
+  " expand title in the zettel_format
+  let newformat = substitute(g:zettel_format, "%title", title, "")
+  return strftime(newformat)
 endfunction
 
 " the optional argument is the wiki number
@@ -261,9 +276,9 @@ endfunction
 " there is one optional argument, the zettel title
 function! zettel#vimwiki#create(...)
   " name of the new note
-  let format = zettel#vimwiki#new_zettel_name()
+  let format = zettel#vimwiki#new_zettel_name(a:1)
   let date_format = strftime("%Y-%m-%d %H:%M")
-  echom("new zettel: ". format)
+  echomsg("new zettel: ". format)
   let link_info = vimwiki#base#resolve_link(format)
   " detect if the wiki file exists
   let wiki_not_exists = empty(glob(link_info.filename)) 
@@ -308,8 +323,8 @@ endfunction
 
 " crate zettel link from a selected text
 function! zettel#vimwiki#zettel_new_selected()
-  let name = zettel#vimwiki#new_zettel_name()
   let title = <sid>get_visual_selection()
+  let name = zettel#vimwiki#new_zettel_name(title)
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
   execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\\\0") ."\<cr>\<C-o>"

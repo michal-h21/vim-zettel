@@ -70,6 +70,10 @@ To use filename based on current time and note title, you can use the following 
 
     let g:zettel_format = "%y%m%d-%H%M-%title"
 
+For sequentialy named files use:
+
+    let g:zettel_format = "%file_no"
+
 # Usage
 
 `Vim-zettel` adds some commands and mappings on top of

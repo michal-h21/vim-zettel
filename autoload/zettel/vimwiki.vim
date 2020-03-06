@@ -138,7 +138,7 @@ function! zettel#vimwiki#template(title, date)
 endfunction
 
 function! zettel#vimwiki#new_zettel_name(...)
-  if a:1 != ""
+  if a:0 > 0 && a:1 != "" && g:zettel_filename_title
       return strftime(g:zettel_format) . "-" . a:1
   endif
 

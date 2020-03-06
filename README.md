@@ -70,6 +70,8 @@ basic wiki and navigate it.
   %title Note title
   %date current date
   ```
+  where title is the first parameter to `:ZettelNew`.
+  You can also set the filename to include the title by toggling the variable `g:zettel_filename_title=1`.
 
 - `:ZettelBackLinks` command – insert list of notes that link to the current note.
 

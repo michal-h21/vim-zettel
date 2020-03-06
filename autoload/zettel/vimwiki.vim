@@ -137,12 +137,23 @@ function! zettel#vimwiki#template(title, date)
   call <sid>add_line(s:header_delimiter)
 endfunction
 
-function! zettel#vimwiki#new_zettel_name(...)
-  if a:0 > 0 && a:1 != "" && g:zettel_filename_title
-      return strftime(g:zettel_format) . "-" . a:1
-  endif
+" sanitize title for filename
+function! zettel#vimwiki#escape_filename(name)
+  let name = substitute(a:name, " ", "_","") " change spaces to underscores
+  let name = tolower(name)
+  return fnameescape(name)
+endfunction
 
-  return strftime(g:zettel_format)
+function! zettel#vimwiki#new_zettel_name(...)
+  " default title value
+  let title = ""
+  if a:0 > 0 && a:1 != "" 
+    let title = zettel#vimwiki#escape_filename(a:1)
+      " return strftime(g:zettel_format) . "-" . s:escape_filename(a:1)
+  endif
+  " expand title in the zettel_format
+  let newformat = substitute(g:zettel_format, "%title", title, "")
+  return strftime(newformat)
 endfunction
 
 " the optional argument is the wiki number

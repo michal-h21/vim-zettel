@@ -53,6 +53,19 @@ them in your `.vimrc` unless you want to use a different value.
     " Set template and custom header variable for the second Wiki
     let g:zettel_options = [{},{"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}]
 
+## Filenames
+
+By default, `Vim-zettel` creates filename in the form `YYMMDD-HHMM`. This
+format can be changed using the `g:zettel_format` variable. Any date and time
+formats supported by the `strftime()` function.
+
+It is also possible to use other formatting strings:
+
+- `%title` -- insert sanitized title
+
+To use filename based on current time and note title, you can use the following format:
+
+    let g:zettel_format = "%y%m%d-%H%M-%title"
 
 # Usage
 
@@ -71,7 +84,6 @@ basic wiki and navigate it.
   %date current date
   ```
   where title is the first parameter to `:ZettelNew`.
-  You can also set the filename to include the title by toggling the variable `g:zettel_filename_title=1`.
 
 - `:ZettelBackLinks` command – insert list of notes that link to the current note.
 

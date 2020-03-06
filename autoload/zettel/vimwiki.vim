@@ -178,7 +178,7 @@ function! zettel#vimwiki#new_zettel_name(...)
   if matchstr(newformat, "%file_alpha") != ""
     " same as file_no, but convert numbers to letters
     let next_file = s:numtoletter(zettel#vimwiki#next_counted_file())
-    let newformat = substitute(newformat,"%file_aplha", next_file, "")
+    let newformat = substitute(newformat,"%file_alpha", next_file, "")
   endif
   return strftime(newformat)
 endfunction

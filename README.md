@@ -102,8 +102,8 @@ basic wiki and navigate it.
 
 - `:ZettelGenerateTags` command – insert list of tags and pages that used these tags in the current
   page. It needs updated tags database. The tags database can be updated  using
-  the `:VimwikiRebuildTags` command. It works only for the `Vimwiki` syntax,
-  `Markdown` doesn't have tag support.
+  the `:VimwikiRebuildTags` command. It only supports the `Vimwiki` style tags in the form `:tag1:tag2`.
+  These work even in the `Markdown` mode.
 
 - `z` command in the visual mode – create a new wiki file using selected text
   for the note title 

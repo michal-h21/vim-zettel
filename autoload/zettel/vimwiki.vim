@@ -140,7 +140,7 @@ endfunction
 
 " sanitize title for filename
 function! zettel#vimwiki#escape_filename(name)
-  let name = substitute(a:name, " ", "_","") " change spaces to underscores
+  let name = substitute(a:name, " ", "_","g") " change spaces to underscores
   let name = tolower(name)
   return fnameescape(name)
 endfunction
@@ -326,8 +326,6 @@ function! zettel#vimwiki#zettel_new(...)
   if filename == 0
     return 0
   endif
-  " save the new wiki file
-  execute ":w"
   let front_matter = zettel#vimwiki#get_option("front_matter")
   if !empty(front_matter)
     let newfile = zettel#vimwiki#save_wiki_page(filename)
@@ -345,6 +343,9 @@ function! zettel#vimwiki#zettel_new(...)
   if !empty(template)
     execute "read " . template
   endif
+
+  " save the new wiki file
+  execute ":w"
 
 endfunction
 

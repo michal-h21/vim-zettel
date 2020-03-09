@@ -45,7 +45,7 @@ function! s:wiki_search(line)
   let link = zettel#vimwiki#format_search_link(wikiname, title)
   let line = getline('.')
   " replace the [[ with selected link and title
-  call feedkeys("a\<BS>\<BS>".link)
+  call feedkeys("a\<BS>\<BS>".link, "n")
 endfunction
 
 function! s:wiki_yank_name()

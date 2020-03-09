@@ -33,15 +33,18 @@ function! s:wiki_search(line)
   let title = <sid>get_zettel_title(filename)
   " insert the filename and title into the current buffer
   let wikiname = <sid>get_wiki_file(filename)
+  " if the title is empty, the link will be hidden by vimwiki, use the filename
+  " instead
+  if empty(title)
+    let title = wikiname
+  end
   let link = zettel#vimwiki#format_search_link(wikiname, title)
-  " delete the [[, set mark ` at the current position,  insert selected link and title 
-  execute 'normal! xxm`a'. link 
-  " if the title is empty, the link will be hidden by vimwiki
-  " we can move the cursor to the title position and switch to the insert mode
-  " to enable user to specify the title by hand
-  if title == ""
-    call zettel#vimwiki#insert_mode_in_title()
-  endif
+  let line = getline('.')
+  " replace the [[ with selected link and title
+  let caret = col('.')
+  call setline('.', strpart(line, 0, caret - 2) . link . strpart(line, caret))
+  startinsert
+  call cursor(line('.'), caret + len(link) - 1)
 endfunction
 
 function! s:wiki_yank_name()

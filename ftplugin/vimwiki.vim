@@ -1,7 +1,11 @@
  " get active VimWiki directory
 let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
+
 " FZF command used in the ZettelSearch command
-let g:zettel_fzf_command = "ag"
+if !exists('g:zettel_fzf_command')
+  let g:zettel_fzf_command = "ag"
+endif
+
 " format of a new zettel filename
 if !exists('g:zettel_format')
   let g:zettel_format = "%y%m%d-%H%M"

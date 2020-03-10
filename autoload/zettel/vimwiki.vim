@@ -568,7 +568,10 @@ function! zettel#vimwiki#generate_tags(...) abort
             \ substitute(vimwiki#vars#get_syntaxlocal('rxH2_Template'), '__Header__', tagname, ''),
             \ '' ])
       for taglink in reverse(sort(tags_entries[tagname]))
-        call add(lines, bullet . zettel#vimwiki#get_link(vimwiki#path#abs_path_of_link(taglink)))
+        let filepath = vimwiki#path#abs_path_of_link(taglink)
+        if filereadable(filepath)
+          call add(lines, bullet . zettel#vimwiki#get_link(filepath))
+        endif
       endfor
     endif
   endfor

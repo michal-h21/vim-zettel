@@ -474,14 +474,26 @@ endfunction
 
 function! zettel#vimwiki#inbox()
   call vimwiki#base#check_links()
+  let linklist = getqflist()
   cclose
   let paths = []
-  for d in getqflist()
-    let filename = fnamemodify(bufname(d.bufnr), ":p")
-    call add(paths, zettel#vimwiki#get_link(filename))
+  " normalize the current wiki path
+  let cwd = fnamemodify(vimwiki#vars#get_wikilocal('path'), ":p:h")
+  for d in linklist
+    " detect files that are not reachable from the wiki index
+    let filenamematch = matchstr(d.text,'\zs.*\ze is not reachable')
+    if filenamematch != "" && filereadable(filenamematch)
+      " use only files from the current wiki, we get files from all registered
+      " wikis here
+      let filepath = fnamemodify(filenamematch, ":p:h")
+      if filepath ==# cwd
+        call add(paths, zettel#vimwiki#get_link(filenamematch))
+      endif
+    endif
   endfor
   if empty(paths)
   else
+    " remove duplicates and insert inbox section
     call uniq(paths)
     call s:insert_link_array('Unlinked notes', paths)
   endif

@@ -47,7 +47,7 @@ function! s:wiki_search(line)
   " replace the [[ with selected link and title
   let caret = col('.')
   call setline('.', strpart(line, 0, caret - 2) . link .  strpart(line, caret))
-  call cursor(line('.'), caret + len(link) - 1)
+  call cursor(line('.'), caret + len(link) - 2)
   call feedkeys("a", "n")
 endfunction
 

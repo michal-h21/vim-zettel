@@ -341,9 +341,13 @@ function! zettel#vimwiki#zettel_new(...)
   " g:zettel_options for the current wiki
   let template = zettel#vimwiki#get_option("template")
   if !empty(template)
-    execute "read " . template
+    let variables = get(a:, 2, 0)
+    if !empty(variables)
+      " variables are available only when this function is called from
+      " zettel_new_selected
+      call zettel#vimwiki#expand_template(template, variables)
+    endif
   endif
-
   " save the new wiki file
   execute ":w"
 
@@ -353,10 +357,62 @@ endfunction
 function! zettel#vimwiki#zettel_new_selected()
   let title = <sid>get_visual_selection()
   let name = zettel#vimwiki#new_zettel_name(title)
+  " make variables that will be available in the new page template
+  let variables = zettel#vimwiki#prepare_template_variables(expand("%"), title)
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
   execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\\\0") ."\<cr>\<C-o>"
-  call zettel#vimwiki#zettel_new(title)
+  call zettel#vimwiki#zettel_new(title, variables)
+endfunction
+
+" prepare variables that will be available to expand in the new note template
+function! zettel#vimwiki#prepare_template_variables(filename, title)
+  let variables = {}
+  let variables.title = a:title
+  let variables.backlink = zettel#vimwiki#get_link(a:filename)
+  " we want to save footer of the parent note. It can contain stuff that can
+  " be useful in the child note, like citations,  etc. Footer is everything
+  " below last horizontal rule (----)
+  let variables.footer = s:read_footer(a:filename)
+  return variables
+endfunction
+
+" find and return footer in the file
+" footer is content below last horizontal rule (----)
+function! s:read_footer(filename)
+  let lines = readfile(a:filename)
+  let footer_lines = []
+  let found_footer = -1
+  " return empty footer if we couldn't find the footer
+  let footer = "" 
+  " process lines from the last one and try to find the rule
+  for line in reverse(lines) 
+    if match(line, "^ \*----") == 0
+      let found_footer = 0
+      break
+    endif
+    call add(footer_lines, line)
+  endfor
+  if found_footer == 0
+    let footer = join(reverse(footer_lines), "\n")
+  endif
+  return footer
+endfunction
+
+" populate new note using template
+function! zettel#vimwiki#expand_template(template, variables)
+  " readfile returns list, we need to convert it to string 
+  " in order to do global replace
+  let content = readfile(a:template)
+  let text = join(content, "\n")
+  for key in keys(a:variables)
+    let text = substitute(text, "%" . key, a:variables[key], "g")
+  endfor
+  " add template at the end
+  " we must split it, 
+  for xline in split(text, "\n")
+    call append(line('$'), xline)
+  endfor
 endfunction
 
 " make new zettel from a file. the file contents will be copied to a new

@@ -69,10 +69,13 @@ endfunction
 
 
 function! s:execute_fzf(a, b, options)
+  " I cannot get `ag` running with fzf#vim#grep, so we use
+  " two different methods
   if g:zettel_fzf_command == "ag"
     let Fzf_cmd = function("fzf#vim#" . g:zettel_fzf_command)
     return Fzf_cmd(a:a, a:b, a:options)
   else
+    " use grep method for other commands
     return fzf#vim#grep(g:zettel_fzf_command . " " . shellescape(a:a), 1, a:options)
   endif
 endfunction

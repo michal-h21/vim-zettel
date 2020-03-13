@@ -69,8 +69,12 @@ endfunction
 
 
 function! s:execute_fzf(a, b, options)
-  let Fzf_cmd = function("fzf#vim#" . g:zettel_fzf_command)
-  return Fzf_cmd(a:a, a:b, a:options)
+  if g:zettel_fzf_command == "ag"
+    let Fzf_cmd = function("fzf#vim#" . g:zettel_fzf_command)
+    return Fzf_cmd(a:a, a:b, a:options)
+  else
+    return fzf#vim#grep(g:zettel_fzf_command . " " . shellescape(a:a), 1, a:options)
+  endif
 endfunction
 
 

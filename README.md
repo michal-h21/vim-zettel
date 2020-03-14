@@ -23,7 +23,7 @@ The used command can be changed by setting the `g:zettel_fzf_command` variable.
 First of all, it is necessary to configure Vimwiki, as `Vim-zettel` builds on top of it.
 
     " Settings for Vimwiki
-    let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown', 'zettel_template': "~/mytemplate.tpl"}, {"path":"~/scratchbox/vimwiki/wiki/"}]
+    let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md','syntax':'markdown'}, {"path":"~/scratchbox/vimwiki/wiki/"}]
 
 To open the index page of your wiki, invoke Vim with the following parameters:
 
@@ -37,8 +37,9 @@ them in your `.vimrc` unless you want to use a different value.
     " Filename format. The filename is created using strftime() function
     let g:zettel_format = "%y%m%d-%H%M"
     " command used for VimwikiSearch 
-    " possible values: "ag", "rg", "grep"
-    let g:zettel_fzf_command = "ag"
+    " default value is "ag". To use other command, like ripgrep, pass the
+    " command line and options:
+    let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
     " Disable default keymappings
     let g:zettel_default_mappings = 0 
     " This is basically the same as the default configuration
@@ -73,6 +74,31 @@ To use filename based on current time and note title, you can use the following 
 For sequentialy named files use:
 
     let g:zettel_format = "%file_no"
+
+## Templates
+
+It is possible to populate new notes with basic structure using templates.
+Template can be declared using the `g:zettel_options` variable:
+
+    let g:zettel_options = [{"template" :  "~/path/to/mytemplate.tpl"}]
+
+Sample template:
+
+    = %title =
+    
+    Backlink: %backlink
+    ----
+    %footer
+
+Variables that start with the `%` will be expanded. Supported variables:
+
+- `%title` - title of the new note
+- `%backlink` - back link to the parent note
+- `%footer` - text from the parent note footer. Footer is separated from  the
+  main text by horizontal rule  (`----`). It can contain some information
+  shared by notes. For example notes about publication can share citation of that
+  publication.
+
 
 # Usage
 

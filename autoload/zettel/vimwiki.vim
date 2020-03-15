@@ -403,7 +403,11 @@ endfunction
 function! zettel#vimwiki#expand_template(template, variables)
   " readfile returns list, we need to convert it to string 
   " in order to do global replace
-  let content = readfile(a:template)
+  let template_file = expand(a:template)
+  if !filereadable(template_file) 
+    return 
+  endif
+  let content = readfile(template_file)
   let text = join(content, "\n")
   for key in keys(a:variables)
     let text = substitute(text, "%" . key, a:variables[key], "g")

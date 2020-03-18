@@ -30,7 +30,8 @@ command! -bang -nargs=* ZettelSearch call zettel#fzf#execute_fzf(<q-args>,
       \'down': '~40%',
       \'sink':function('zettel#fzf#wiki_search'),
       \'dir':g:zettel_dir,
-      \'options':['--exact']}))
+      \'options': ['--exact', '--tiebreak=end']}))
+
 
 
 command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)

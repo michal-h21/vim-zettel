@@ -489,7 +489,11 @@ endfunction
 " insert list of links to the current page
 function! s:insert_link_array(title, lines)
   let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
-  call vimwiki#base#update_listing_in_buffer(a:lines, a:title, links_rx, line('$')+1, 1)
+  let generator = { 'data': a:lines }
+  function generator.f() dict
+      return self.data
+  endfunction
+  call vimwiki#base#update_listing_in_buffer(generator, a:title, links_rx, line('$')+1, 1, 1)
 endfunction
 
 
@@ -569,7 +573,7 @@ function! s:load_tags_metadata() abort
   endif
   let metadata = {}
   for line in readfile(metadata_path)
-    if line =~ '^!_TAG_FILE_'
+    if line =~ '^!_TAG'
       continue
     endif
     let parts = matchlist(line, '^\(.\{-}\);"\(.*\)$')
@@ -652,5 +656,9 @@ function! zettel#vimwiki#generate_tags(...) abort
         \ .vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
         \ .vimwiki#vars#get_syntaxlocal('rxWikiLink').'$\)'
 
-  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Tags', links_rx, line('$')+1, 1)
+  let generator = { 'data': lines }
+  function generator.f() dict
+      return self.data
+  endfunction
+  call vimwiki#base#update_listing_in_buffer(generator, 'Generated Tags', links_rx, line('$')+1, 1, 1)
 endfunction

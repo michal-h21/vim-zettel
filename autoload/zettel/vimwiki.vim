@@ -72,6 +72,24 @@ else
   let s:grep_link_pattern = '/\[%s|/'
 end
 
+" support for the development version of Vimwiki. They changed expected
+" parameters for update_listing_in_buffer function.
+if exists("*vimwiki#base#deprecate")
+  let s:tag_pattern = '^!_TAG'
+  function! zettel#vimwiki#update_listing(lines, title, links_rx)
+    let generator = { 'data': a:lines }
+    function generator.f() dict
+          return self.data
+    endfunction
+    call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, 1, 1)
+  endfunction
+else
+  let s:tag_pattern = '^!_TAG_FILE_'
+  function! zettel#vimwiki#update_listing(lines, title, links_rx)
+    call vimwiki#base#update_listing_in_buffer(a:lines, a:title, a:links_rx, line('$')+1, 1)
+  endfunction
+endif 
+
 " user configurable fields that should be inserted to a front matter of a new
 " Zettel
 if !exists('g:zettel_front_matter')
@@ -484,12 +502,13 @@ function! s:add_bulleted_link(lines, abs_filepath)
         \ zettel#vimwiki#get_link(a:abs_filepath))
   return a:lines
 endfunction
+
   
 
 " insert list of links to the current page
 function! s:insert_link_array(title, lines)
   let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
-  call vimwiki#base#update_listing_in_buffer(a:lines, a:title, links_rx, line('$')+1, 1)
+  call zettel#vimwiki#update_listing(a:lines, a:title, links_rx)
 endfunction
 
 
@@ -569,7 +588,7 @@ function! s:load_tags_metadata() abort
   endif
   let metadata = {}
   for line in readfile(metadata_path)
-    if line =~ '^!_TAG_FILE_'
+    if line =~ s:tag_pattern
       continue
     endif
     let parts = matchlist(line, '^\(.\{-}\);"\(.*\)$')
@@ -652,5 +671,5 @@ function! zettel#vimwiki#generate_tags(...) abort
         \ .vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
         \ .vimwiki#vars#get_syntaxlocal('rxWikiLink').'$\)'
 
-  call vimwiki#base#update_listing_in_buffer(lines, 'Generated Tags', links_rx, line('$')+1, 1)
+  call zettel#vimwiki#update_listing(lines, 'Generated Tags', links_rx)
 endfunction

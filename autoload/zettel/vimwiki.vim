@@ -62,7 +62,7 @@ if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
-  let s:grep_link_pattern = "/(%s)/"
+  let s:grep_link_pattern = '/\(%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
 else
   let s:link_format = "[[%link|%title]]"
   let s:link_stub = "[[%link|%title]]"

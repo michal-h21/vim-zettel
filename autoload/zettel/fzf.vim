@@ -43,7 +43,9 @@ endfunction
 
 
 " insert link for the searched zettel in the current note
-function! zettel#fzf#wiki_search(line)
+function! zettel#fzf#wiki_search(line,...)
+  let deleted_chars = get(a:, 1, 2)
+  echom("Deleted chars: " . deleted_chars)
   let filename = s:get_fzf_filename(a:line)
   let title = s:get_zettel_title(filename)
   " insert the filename and title into the current buffer
@@ -60,4 +62,17 @@ function! zettel#fzf#wiki_search(line)
   call setline('.', strpart(line, 0, caret - 2) . link .  strpart(line, caret))
   call cursor(line('.'), caret + len(link) - 2)
   call feedkeys("a", "n")
+endfunction
+
+
+" function!  zettel#fzf#execute_fzf(<q-args>, 
+"       \'--skip-vcs-ignores', fzf#vim#with_preview({
+"       \'down': '~40%',
+"       \'sink':function('zettel#fzf#wiki_search'),
+"       \'dir':g:zettel_dir,
+"       \'options':['--exact']}))
+function! zettel#fzf#insert_note(lines)
+  for line in a:lines
+    echom("we got line: " . line)
+  endfor
 endfunction

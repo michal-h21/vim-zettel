@@ -15,6 +15,7 @@ CONTENTS                                                           *vim-zettel*
 2. Configuration                             |Vim-Zettel-Configure|
 3. Commands                                  |Vim-Zettel-Commands|
    `ZettelNew`                                |Vim-Zettel_ZettelNew|
+   `ZettelOpen`                               |Vim-Zettel_ZettelOpen|
    `ZettelCapture`                            |Vim-Zettel_ZettelCapture|
    `ZettelBackLinks`                          |Vim-Zettel_ZettelBackLinks|
    `ZettelInbox`                              |Vim-Zettel_ZettelInbox|
@@ -94,6 +95,11 @@ Vim-Zettel implements the following commands on top of Vimwiki.
  
 where title is the first parameter to `:ZettelNew`.
  
+                                                       *Vim-Zettel_ZettelOpen*
+                                                                  *ZettelOpen*
+- `:ZettelOpen` command - perform fulltext search using FZF. It keeps the
+  history of opened pages.
+
                                                    *Vim-Zettel_ZettelCapture*
                                                               *ZettelCapture*
 - `:ZettelCapture` command – turn the content of the current file into a

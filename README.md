@@ -118,7 +118,7 @@ basic wiki and navigate it.
   ```
   where title is the first parameter to `:ZettelNew`.
 
-- `ZettelOpen` command - perform fulltext search using FZF.
+- `:ZettelOpen` command - perform fulltext search using FZF.
 
 - `:ZettelBackLinks` command – insert list of notes that link to the current note.
 

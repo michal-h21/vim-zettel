@@ -23,15 +23,13 @@ endfunction
 
 
 
-" make fulltext search in all VimWiki files using FZF
+" make fulltext search in all VimWiki files using FZF and insert link to the
+" found file
 " command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
-command! -bang -nargs=* ZettelSearch call zettel#fzf#execute_fzf(<q-args>, 
-      \'--skip-vcs-ignores', fzf#vim#with_preview({
-      \'down': '~40%',
-      \'sink':function('zettel#fzf#wiki_search'),
-      \'dir':g:zettel_dir,
-      \'options': ['--exact', '--tiebreak=end']}))
+command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#wiki_search')
 
+" make fulltext search in all VimWiki files using FZF and open the found file
+command! -bang -nargs=* ZettelOpen call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#search_open')
 
 
 command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)

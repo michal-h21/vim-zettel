@@ -6,6 +6,10 @@ if !exists('g:zettel_fzf_command')
   let g:zettel_fzf_command = "ag"
 endif
 
+if !exists('g:zettel_fzf_options')
+  let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
+endif
+
 " vimwiki files can have titles in the form of %title title content
 function! s:get_zettel_title(filename)
   return zettel#vimwiki#get_title(a:filename)
@@ -44,8 +48,6 @@ endfunction
 
 " insert link for the searched zettel in the current note
 function! zettel#fzf#wiki_search(line,...)
-  let deleted_chars = get(a:, 1, 2)
-  echom("Deleted chars: " . deleted_chars)
   let filename = s:get_fzf_filename(a:line)
   let title = s:get_zettel_title(filename)
   " insert the filename and title into the current buffer
@@ -65,12 +67,50 @@ function! zettel#fzf#wiki_search(line,...)
 endfunction
 
 
-" function!  zettel#fzf#execute_fzf(<q-args>, 
-"       \'--skip-vcs-ignores', fzf#vim#with_preview({
-"       \'down': '~40%',
-"       \'sink':function('zettel#fzf#wiki_search'),
-"       \'dir':g:zettel_dir,
-"       \'options':['--exact']}))
+" search for a note and the open it in Vimwiki
+function! zettel#fzf#search_open(line,...)
+  let filename = s:get_fzf_filename(a:line)
+  let wikiname = s:get_wiki_file(filename)
+  if !empty(wikiname)
+    " open the selected note using this Vimwiki function
+    " it will keep the history of opened pages, so you can go to the previous
+    " page using backspace
+    call vimwiki#base#open_link(':e ', wikiname)
+  endif
+endfunction
+
+" get options for fzf#vim#with_preview function
+function! zettel#fzf#preview_options(sink_function, additional_options)
+  let options = {'sink':function(a:sink_function),
+      \'dir':g:zettel_dir,
+      \'options':g:zettel_fzf_options}
+  " make it possible to pass additional options that overwrite the default
+  " ones
+  for [key, value] in items(a:additional_options) 
+    " ToDo: it seems that it doesn't work
+    let options.key = value
+  endfor
+  return options
+endfunction
+
+" helper function to open FZF preview window and pass one selected file to a
+" sink function. useful for opening found files
+function! zettel#fzf#sink_onefile(params, sink_function,...)
+  " get optional argument that should contain additional options for the fzf
+  " preview window
+  let additional_options = get(a:, 1, {})
+  call zettel#fzf#execute_fzf(a:params, 
+      \'--skip-vcs-ignores', fzf#vim#with_preview(zettel#fzf#preview_options(a:sink_function, additional_options)))
+endfunction
+
+" open wiki page using FZF search
+function! zettel#fzf#execute_open(params)
+  call zettel#fzf#sink_onefile(a:params, 'zettel#fzf#search_open')
+endfunction
+
+
+" this function is just a test for retrieving multiple results from FZF. see
+" plugin/zettel.vim for call example
 function! zettel#fzf#insert_note(lines)
   for line in a:lines
     echom("we got line: " . line)

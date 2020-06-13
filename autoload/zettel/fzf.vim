@@ -106,11 +106,75 @@ function! zettel#fzf#execute_open(params)
   call zettel#fzf#sink_onefile(a:params, 'zettel#fzf#search_open')
 endfunction
 
+" return list of unique wiki pages selected in FZF 
+function! zettel#fzf#get_files(lines)
+  " remove duplicate lines
+  let new_list = [] 
+  for line in a:lines
+    if line !="" 
+      let new_list = add(new_list, s:get_fzf_filename(line))
+    endif
+  endfor
+  return uniq(new_list)
+endfunction
+
+" map between Vim filetypes and Pandoc output formats
+let s:supported_formats = {
+      \"tex":"latex",
+      \"latex":"latex",
+      \"markdown":"markdown",
+      \"wiki":"vimwiki",
+      \"md":"markdown",
+      \"org":"org",
+      \"html":"html",
+      \"default":"markdown",
+\}
+
+" this global variable can hold additional mappings between Vim and Pandoc
+if exists('g:export_formats')
+  let s:supported_formats = extend(s:supported_formats, g:export_formats)
+endif
+
+" return section title depending on the syntax
+function! s:make_section(title, ft)
+  if a:ft ==? "md"
+    return "# " . a:title
+  else
+    return "= " . a:title . " ="
+  endif
+endfunction
 
 " this function is just a test for retrieving multiple results from FZF. see
 " plugin/zettel.vim for call example
 function! zettel#fzf#insert_note(lines)
-  for line in a:lines
-    echom("we got line: " . line)
+  " get Pandoc output format for the current file filetype
+  let output_format = get(s:supported_formats,&filetype, "markdown")
+  let lines_to_convert = []
+  let input_format = "vimwiki"
+  for line in zettel#fzf#get_files(a:lines)
+    " convert all files to the destination format
+    let filename = vimwiki#vars#get_wikilocal('path',0). line
+    let ext = fnamemodify(filename, ":e")
+    " update the input format
+    let input_format = get(s:supported_formats, ext, "vimwiki")
+    " convert note title to section
+    let sect_title = s:make_section( zettel#vimwiki#get_title(filename), ext)
+    " find start of the content
+    let header_end = zettel#vimwiki#find_header_end(filename)
+    let lines_to_convert = add(lines_to_convert, sect_title)
+    let i = 0
+    " read note contents without metadata header
+    for fline in readfile(filename)
+      if i >= header_end
+        let lines_to_convert = add(lines_to_convert, fline)
+      endif
+      let i = i + 1
+    endfor
   endfor
+  let command_to_execute = "pandoc -f " . input_format . " -t " . output_format
+  echom("Executing :" .command_to_execute)
+  let result = systemlist(command_to_execute, lines_to_convert)
+  call append(line("."), result)
+  " Todo: move this to execute_open 
+  call setqflist(map(zettel#fzf#get_files(a:lines), '{ "filename": v:val }'))
 endfunction

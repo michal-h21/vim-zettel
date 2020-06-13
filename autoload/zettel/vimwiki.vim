@@ -99,11 +99,15 @@ endif
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
   let lines = readfile(a:filename)
+  " Markdown and Vimwiki use different formats for metadata header, select the
+  " right one according to the file type
+  let ext = fnamemodify(a:filename, ":e")
+  let Header_test = function(ext ==? 'md' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
   let i = 0
   for line in lines
-    let res = s:test_header_end(line, i)
+    " let res = s:test_header_end(line, i)
+    let res = Header_test(line, i)
     if res > -1 
-      " call append(i, "This is the end")
       return i
     endif
     let i = i + 1

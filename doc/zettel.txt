@@ -16,6 +16,7 @@ CONTENTS                                                           *vim-zettel*
 3. Commands                                  |Vim-Zettel-Commands|
    `ZettelNew`                                |Vim-Zettel_ZettelNew|
    `ZettelOpen`                               |Vim-Zettel_ZettelOpen|
+   `ZettelInsertNote`                         |Vim-Zettel_ZettelInsertNote|
    `ZettelCapture`                            |Vim-Zettel_ZettelCapture|
    `ZettelBackLinks`                          |Vim-Zettel_ZettelBackLinks|
    `ZettelInbox`                              |Vim-Zettel_ZettelInbox|
@@ -99,6 +100,12 @@ where title is the first parameter to `:ZettelNew`.
                                                                   *ZettelOpen*
 - `:ZettelOpen` command - perform fulltext search using FZF. It keeps the
   history of opened pages.
+
+                                                 *Vim-Zettel_ZettelInsertNote*
+                                                            *ZettelInsertNote*
+- `:ZettelInsertNote` - select notes using FZF and insert them in the current
+  document.  Multiple notes can be selected using the `<TAB>` key.  They are 
+  automatically converted to the document syntax format using Pandoc.
 
                                                    *Vim-Zettel_ZettelCapture*
                                                               *ZettelCapture*

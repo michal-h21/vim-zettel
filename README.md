@@ -142,6 +142,15 @@ basic wiki and navigate it.
 
 - `gZ` command in the normal mode – replace file path under cursor with Wiki link
 
+## Insert notes to the current document
+
+`Vim-zettel` provides way to search notes in your Zettelkasten and insert the
+selected notes in the current document. The notes are automatically converted
+to the document syntax format using [Pandoc](https://pandoc.org).
+
+- `:ZettelInsertNote` - select notes using FZF. Multiple notes can be selected
+  using the `<TAB>` key. The selected notes are inserted in the current document.
+
 
 ## Useful Vimwiki commands
 

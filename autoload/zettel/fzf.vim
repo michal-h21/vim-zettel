@@ -80,16 +80,14 @@ function! zettel#fzf#search_open(line,...)
 endfunction
 
 " get options for fzf#vim#with_preview function
+" pass empty dictionary {} if you don't want additinal_options
 function! zettel#fzf#preview_options(sink_function, additional_options)
   let options = {'sink':function(a:sink_function),
       \'dir':g:zettel_dir,
       \'options':g:zettel_fzf_options}
   " make it possible to pass additional options that overwrite the default
   " ones
-  for [key, value] in items(a:additional_options) 
-    " ToDo: it seems that it doesn't work
-    let options.key = value
-  endfor
+  let options = extend(options, a:additional_options)
   return options
 endfunction
 

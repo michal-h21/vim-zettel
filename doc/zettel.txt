@@ -58,7 +58,7 @@ Using Vundle: >
 ==============================================================================
 2. Configuration                                        *Vim-Zettel-Configure*
  
-First of all, it is necessary to configure Vimwiki, as Vim-zettel builds
+First of all, it is necessary to configure Vimwiki, as Vim-Zettel builds
 on top of it.  Vim-Zettel can be used out of the box without further
 configuration if you have only one wiki.  However, you will probably want to
 customize your Vim-Zettel configuration and will have to if you have more than
@@ -196,7 +196,7 @@ first wiki in your g:zettel_options list as a set of empty braces: >
    let g:zettel_options = ['{}', '{"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}']
 <
                                                             *g:zettel_format*
-By default, Vim-zettel creates filenames in the form YYMMDD-HHMM. This
+By default, Vim-Zettel creates filenames in the form YYMMDD-HHMM. This
 format can be changed using the g:zettel_format variable. Any date and time
 formats supported by the `strftime()` function.
  
@@ -272,7 +272,7 @@ Variables that start with the % will be expanded. Supported variables:
 7. Related packages                                        *Vim-Zettel-Related*
  
 The following packages may be useful in conjunction with Vimwiki and
-Vim-zettel:
+Vim-Zettel:
  
 - [Notational FZF](https://github.com/alok/notational-fzf-vim) - fast
    searching notes with preview window.

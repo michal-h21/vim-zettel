@@ -95,6 +95,10 @@ Vim-Zettel implements the following commands on top of Vimwiki.
    %date current date
  
 where title is the first parameter to `:ZettelNew`.
+
+If you use the default mappings provided by `Vim-Zettel`, it is possible to
+call this command by pressing the `z` character in visual mode. The selected
+text will be used as title of the new note.
  
                                                        *Vim-Zettel_ZettelOpen*
                                                                   *ZettelOpen*

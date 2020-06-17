@@ -1,9 +1,14 @@
 # The `vim-zettel` package
 
 This is a Vim plugin that implements ideas of the
-[Zettelkasten](https://zettelkasten.de/) method using Vimwiki. This is a work
-in progress and it has just a basic features ATM. It supports both Vimwiki and
-Markdown syntaxes.
+[Zettelkasten](https://zettelkasten.de/) method using Vimwiki. 
+It supports both Vimwiki and Markdown syntaxes.
+
+You can read the full documentation using
+
+    :help vim-zettel
+
+command in Vim after package installation.
 
 # Install
 

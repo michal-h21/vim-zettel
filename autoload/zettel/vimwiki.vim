@@ -535,6 +535,24 @@ function! zettel#vimwiki#generate_links()
   call s:insert_link_array('Generated Index', lines)
 endfunction
 
+
+" test if link in the Backlinks section
+function! s:is_in_backlinks(file, filenamepattern)
+  let f = readfile(a:file)
+  let content = join(f, "\n")
+  " ToDo: make the backlink header string configurable
+  " probably use proper pattern for section header, not just string
+  let backlinks_pos = matchstrpos(content, "Backlinks")
+  " if we cannot find backlinks in the page return false
+  if backlinks_pos[1] == -1 
+    return -1
+  endif
+  let file_pos = matchstrpos(content, a:filenamepattern)
+  " link is in backlinks when it is placed after the Backlinks section
+  return backlinks_pos[1] < file_pos[1]
+endfunction
+
+
 " based on vimwikis "backlinks"
 " insert backlinks of the current page in a section
 function! zettel#vimwiki#backlinks()
@@ -544,7 +562,11 @@ function! zettel#vimwiki#backlinks()
   let locations = []
   let backfiles = zettel#vimwiki#wikigrep(filenamepattern)
   for file in backfiles
-    call s:add_bulleted_link(locations, file)
+    " only add backlink if it is not already backlink
+    let is_backlink = s:is_in_backlinks(file, current_filename)
+    if is_backlink < 1
+      call s:add_bulleted_link(locations, file)
+    endif
   endfor
 
   if empty(locations)

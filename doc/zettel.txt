@@ -196,7 +196,7 @@ first wiki in your g:zettel_options list as a set of empty braces: >
  
                    first wiki     zettelkasten wiki
                             ↓     ↓
-   let g:zettel_options = ['{}', '{"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}']
+   let g:zettel_options = [{}, {"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}]
 <
                                                             *g:zettel_format*
 By default, Vim-Zettel creates filenames in the form YYMMDD-HHMM. This
@@ -219,6 +219,7 @@ following format: >
 For sequentialy named files use: >
  
    let g:zettel_format = "%file_no"
+<
  
                                                   *g:zettel_default_mappings*
 The default mappings used by Vim-Zettel can be changed by setting the
@@ -234,6 +235,7 @@ The code below can serve as a template to start from. >
      autocmd FileType vimwiki xmap z <Plug>ZettelNewSelectedMap
      autocmd FileType vimwiki nmap gZ <Plug>ZettelReplaceFileWithLink
    augroup END
+<
  
                                                        *g:zettel_fzf_command*
 Vim-Zettel uses The Silver Searcher (ag) by default when searching through
@@ -245,13 +247,22 @@ setting. >
    " command line and options:
    let g:zettel_fzf_command = "rg --column --line-number --ignore-case \
      --no-heading --color=always "
+
+<
      
                                                        *g:zettel_fzf_options*
-                                                    *g:zettel_backlinks_title*
+Options used for the `fzf` command.
 
+>
+   let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
+<
+
+                                                    *g:zettel_backlinks_title*
 Text used as back links section.
 
+>
    let g:zettel_backlinks_title = "Backlinks"
+<
 
 
 ==============================================================================
@@ -303,6 +314,8 @@ commit changes in wiki and synchronize them with external Git repository.
 2020-06-24  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: the back links title is configurable
+* autoload/zettel/vimwiki.vim: template is now available also in the
+  `:ZettelNew` command.
 * ftplugin/vimwiki.vim: removed unused variable `g:zettel_filename_title`.
 * doc/zettel.txt: added ChangeLog and documented few variables.
 

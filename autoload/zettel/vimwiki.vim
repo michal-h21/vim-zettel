@@ -63,6 +63,7 @@ if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
   let s:grep_link_pattern = '/\(%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
+  let s:section_pattern = "# %s"
 else
   let s:link_format = "[[%link|%title]]"
   let s:link_stub = "[[%link|%title]]"
@@ -70,6 +71,7 @@ else
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
   let s:grep_link_pattern = '/\[%s|/'
+  let s:section_pattern = "= %s ="
 end
 
 " support for the development version of Vimwiki. They changed expected
@@ -95,6 +97,11 @@ endif
 if !exists('g:zettel_front_matter')
   let g:zettel_front_matter = {}
 endif
+
+if !exists('g:zettel_backlinks_title')
+  let g:zettel_backlinks_title = "Backlinks"
+endif
+
 
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
@@ -540,15 +547,15 @@ endfunction
 function! s:is_in_backlinks(file, filenamepattern)
   let f = readfile(a:file)
   let content = join(f, "\n")
-  " ToDo: make the backlink header string configurable
-  " probably use proper pattern for section header, not just string
-  let backlinks_pos = matchstrpos(content, "Backlinks")
+  " search for backlinks section
+  let backlinks_pattern = printf(s:section_pattern, g:zettel_backlinks_title)
+  let backlinks_pos = matchstrpos(content, backlinks_pattern)
   " if we cannot find backlinks in the page return false
   if backlinks_pos[1] == -1 
     return -1
   endif
   let file_pos = matchstrpos(content, a:filenamepattern)
-  " link is in backlinks when it is placed after the Backlinks section
+  " link is in backlinks when it is placed after the Backlinks section title
   return backlinks_pos[1] < file_pos[1]
 endfunction
 
@@ -573,7 +580,8 @@ function! zettel#vimwiki#backlinks()
     echomsg 'Vimwiki: No other file links to this file'
   else
     call uniq(locations)
-    call s:insert_link_array('Backlinks', locations)
+    " Insert back links section
+    call s:insert_link_array(g:zettel_backlinks_title, locations)
   endif
 endfunction
 

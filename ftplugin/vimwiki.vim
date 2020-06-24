@@ -47,9 +47,6 @@ if !exists('g:zettel_default_mappings')
   let g:zettel_default_mappings=1
 endif
 
-if !exists('g:zettel_filename_title')
-    let g:zettel_filename_title=0
-endif
 
 nnoremap <silent> <Plug>ZettelSearchMap :ZettelSearch<cr>
 nnoremap <silent> <Plug>ZettelYankNameMap :ZettelYankName<cr> 

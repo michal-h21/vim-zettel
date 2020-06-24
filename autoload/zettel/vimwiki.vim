@@ -371,11 +371,14 @@ function! zettel#vimwiki#zettel_new(...)
   let template = zettel#vimwiki#get_option("template")
   if !empty(template)
     let variables = get(a:, 2, 0)
-    if !empty(variables)
-      " variables are available only when this function is called from
-      " zettel_new_selected
-      call zettel#vimwiki#expand_template(template, variables)
+    if empty(variables)
+      let variables = zettel#vimwiki#prepare_template_variables(expand("%"), a:1)
+      " backlink contains link to the new note itself, so we will just disable
+      " it. backlinks are available only when the new note is created using
+      " ZettelNewSelectedMap (`z` letter in visual mode by default).
+      let variables.backlink = ""
     endif
+    call zettel#vimwiki#expand_template(template, variables)
   endif
   " save the new wiki file
   execute ":w"

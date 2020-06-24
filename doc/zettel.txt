@@ -32,6 +32,7 @@ CONTENTS                                                           *vim-zettel*
 5. Variables                                 |Vim-Zettel-Variables|
 6. Templates                                 |Vim-Zettel-Templates|
 7. Related Packages                          |Vim-Zettel-Related|
+8. ChangeLog                                 |Vim-Zettel-ChangeLog|
  
 ==============================================================================
 0. Intro                                                     *Vim-Zettel-Intro*
@@ -76,6 +77,8 @@ Vim-Zettel work to your liking:
 - |g:zettel_format|
 - |g:zettel_default_mappings|
 - |g:zettel_fzf_command|
+- |g:zettel_fzf_options|
+- |g:zettel_backlinks_title|
  
 You can also supply a custom template for creating new zettels. See
 |Vim-Zettel-Templates|.
@@ -243,6 +246,14 @@ setting. >
    let g:zettel_fzf_command = "rg --column --line-number --ignore-case \
      --no-heading --color=always "
      
+                                                       *g:zettel_fzf_options*
+                                                    *g:zettel_backlinks_title*
+
+Text used as back links section.
+
+   let g:zettel_backlinks_title = "Backlinks"
+
+
 ==============================================================================
 6. Templates                                             *Vim-Zettel-Templates*
  
@@ -285,5 +296,15 @@ Vim-Zettel:
 - [Vimwiki-sync](https://github.com/michal-h21/vimwiki-sync) - automatically
 commit changes in wiki and synchronize them with external Git repository.
  
+
+==============================================================================
+8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2020-06-24  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: the back links title is configurable
+* ftplugin/vimwiki.vim: removed unused variable `g:zettel_filename_title`.
+* doc/zettel.txt: added ChangeLog and documented few variables.
+
  
 vim:tw=78:ts=8:ft=help

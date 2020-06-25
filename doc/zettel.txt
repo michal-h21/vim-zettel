@@ -124,6 +124,12 @@ text will be used as title of the new note.
    
        vim -c ZettelCapture filename
 <
+    you can specify wiki numbner (starting from 0) if you have multiple
+    wikis. It opens first declared wiki by default:
+
+>
+      vim -c "ZettelCapture 1" filename
+<
                                                  *Vim-Zettel_ZettelBackLinks*
                                                             *ZettelBackLinks*
 - `:ZettelBackLinks` command – insert list of notes that link to the current

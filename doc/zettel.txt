@@ -92,7 +92,7 @@ Vim-Zettel implements the following commands on top of Vimwiki.
                                                                   *ZettelNew*
 - `:ZettelNew` command – it will create a new wiki file named as
  %y%m%d-%H%M.wiki (it is possible to change the file name format using
- g:zettel_format variable). The file uses basic template in the form >
+ |g:zettel_format| variable). The file uses basic template in the form >
  
    %title Note title
    %date current date
@@ -220,6 +220,9 @@ For sequentialy named files use: >
  
    let g:zettel_format = "%file_no"
 <
+If the generated file name exists (this may happen when you use the default
+format - `%y%m%d-%H-M`, letter suffix is added to the filename. You will then
+get `200622-1114` and `200622-1114a` when you create two notes in one minute.
  
                                                   *g:zettel_default_mappings*
 The default mappings used by Vim-Zettel can be changed by setting the
@@ -311,6 +314,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-06-25  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: add letter to filename if `:ZettelNew` is used
+  multiple times in one minute.
+        
 2020-06-24  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: the back links title is configurable

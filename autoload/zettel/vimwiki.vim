@@ -209,7 +209,14 @@ function! zettel#vimwiki#new_zettel_name(...)
     let next_file = s:numtoletter(zettel#vimwiki#next_counted_file())
     let newformat = substitute(newformat,"%file_alpha", next_file, "")
   endif
-  return strftime(newformat)
+  let final_format =  strftime(newformat)
+  if !s:wiki_file_not_exists(final_format)
+    " if the current file name is used, increase counter and add it as a
+    " letter to the file name. this ensures that we don't reuse the filename
+    let file_count = zettel#vimwiki#count_files(final_format . "*")
+    let final_format = final_format . s:numtoletter(file_count)
+  endif
+  return final_format
 endfunction
 
 " the optional argument is the wiki number
@@ -328,6 +335,12 @@ function! zettel#vimwiki#get_title(filename)
 endfunction
 
 
+" check if the file with the current filename exits in wiki
+function! s:wiki_file_not_exists(filename)
+  let link_info = vimwiki#base#resolve_link(a:filename)
+  return empty(glob(link_info.filename)) 
+endfunction
+
 " create new zettel note
 " there is one optional argument, the zettel title
 function! zettel#vimwiki#create(...)
@@ -335,9 +348,8 @@ function! zettel#vimwiki#create(...)
   let format = zettel#vimwiki#new_zettel_name(a:1)
   let date_format = strftime("%Y-%m-%d %H:%M")
   echomsg("new zettel: ". format)
-  let link_info = vimwiki#base#resolve_link(format)
   " detect if the wiki file exists
-  let wiki_not_exists = empty(glob(link_info.filename)) 
+  let wiki_not_exists = s:wiki_file_not_exists(format)
   " let vimwiki to open the wiki file. this is necessary  
   " to support the vimwiki navigation commands.
   call vimwiki#base#open_link(':e ', format)

@@ -6,8 +6,8 @@ let g:loaded_zettel = 1
 
 
 " gloabal commands
-command! -count=1 ZettelCapture
-      \ call zettel#vimwiki#zettel_capture(v:count1)
+command! -nargs=? -bang ZettelCapture
+      \ call zettel#vimwiki#zettel_capture(<q-args>)
 
 " make fulltext search in all VimWiki files using FZF
 " command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 

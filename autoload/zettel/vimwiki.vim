@@ -102,6 +102,12 @@ if !exists('g:zettel_backlinks_title')
   let g:zettel_backlinks_title = "Backlinks"
 endif
 
+" default title used for %title placeholder in g:zettel_format if the title is
+" empty
+if !exists('g:zettel_default_title')
+  let g:zettel_default_title="untitled"
+endif
+
 
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
@@ -195,10 +201,13 @@ function! zettel#vimwiki#new_zettel_name(...)
     " raw_title is exact title
     let title = zettel#vimwiki#escape_filename(a:1)
     let raw_title = a:1 
-    " expand title in the zettel_format
-    let newformat = substitute(g:zettel_format, "%title", title, "")
-    let newformat = substitute(newformat, "%raw_title", raw_title, "")
+  else
+    let title = zettel#vimwiki#escape_filename(g:zettel_default_title)
+    let raw_title = g:zettel_default_title
   endif
+  " expand title in the zettel_format
+  let newformat = substitute(g:zettel_format, "%title", title, "")
+  let newformat = substitute(newformat, "%raw_title", raw_title, "")
   if matchstr(newformat, "%file_no") != ""
     " file_no counts files in the current wiki and adds 1
     let next_file = zettel#vimwiki#next_counted_file()
@@ -479,7 +488,8 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   else
     let idx = 0
   endif
-  let format = zettel#vimwiki#new_zettel_name()
+  let title = zettel#vimwiki#get_title(origfile)
+  let format = zettel#vimwiki#new_zettel_name(title)
   " let link_info = vimwiki#base#resolve_link(format)
   let newfile = zettel#vimwiki#save_wiki_page(format, idx)
   " delete contents of the captured file

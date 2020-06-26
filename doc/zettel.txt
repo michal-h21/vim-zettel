@@ -230,6 +230,10 @@ If the generated file name exists (this may happen when you use the default
 format - `%y%m%d-%H-M`, letter suffix is added to the filename. You will then
 get `200622-1114` and `200622-1114a` when you create two notes in one minute.
  
+                                                     *g:zettel_default_title*
+Text used for `%title` formatting string in new Zettel filename if title was
+not provided.
+
                                                   *g:zettel_default_mappings*
 The default mappings used by Vim-Zettel can be changed by setting the
 g:zettel_default_mappings variable to 0 and then prividing your own keymaps.
@@ -323,6 +327,9 @@ commit changes in wiki and synchronize them with external Git repository.
 2020-06-26  Michal Hoftich <michal.h21@gmail.com>
 
 * ftplugin/vimwiki.vim: detect correct register for `:ZettelYankName`.
+* autoload/zettel/vimwiki.vim: detect imported file title in
+  `capture()`.
+* autoload/zettel/vimwiki.vim: use default title in `new_zettel_name()`
 
 2020-06-25  Michal Hoftich <michal.h21@gmail.com>
 

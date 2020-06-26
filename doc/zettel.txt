@@ -161,8 +161,12 @@ text will be used as title of the new note.
    
                                                  *Vim-Zettel_ZettelYankName*
                                                             *ZettelYankName*
-- `:ZettelYankName` – copy the current zettel file name and title as a
-   formatted link.  Mapped to `T` in normal mode.
+- `:ZettelYankName` – copy the current zettel file name and title to the
+  unnamed register as a formatted link.  Mapped to `T` in normal mode.
+
+  Note that if you use `set clipboard=unnamed` in your `.vimrc`, you need to
+  explicitly select the correct register to for paste, for example 
+  using `""p`
  
 Useful Vimwiki commands ~
  

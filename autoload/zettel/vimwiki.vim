@@ -394,6 +394,8 @@ function! zettel#vimwiki#zettel_new(...)
   if !empty(template)
     let variables = get(a:, 2, 0)
     if empty(variables)
+      " save file, in order to prevent errors in variable reading
+      execute ":w"
       let variables = zettel#vimwiki#prepare_template_variables(expand("%"), a:1)
       " backlink contains link to the new note itself, so we will just disable
       " it. backlinks are available only when the new note is created using
@@ -411,6 +413,8 @@ endfunction
 function! zettel#vimwiki#zettel_new_selected()
   let title = <sid>get_visual_selection()
   let name = zettel#vimwiki#new_zettel_name(title)
+  " prepare_template_variables needs the file saved on disk
+  execute ":w"
   " make variables that will be available in the new page template
   let variables = zettel#vimwiki#prepare_template_variables(expand("%"), title)
   " replace the visually selected text with a link to the new zettel

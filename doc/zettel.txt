@@ -324,6 +324,14 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-06-29  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: remove some punctuation from filenames in
+  `zettel#vimwiki#escape_filename`.
+* autoload/zettel/vimwiki.vim: save file before it is read by
+  `prepare_template_variables`
+  https://github.com/michal-h21/vim-zettel/issues/43
+     
 2020-06-26  Michal Hoftich <michal.h21@gmail.com>
 
 * ftplugin/vimwiki.vim: detect correct register for `:ZettelYankName`.

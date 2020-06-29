@@ -108,6 +108,10 @@ if !exists('g:zettel_default_title')
   let g:zettel_default_title="untitled"
 endif
 
+" default date format used in front matter for new zettel
+if !exists('g:zettel_date_format')
+  let g:zettel_date_format = "%Y-%m-%d %H:%M"
+endif
 
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
@@ -356,7 +360,8 @@ endfunction
 function! zettel#vimwiki#create(...)
   " name of the new note
   let format = zettel#vimwiki#new_zettel_name(a:1)
-  let date_format = strftime("%Y-%m-%d %H:%M")
+  let date_format = g:zettel_date_format
+  let date = strftime(date_format)
   echomsg("new zettel: ". format)
   " detect if the wiki file exists
   let wiki_not_exists = s:wiki_file_not_exists(format)
@@ -365,7 +370,7 @@ function! zettel#vimwiki#create(...)
   call vimwiki#base#open_link(':e ', format)
   " add basic template to the new file
   if wiki_not_exists
-    call zettel#vimwiki#template(a:1, date_format)
+    call zettel#vimwiki#template(a:1, date)
     return format
   endif
   return 0

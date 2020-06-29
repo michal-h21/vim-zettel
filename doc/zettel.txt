@@ -340,6 +340,10 @@ commit changes in wiki and synchronize them with external Git repository.
   `prepare_template_variables`
   https://github.com/michal-h21/vim-zettel/issues/43
      
+2020-06-27  Irfan Sharif
+
+* autoload/zettel/vimwiki.vim: added `g:zettel_date_format` variable.
+
 2020-06-26  Michal Hoftich <michal.h21@gmail.com>
 
 * ftplugin/vimwiki.vim: detect correct register for `:ZettelYankName`.

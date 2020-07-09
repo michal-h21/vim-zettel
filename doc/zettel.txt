@@ -1,10 +1,10 @@
 *vim-zettel.txt*    A Zettelkasten VimWiki Addon Last change: 2020 Mar 14
 
-  _____    _   _       _ _             _
- |__  /___| |_| |_ ___| | | _____  ___| |_ ___ _ __
-   / // _ \ __| __/ _ \ | |/ / _ \/ __| __/ _ \ '_ \
- / /|  __/ |_| ||  __/ |   < (_| \__ \ ||  __/ | | |
-/____\___|\__|\__\___|_|_|\_\__,_|___/\__\___|_| |_|
+             _____    _   _       _ _             _                          ~
+            |__  /___| |_| |_ ___| | | _____  ___| |_ ___ _ __               ~
+              / // _ \ __| __/ _ \ | |/ / _ \/ __| __/ _ \ '_ \              ~
+             / /|  __/ |_| ||  __/ |   < (_| \__ \ ||  __/ | | |             ~
+            /____\___|\__|\__\___|_|_|\_\__,_|___/\__\___|_| |_|             ~
 
 
 ==============================================================================
@@ -230,6 +230,10 @@ If the generated file name exists (this may happen when you use the default
 format - `%y%m%d-%H-M`, letter suffix is added to the filename. You will then
 get `200622-1114` and `200622-1114a` when you create two notes in one minute.
 
+Vim-Zettel respects the `link_space_char` setting defined by vimwiki
+(see `:h links_space_char`), which lets you specify the separates used in place
+of spaces for filenames.
+
                                                      *g:zettel_default_title*
 Text used for `%title` formatting string in new Zettel filename if title was
 not provided.
@@ -339,7 +343,7 @@ commit changes in wiki and synchronize them with external Git repository.
 * autoload/zettel/vimwiki.vim: save file before it is read by
   `prepare_template_variables`
   https://github.com/michal-h21/vim-zettel/issues/43
-     
+
 2020-06-27  Irfan Sharif
 
 * autoload/zettel/vimwiki.vim: added `g:zettel_date_format` variable.

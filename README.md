@@ -181,7 +181,7 @@ The following packages may be useful in conjunction with Vimwiki and Vim-zettel:
   notes with preview window. Similar functionality is now built in in
   `Vim-Zettel` using `:ZettelOpen` command.
 
-To search in the Zettelkasten, set the following variable with path to the Zettelkaster direcory in `.vimrc`:
+To search in the Zettelkasten, set the following variable with path to the Zettelkasten direcory in `.vimrc`:
 
     let g:nv_search_paths = ['/path/to/zettelkasten/dir']
 

@@ -321,7 +321,7 @@ Vim-Zettel:
    searching notes with preview window.
 
    To search in the Zettelkasten, set the following variable with path to the
-   Zettelkaster direcory in .vimrc: >
+   Zettelkasten direcory in .vimrc: >
 
        let g:nv_search_paths = ['/path/to/zettelkasten/dir']
 

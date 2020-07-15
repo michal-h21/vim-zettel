@@ -609,7 +609,10 @@ function! zettel#vimwiki#backlinks()
     " only add backlink if it is not already backlink
     let is_backlink = s:is_in_backlinks(file, current_filename)
     if is_backlink < 1
-      call s:add_bulleted_link(locations, file)
+      " Make sure we don't add ourselves
+      if !(file ==# expand("%:p"))
+        call s:add_bulleted_link(locations, file)
+      endif
     endif
   endfor
 

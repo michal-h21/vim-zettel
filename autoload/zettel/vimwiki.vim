@@ -298,7 +298,7 @@ endfunction
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
-  let path = vimwiki#vars#get_wikilocal('path', idx)
+  let path = fnameescape(vimwiki#vars#get_wikilocal('path', idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
     let command = 'vimgrep ' . a:pattern . 'j ' . path . "*" . ext
@@ -614,7 +614,7 @@ function! zettel#vimwiki#backlinks()
   endfor
 
   if empty(locations)
-    echomsg 'Vimwiki: No other file links to this file'
+    echomsg 'Vimzettel: No other file links to this file'
   else
     call uniq(locations)
     " Insert back links section

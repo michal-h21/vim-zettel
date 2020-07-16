@@ -290,6 +290,14 @@ Text used as back links section.
 <
 
 
+                                                 *g:vimwiki_markdown_link_ext*
+You can use this Vimwiki variable to require inclusion of the `.md` extension
+in links created by Vim-zettel (eq. using `z` or `T` keys).
+
+>
+   let g:vimwiki_markdown_link_ext = 1
+<
+
 ==============================================================================
 6. Templates                                             *Vim-Zettel-Templates*
 

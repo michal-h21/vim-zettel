@@ -243,8 +243,9 @@ Date format used for date metadata in front matter for new zettel. It will
 need to be supported by the `strftime()` function.
 
 For example:
-
+>
     let g:zettel_date_format = "%y/%m/%d"
+<
 
                                                   *g:zettel_default_mappings*
 The default mappings used by Vim-Zettel can be changed by setting the
@@ -289,6 +290,12 @@ Text used as back links section.
    let g:zettel_backlinks_title = "Backlinks"
 <
 
+                                                       *g:zettel_link_format*
+Format used for generated links. You can change this variable if you are not
+satisfied with the default format.
+>
+   let g:zettel_link_format="[%title](%link)"
+<
 
                                                  *g:vimwiki_markdown_link_ext*
 You can use this Vimwiki variable to require inclusion of the `.md` extension

@@ -1,4 +1,4 @@
-*vim-zettel.txt*    A Zettelkasten VimWiki Addon Last change: 2020 Mar 14
+*vim-zettel.txt*    A Zettelkasten VimWiki Addon Last change: 2020 Jul 21
 
              _____    _   _       _ _             _                          ~
             |__  /___| |_| |_ ___| | | _____  ___| |_ ___ _ __               ~

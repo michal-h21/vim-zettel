@@ -60,6 +60,8 @@ if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
   " add file extension when g:vimwiki_markdown_link_ext is set
   if exists("g:vimwiki_markdown_link_ext") && g:vimwiki_markdown_link_ext == 1
     let s:link_format = "[%title](%link.md)"
+    " TODO: s:link_stub used to be different than s:link_format, but it is no longer
+    " the case. maybe we can get rid of it?
     let s:link_stub =  "[%title](%link.md)"
   else
     let s:link_format = "[%title](%link)"
@@ -79,6 +81,12 @@ else
   let s:grep_link_pattern = '/\[%s|/'
   let s:section_pattern = "= %s ="
 end
+
+" enable overriding of 
+if exists("g:zettel_link_format")
+  let s:link_format = g:zettel_link_format
+  let s:link_stub =  g:zettel_link_format
+endif
 
 " support for the development version of Vimwiki. They changed expected
 " parameters for update_listing_in_buffer function.

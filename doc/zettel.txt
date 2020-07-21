@@ -351,6 +351,32 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-07-21  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: added `g:zettel_link_format` variable.
+
+2020-07-17  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: added support for `g:vimwiki_markdown_link_ext` 
+  setting.
+
+2020-07-15  Dan Pilone
+
+* autoload/zettel/vimwiki.vim: don't add self-link when building backlinks.
+
+2020-07-15  Dan Pilone
+
+* autoload/zettel/vimwiki.vim: don't add self-link when building backlinks.
+
+2020-07-06  Irfan Sharif
+
+* autoload/zettel/vimwiki.vim: respect `links_space_char` setting from
+  Vimwiki.
+
+2020-07-04  Irfan Sharif
+
+* autoload/zettel/vimwiki.vim: listify results of :ZettelInbox.
+
 2020-06-29  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: remove some punctuation from filenames in

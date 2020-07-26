@@ -255,7 +255,7 @@ function! zettel#vimwiki#save_wiki_page(format, ...)
   let idx = get(a:, 1, defaultidx)
   let newfile = vimwiki#vars#get_wikilocal('path',idx ) . a:format . vimwiki#vars#get_wikilocal('ext',idx )
   " copy the captured file to a new zettel
-  execute ":w! " . newfile
+  execute "w! " . newfile
   return newfile
 endfunction
 
@@ -416,7 +416,7 @@ function! zettel#vimwiki#zettel_new(...)
     let variables = get(a:, 2, 0)
     if empty(variables)
       " save file, in order to prevent errors in variable reading
-      execute ":w"
+      execute "w"
       let variables = zettel#vimwiki#prepare_template_variables(expand("%"), a:1)
       " backlink contains link to the new note itself, so we will just disable
       " it. backlinks are available only when the new note is created using
@@ -426,7 +426,7 @@ function! zettel#vimwiki#zettel_new(...)
     call zettel#vimwiki#expand_template(template, variables)
   endif
   " save the new wiki file
-  execute ":w"
+  execute "w"
 
 endfunction
 
@@ -435,7 +435,7 @@ function! zettel#vimwiki#zettel_new_selected()
   let title = <sid>get_visual_selection()
   let name = zettel#vimwiki#new_zettel_name(title)
   " prepare_template_variables needs the file saved on disk
-  execute ":w"
+  execute "w"
   " make variables that will be available in the new page template
   let variables = zettel#vimwiki#prepare_template_variables(expand("%"), title)
   " replace the visually selected text with a link to the new zettel
@@ -503,7 +503,7 @@ endfunction
 " use temporary file if you want to keep the original file
 function! zettel#vimwiki#zettel_capture(wnum,...)
   let origfile = expand("%")
-  execute ":set ft=vimwiki"
+  execute "set ft=vimwiki"
   " This probably doesn't work with current vimwiki code
   if a:wnum > vimwiki#vars#number_of_wikis()
     echomsg 'Vimwiki Error: Wiki '.a:wnum.' is not registered in g:vimwiki_list!'
@@ -522,9 +522,9 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   execute "normal! ggdG"
   " replace it with a address of the zettel file
   execute "normal! i" . newfile 
-  execute ":w"
+  execute "w"
   " open the new zettel
-  execute ":e " . newfile
+  execute "e " . newfile
 endfunction
 
 " based on vimwikis "get wiki links", not stripping file extension

@@ -356,6 +356,9 @@ commit changes in wiki and synchronize them with external Git repository.
 * support for anchored links in `:ZettelBackLinks`
   https://github.com/michal-h21/vim-zettel/issues/54
 
+* fixed FZF support for notes with colons in filenames.
+  https://github.com/michal-h21/vim-zettel/issues/55
+
 2020-07-26  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: removed `:` character from all `execute`

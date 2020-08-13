@@ -16,12 +16,12 @@ function! s:get_zettel_title(filename)
 endfunction
 
 " fzf returns selected filename and matched line from the file, we need to
-" strip that
+" strip the unnecessary text to get just the filename
 function! s:get_fzf_filename(line)
-  " the filename is separated by : from rest of the line
-  let parts =  split(a:line,":")
-  " we need to remove the extension
-  let filename = parts[0]
+  " line is in the following format:
+  " filename:linenumber:number:matched_text
+  " remove spurious text from the line to get just the filename
+  let filename = substitute(a:line, ":[0-9]\*:[0-9]\*:.\*$", "", "")
   return filename
 endfunction
 

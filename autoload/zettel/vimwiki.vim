@@ -78,7 +78,7 @@ else
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
-  let s:grep_link_pattern = '/\[%s|/'
+  let s:grep_link_pattern = '/\[%s[|#]/'
   let s:section_pattern = "= %s ="
 end
 

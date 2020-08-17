@@ -172,6 +172,10 @@ Useful Vimwiki commands ~
 ==============================================================================
 4. Mappings                                               *Vim-Zettel-Mappings*
 
+`Vim-zettel` sets some mappings by default. You can disable the default
+mappings and define your own. See |g:zettel_default_mappings| for more
+details.
+
                                                                *Vim-Zettel_z*
 - `z` command in visual mode – create a new wiki file using selected text for
    the note title
@@ -358,6 +362,7 @@ commit changes in wiki and synchronize them with external Git repository.
 * doc/zettel.txt: don't create tags for `g:vimwiki_markdown_link_ext`
   variable, it can cause clashes with Vimwiki.
   https://github.com/michal-h21/vim-zettel/issues/57
+* doc/zettel.txt: link to mapping configuration from the mapping section.
 
 2020-08-13  Michal Hoftich <michal.h21@gmail.com>
 

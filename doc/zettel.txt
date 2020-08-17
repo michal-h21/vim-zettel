@@ -41,6 +41,16 @@ This is a Vim plugin that implements ideas of the zettelkasten method of
 note taking as described at https://zettelkasten.de/.  It is an add-on to
 the Vimwiki extension for Vim and supports both Vimwiki and Markdown syntaxes.
 
+Main features:
+
+- customizable filenames (date and time, title, consecutive numbering)
+- links always show titles, regardless of the actual filename
+- fulltext support using FZF for searching and hyperlinking
+- search your Zettelkasten from LaTeX or Markdown documents and insert selected notes to the document
+- template support 
+- automatically updated tag index
+- backlinks
+
 ==============================================================================
 1. Installation                                           *Vim-Zettel-Install*
 
@@ -362,7 +372,11 @@ commit changes in wiki and synchronize them with external Git repository.
 * doc/zettel.txt: don't create tags for `g:vimwiki_markdown_link_ext`
   variable, it can cause clashes with Vimwiki.
   https://github.com/michal-h21/vim-zettel/issues/57
+
 * doc/zettel.txt: link to mapping configuration from the mapping section.
+
+* doc/zettel.txt,
+* README.md: added main features of `vim-zettel`. 
 
 2020-08-13  Michal Hoftich <michal.h21@gmail.com>
 

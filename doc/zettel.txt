@@ -234,6 +234,14 @@ Vim-Zettel respects the `link_space_char` setting defined by vimwiki
 (see `:h links_space_char`), which lets you specify the separates used in place
 of spaces for filenames.
 
+You can use Vimwiki variable `g:vimwiki_markdown_link_ext` to require
+inclusion of the `.md` extension in links created by Vim-zettel (eq. using `z`
+or `T` keys).
+
+>
+   let g:vimwiki_markdown_link_ext = 1
+<
+
                                                      *g:zettel_default_title*
 Text used for `%title` formatting string in new Zettel filename if title was
 not provided.
@@ -297,13 +305,6 @@ satisfied with the default format.
    let g:zettel_link_format="[%title](%link)"
 <
 
-                                                 *g:vimwiki_markdown_link_ext*
-You can use this Vimwiki variable to require inclusion of the `.md` extension
-in links created by Vim-zettel (eq. using `z` or `T` keys).
-
->
-   let g:vimwiki_markdown_link_ext = 1
-<
 
 ==============================================================================
 6. Templates                                             *Vim-Zettel-Templates*
@@ -351,12 +352,20 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+
+2020-08-17  Michal Hoftich <michal.h21@gmail.com>
+
+* doc/zettel.txt: don't create tags for `g:vimwiki_markdown_link_ext`
+  variable, it can cause clashes with Vimwiki.
+  https://github.com/michal-h21/vim-zettel/issues/57
+
 2020-08-13  Michal Hoftich <michal.h21@gmail.com>
 
-* support for anchored links in `:ZettelBackLinks`
+* autoload/zettel/vimwiki.vim: support for anchored links in `:ZettelBackLinks`
   https://github.com/michal-h21/vim-zettel/issues/54
 
-* fixed FZF support for notes with colons in filenames.
+* autoload/zettel/vimwiki.vim: fixed FZF support for notes with colons in
+  filenames.
   https://github.com/michal-h21/vim-zettel/issues/55
 
 2020-07-26  Michal Hoftich <michal.h21@gmail.com>

@@ -4,6 +4,16 @@ This is a Vim plugin that implements ideas of the
 [Zettelkasten](https://zettelkasten.de/) method using Vimwiki. 
 It supports both Vimwiki and Markdown syntaxes.
 
+Main features:
+
+- customizable filenames (date and time, title, consecutive numbering)
+- links always show titles, regardless of the actual filename
+- fulltext support using FZF for searching and hyperlinking
+- search your Zettelkasten from LaTeX or Markdown documents and insert selected notes to the document
+- template support 
+- automatically updated tag index
+- backlinks
+
 You can read the full documentation using
 
     :help vim-zettel

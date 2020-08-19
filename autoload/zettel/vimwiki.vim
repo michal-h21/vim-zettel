@@ -88,23 +88,14 @@ if exists("g:zettel_link_format")
   let s:link_stub =  g:zettel_link_format
 endif
 
-" support for the development version of Vimwiki. They changed expected
-" parameters for update_listing_in_buffer function.
-if exists("*vimwiki#base#deprecate")
-  let s:tag_pattern = '^!_TAG'
-  function! zettel#vimwiki#update_listing(lines, title, links_rx)
-    let generator = { 'data': a:lines }
-    function generator.f() dict
-          return self.data
-    endfunction
-    call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, 1, 1)
+let s:tag_pattern = '^!_TAG'
+function! zettel#vimwiki#update_listing(lines, title, links_rx)
+  let generator = { 'data': a:lines }
+  function generator.f() dict
+        return self.data
   endfunction
-else
-  let s:tag_pattern = '^!_TAG_FILE_'
-  function! zettel#vimwiki#update_listing(lines, title, links_rx)
-    call vimwiki#base#update_listing_in_buffer(a:lines, a:title, a:links_rx, line('$')+1, 1)
-  endfunction
-endif 
+  call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, 1, 1)
+endfunction
 
 " user configurable fields that should be inserted to a front matter of a new
 " Zettel

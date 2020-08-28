@@ -387,7 +387,6 @@ function! zettel#vimwiki#zettel_new(...)
   let filename = zettel#vimwiki#create(a:1)
   " the wiki file already exists
   if filename ==? -1
-    echom("prázdná wiki")
     return 0
   endif
   let front_matter = zettel#vimwiki#get_option("front_matter")

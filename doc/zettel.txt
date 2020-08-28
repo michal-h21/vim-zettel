@@ -367,6 +367,12 @@ commit changes in wiki and synchronize them with external Git repository.
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
 
+2020-08-28  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: fixed template application when new zettel
+  filename starts with letter.
+  https://github.com/michal-h21/vim-zettel/issues/59
+
 2020-08-19  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: removed the older version of `update_listing`

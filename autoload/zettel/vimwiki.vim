@@ -380,13 +380,14 @@ function! zettel#vimwiki#create(...)
     call zettel#vimwiki#template(a:1, date)
     return format
   endif
-  return 0
+  return -1
 endfunction
 
 function! zettel#vimwiki#zettel_new(...)
   let filename = zettel#vimwiki#create(a:1)
   " the wiki file already exists
-  if filename == 0
+  if filename ==? -1
+    echom("prázdná wiki")
     return 0
   endif
   let front_matter = zettel#vimwiki#get_option("front_matter")

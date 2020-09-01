@@ -40,6 +40,12 @@ The used command can be changed by setting the `g:zettel_fzf_command` variable.
 [Vimwiki](http://vimwiki.github.io/). See Vimwiki documentation on how to set up a
 basic wiki and navigate it.
 
+# Known issues
+
+- [ZettelOpen and ZettelSearch fail because of an "Error running fzf..."](https://github.com/michal-h21/vim-zettel/issues/58). 
+  This issue is probably caused by too old version of
+  [FZF](https://github.com/junegunn/fzf) on your machine. Try to update both
+  `fzf` binary and `fzf.vim`.
 
 # Related packages
 

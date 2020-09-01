@@ -394,6 +394,7 @@ function! zettel#vimwiki#zettel_new(...)
     let newfile = zettel#vimwiki#save_wiki_page(filename)
     let last_header_line = zettel#vimwiki#find_header_end(newfile)
     echom(last_header_line)
+    " if type(front_matter) ==? v:t_list
     for key in keys(front_matter)
        " <sid>add_to_header(key, front_matter[key])
        call append(last_header_line, <sid>make_header_item(key, front_matter[key]))

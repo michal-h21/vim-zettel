@@ -407,6 +407,21 @@ function! zettel#vimwiki#create(...)
   return -1
 endfunction
 
+" front_matter can be either list or dict. if it is a dict, then convert it to
+" list
+function! s:front_matter_list(front_matter)
+  if type(a:front_matter) ==? v:t_list
+    return a:front_matter
+  endif
+  " it is prefered to use a list for front_matter, as it keeps the order of
+  " keys. but it is possible to use dict, to keep the backwards compatibility
+  let newlist = []
+  for key in keys(a:front_matter)
+    call add(newlist, [key, a:front_matter[key]])
+  endfor
+  return newlist
+endfunction
+
 function! zettel#vimwiki#zettel_new(...)
   let filename = zettel#vimwiki#create(a:1)
   " the wiki file already exists
@@ -417,11 +432,12 @@ function! zettel#vimwiki#zettel_new(...)
   if !empty(front_matter)
     let newfile = zettel#vimwiki#save_wiki_page(filename)
     let last_header_line = zettel#vimwiki#find_header_end(newfile)
-    echom(last_header_line)
-    " if type(front_matter) ==? v:t_list
-    for key in keys(front_matter)
-       " <sid>add_to_header(key, front_matter[key])
-       call append(last_header_line, <sid>make_header_item(key, front_matter[key]))
+    " ensure that front_matter is a list
+    let front_list = s:front_matter_list(front_matter)
+    " we must reverse the list, because each line is inserted before the
+    " ones inserted earlier
+    for values in reverse(copy(front_list))
+       call append(last_header_line, <sid>make_header_item(values[0], values[1]))
     endfor
   endif
 

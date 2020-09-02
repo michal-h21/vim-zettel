@@ -214,10 +214,19 @@ you have more than one vimwiki and the second wiki listed in your
 g:vimwiki_list variable is your zettelkasten, then you must represent the
 first wiki in your g:zettel_options list as a set of empty braces: >
 
+>
                    first wiki     zettelkasten wiki
                             ↓     ↓
-   let g:zettel_options = [{}, {"front_matter" : {"tags" : ""}, "template" :  "~/mytemplate.tpl"}]
+   let g:zettel_options = [{}, {"front_matter" : [["tags", ""], ["type","note"]],
+   \ "template" :  "~/mytemplate.tpl"}]
 <
+
+`front_matter` contains additional fields to be inserted in the header of a
+new note. It should be list of lists, where the first item contains key and
+the second contains value. 
+
+The `template` field is discussed in |Vim-Zettel-Templates|.
+
                                                             *g:zettel_format*
 By default, Vim-Zettel creates filenames in the form YYMMDD-HHMM. This
 format can be changed using the g:zettel_format variable. Any date and time
@@ -377,6 +386,9 @@ commit changes in wiki and synchronize them with external Git repository.
 
 * autoload/zettel/vimwiki.vim: added support for `%random` zettel name format. 
   https://github.com/michal-h21/vim-zettel/issues/63
+* autoload/zettel/vimwiki.vim: `front_matter` variable should be list now,
+  because it needs to keep a correct order.
+  https://github.com/michal-h21/vim-zettel/issues/62
 
 2020-08-28  Michal Hoftich <michal.h21@gmail.com>
 

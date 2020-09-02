@@ -113,10 +113,23 @@ if !exists('g:zettel_default_title')
   let g:zettel_default_title="untitled"
 endif
 
+function! zettel#vimwiki#make_random_chars()
+  let seed = srand()
+  return range(g:zettel_random_chars)->map({-> (97+rand(seed) % 26)->nr2char()})->join('')
+endfunction
+
+" number of random characters used in %random placehoder in new zettel name
+if !exists('g:zettel_random_chars')
+  let g:zettel_random_chars=8
+  let s:randomchars = zettel#vimwiki#make_random_chars()
+endif
+
 " default date format used in front matter for new zettel
 if !exists('g:zettel_date_format')
   let g:zettel_date_format = "%Y-%m-%d %H:%M"
 endif
+
+
 
 " find end of the front matter variables
 function! zettel#vimwiki#find_header_end(filename)
@@ -229,6 +242,15 @@ function! zettel#vimwiki#new_zettel_name(...)
     " same as file_no, but convert numbers to letters
     let next_file = s:numtoletter(zettel#vimwiki#next_counted_file())
     let newformat = substitute(newformat,"%file_alpha", next_file, "")
+  endif
+  if matchstr(newformat, "%random") != ""
+    " generate random characters, their number is set by g:zettel_random_chars
+    " random characters are set using zettel#vimwiki#make_random_chars()
+    " this function is set at the startup and then each time
+    " zettel#vimwiki#create() is called. we don't call it here because we
+    " would get wrong links in zettel_new_selected(). It calls new_zettel_name
+    " twice.
+    let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
   let final_format =  strftime(newformat)
   if !s:wiki_file_not_exists(final_format)
@@ -370,6 +392,8 @@ function! zettel#vimwiki#create(...)
   let date_format = g:zettel_date_format
   let date = strftime(date_format)
   echomsg("new zettel: ". format)
+  " update random chars used in %random name format 
+  let s:randomchars = zettel#vimwiki#make_random_chars()
   " detect if the wiki file exists
   let wiki_not_exists = s:wiki_file_not_exists(format)
   " let vimwiki to open the wiki file. this is necessary  

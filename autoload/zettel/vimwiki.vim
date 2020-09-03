@@ -268,6 +268,7 @@ function! zettel#vimwiki#new_zettel_name(...)
     " zettel#vimwiki#create() is called. we don't call it here because we
     " would get wrong links in zettel_new_selected(). It calls new_zettel_name
     " twice.
+    echomsg("Test random chars: " . zettel#vimwiki#make_random_chars())
     let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
   let final_format =  strftime(newformat)

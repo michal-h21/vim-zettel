@@ -139,8 +139,8 @@ endif
 " number of random characters used in %random placehoder in new zettel name
 if !exists('g:zettel_random_chars')
   let g:zettel_random_chars=8
-  let s:randomchars = zettel#vimwiki#make_random_chars()
 endif
+let s:randomchars = zettel#vimwiki#make_random_chars()
 
 " default date format used in front matter for new zettel
 if !exists('g:zettel_date_format')
@@ -268,7 +268,6 @@ function! zettel#vimwiki#new_zettel_name(...)
     " zettel#vimwiki#create() is called. we don't call it here because we
     " would get wrong links in zettel_new_selected(). It calls new_zettel_name
     " twice.
-    echomsg("Test random chars: " . zettel#vimwiki#make_random_chars())
     let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
   let final_format =  strftime(newformat)

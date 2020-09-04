@@ -46,7 +46,8 @@ Main features:
 - customizable filenames (date and time, title, consecutive numbering)
 - links always show titles, regardless of the actual filename
 - fulltext support using FZF for searching and hyperlinking
-- search your Zettelkasten from LaTeX or Markdown documents and insert selected notes to the document
+- search your Zettelkasten from LaTeX or Markdown documents and insert
+  selected notes to the document
 - template support 
 - automatically updated tag index
 - backlinks
@@ -73,13 +74,13 @@ First of all, it is necessary to configure Vimwiki, as Vim-Zettel builds
 on top of it.  Vim-Zettel can be used out of the box without further
 configuration if you have only one wiki.  However, you will probably want to
 customize your Vim-Zettel configuration and will have to if you have more than
-one wiki. >
-
+one wiki. 
+>
    " Settings for Vimwiki
    let g:vimwiki_list = \
      [{'path':'~/scratchbox/vimwiki/markdown/','ext':'.md',\
      'syntax':'markdown'}, {"path":"~/scratchbox/vimwiki/wiki/"}]
-
+<
 You may want to set some of the following options in your .vimrc file to make
 Vim-Zettel work to your liking:
 
@@ -102,11 +103,12 @@ Vim-Zettel implements the following commands on top of Vimwiki.
                                                                   *ZettelNew*
 - `:ZettelNew` command – it will create a new wiki file named as
  %y%m%d-%H%M.wiki (it is possible to change the file name format using
- |g:zettel_format| variable). The file uses basic template in the form >
+ |g:zettel_format| variable). The file uses basic template in the form 
 
+>
    %title Note title
    %date current date
-
+<
 where title is the first parameter to `:ZettelNew`.
 
 If you use the default mappings provided by `Vim-Zettel`, it is possible to
@@ -180,7 +182,7 @@ Useful Vimwiki commands ~
 - |:VimwikiCheckLinks|- display files that no other file links to
 
 ==============================================================================
-4. Mappings                                               *Vim-Zettel-Mappings*
+4. Mappings                                              *Vim-Zettel-Mappings*
 
 `Vim-zettel` sets some mappings by default. You can disable the default
 mappings and define your own. See |g:zettel_default_mappings| for more
@@ -201,8 +203,8 @@ details.
                                                               *Vim-Zettel_gZ*
 - gZ command in normal mode – replace file path under cursor with Wiki link
 
-It may be convenient to map `ZettelNew` to prompt for a note title also: >
-
+It may be convenient to map `ZettelNew` to prompt for a note title also: 
+>
    nnoremap <leader>zn :ZettelNew<space>
 <
 ==============================================================================
@@ -212,15 +214,13 @@ It may be convenient to map `ZettelNew` to prompt for a note title also: >
 The g:zettel_options variable corresponds to the g:vimwiki_list variable.  If
 you have more than one vimwiki and the second wiki listed in your
 g:vimwiki_list variable is your zettelkasten, then you must represent the
-first wiki in your g:zettel_options list as a set of empty braces: >
-
+first wiki in your g:zettel_options list as a set of empty braces: 
 >
                    first wiki     zettelkasten wiki
                             ↓     ↓
    let g:zettel_options = [{}, {"front_matter" : [["tags", ""], ["type","note"]],
    \ "template" :  "~/mytemplate.tpl"}]
 <
-
 `front_matter` contains additional fields to be inserted in the header of a
 new note. It should be list of lists, where the first item contains key and
 the second contains value. 
@@ -243,12 +243,12 @@ It is also possible to use other formatting strings:
   `g:zettel_random_chars` option, eight is used by default.
 
 To use filename based on current time and note title, you can use the
-following format: >
-
+following format: 
+>
    let g:zettel_format = "%y%m%d-%H%M-%title"
-
-For sequentialy named files use: >
-
+<
+For sequentialy named files use: 
+>
    let g:zettel_format = "%file_no"
 <
 If the generated file name exists (this may happen when you use the default
@@ -262,11 +262,9 @@ of spaces for filenames.
 You can use Vimwiki variable `g:vimwiki_markdown_link_ext` to require
 inclusion of the `.md` extension in links created by Vim-zettel (eq. using `z`
 or `T` keys).
-
 >
    let g:vimwiki_markdown_link_ext = 1
 <
-
                                                      *g:zettel_default_title*
 Text used for `%title` formatting string in new Zettel filename if title was
 not provided.
@@ -279,12 +277,11 @@ For example:
 >
     let g:zettel_date_format = "%y/%m/%d"
 <
-
                                                   *g:zettel_default_mappings*
 The default mappings used by Vim-Zettel can be changed by setting the
 g:zettel_default_mappings variable to 0 and then prividing your own keymaps.
-The code below can serve as a template to start from. >
-
+The code below can serve as a template to start from.
+ >
    let g:zettel_default_mappings = 0
    " This is basically the same as the default configuration
    augroup filetype_vimwiki
@@ -295,7 +292,6 @@ The code below can serve as a template to start from. >
      autocmd FileType vimwiki nmap gZ <Plug>ZettelReplaceFileWithLink
    augroup END
 <
-
                                                        *g:zettel_fzf_command*
 Vim-Zettel uses The Silver Searcher (ag) by default when searching through
 your files.  The g:zettel_fzf_command can be used to override the default
@@ -342,7 +338,7 @@ It is possible to populate new notes with basic structure using templates.
 Template can be declared using the g:zettel_options variable: >
 
    let g:zettel_options = [{"template" :  "~/path/to/mytemplate.tpl"}]
-
+<
 Sample template: >
 
    = %title =
@@ -350,7 +346,7 @@ Sample template: >
    Backlink: %backlink
    ----
    %footer
-
+<
 Variables that start with the % will be expanded. Supported variables:
 
 - %title - title of the new note
@@ -375,7 +371,7 @@ Vim-Zettel:
    Zettelkasten direcory in .vimrc: >
 
        let g:nv_search_paths = ['/path/to/zettelkasten/dir']
-
+<
 - [Vimwiki-sync](https://github.com/michal-h21/vimwiki-sync) - automatically
 commit changes in wiki and synchronize them with external Git repository.
 

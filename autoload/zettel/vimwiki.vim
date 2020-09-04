@@ -498,6 +498,14 @@ endfunction
 function! zettel#vimwiki#prepare_template_variables(filename, title)
   let variables = {}
   let variables.title = a:title
+  " add variables from front_matter, to make them available in the template
+  let front_matter = zettel#vimwiki#get_option("front_matter")
+  if !empty(front_matter)
+    let front_list = s:front_matter_list(front_matter)
+    for entry in copy(front_list)
+      let variables[entry[0]] = entry[1]
+    endfor
+  endif
   let variables.backlink = zettel#vimwiki#get_link(a:filename)
   " we want to save footer of the parent note. It can contain stuff that can
   " be useful in the child note, like citations,  etc. Footer is everything

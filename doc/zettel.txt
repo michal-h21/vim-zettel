@@ -225,6 +225,22 @@ first wiki in your g:zettel_options list as a set of empty braces:
 new note. It should be list of lists, where the first item contains key and
 the second contains value. 
 
+The second item can contain funcref. The function will be executed each time
+when this `front_matter` option is used. This can be used to insert the
+current Zettel ID, for example: >
+  function! s:insert_id()
+    if exists("g:zettel_current_id")
+      return g:zettel_current_id
+    else
+      return "unnamed"
+    endif
+  endfunction
+      
+  let g:zettel_options = [{"front_matter" : 
+    [["tags" , ":hello:"],
+    [ "id" , function("s:insert_id")]]
+  }]
+<
 The `template` field is discussed in |Vim-Zettel-Templates|.
 
                                                             *g:zettel_format*
@@ -380,6 +396,12 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-09-07  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: enable functions to be passed as front matter
+  values
+* autoload/zettel/vimwiki.vim: save the current zettel ID as a global variable
+  https://github.com/michal-h21/vim-zettel/issues/66
 
 2020-09-04  Michal Hoftich <michal.h21@gmail.com>
 

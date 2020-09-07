@@ -176,8 +176,20 @@ function! s:add_line(text)
   endif
 endfunction
 
+" enable functions to be passed as front_matter values
+" this can be useful to dynamic value setting 
+function! s:expand_front_matter_value(value)
+  " enable execution of functions that expands to the correct value
+  if type(a:value) == v:t_func
+    return a:value()
+  else
+    return a:value
+  endif
+endfunction
+
 function! s:make_header_item(key, value)
-  return printf(s:header_format, a:key, a:value)
+  let val = <sid>expand_front_matter_value(a:value)
+  return printf(s:header_format, a:key, val)
 endfunction
 
 " add a variable to the zettel header
@@ -277,6 +289,7 @@ function! zettel#vimwiki#new_zettel_name(...)
     let file_count = zettel#vimwiki#count_files(final_format . "*")
     let final_format = final_format . s:numtoletter(file_count)
   endif
+  let g:zettel_current_id = final_format
   return final_format
 endfunction
 
@@ -503,7 +516,7 @@ function! zettel#vimwiki#prepare_template_variables(filename, title)
   if !empty(front_matter)
     let front_list = s:front_matter_list(front_matter)
     for entry in copy(front_list)
-      let variables[entry[0]] = entry[1]
+      let variables[entry[0]] = <sid>expand_front_matter_value(entry[1])
     endfor
   endif
   let variables.backlink = zettel#vimwiki#get_link(a:filename)

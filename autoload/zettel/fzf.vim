@@ -34,6 +34,10 @@ endfunction
 
 " execute fzf function
 function! zettel#fzf#execute_fzf(a, b, options)
+  " search only files in the current wiki syntax
+  " it doesn't work with ag searcher
+  let search_ext = "*" . vimwiki#vars#get_wikilocal('ext')
+  " let search_ext = ""
   " I cannot get `ag` running with fzf#vim#grep, so we use
   " two different methods
   if g:zettel_fzf_command == "ag"
@@ -41,7 +45,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
     return Fzf_cmd(a:a, a:b, a:options)
   else
     " use grep method for other commands
-    return fzf#vim#grep(g:zettel_fzf_command . " " . shellescape(a:a), 1, a:options)
+    return fzf#vim#grep(g:zettel_fzf_command . " " . shellescape(a:a) . " " . search_ext, 1, a:options)
   endif
 endfunction
 

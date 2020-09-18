@@ -396,6 +396,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-09-18  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: enable `%date` variable in templates.
+  https://github.com/michal-h21/vim-zettel/issues/68
+
 2020-09-08  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim: search only in files with the current wiki syntax.

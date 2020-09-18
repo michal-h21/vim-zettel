@@ -147,6 +147,8 @@ if !exists('g:zettel_date_format')
   let g:zettel_date_format = "%Y-%m-%d %H:%M"
 endif
 
+" initialize new zettel date. it should be overwritten in zettel#vimwiki#create()
+let s:zettel_date = strftime(g:zettel_date_format)
 
 
 " find end of the front matter variables
@@ -425,6 +427,7 @@ function! zettel#vimwiki#create(...)
   echomsg("new zettel: ". format)
   " update random chars used in %random name format 
   let s:randomchars = zettel#vimwiki#make_random_chars()
+  let s:zettel_date = date " save zettel date
   " detect if the wiki file exists
   let wiki_not_exists = s:wiki_file_not_exists(format)
   " let vimwiki to open the wiki file. this is necessary  
@@ -486,6 +489,9 @@ function! zettel#vimwiki#zettel_new(...)
       " ZettelNewSelectedMap (`z` letter in visual mode by default).
       let variables.backlink = ""
     endif
+    " we may reuse varaibles from the parent zettel. date would be wrong in this case,
+    " so we will overwrite it with the current zettel date
+    let variables.date = s:zettel_date 
     call zettel#vimwiki#expand_template(template, variables)
   endif
   " save the new wiki file
@@ -511,6 +517,7 @@ endfunction
 function! zettel#vimwiki#prepare_template_variables(filename, title)
   let variables = {}
   let variables.title = a:title
+  let variables.date = s:zettel_date
   " add variables from front_matter, to make them available in the template
   let front_matter = zettel#vimwiki#get_option("front_matter")
   if !empty(front_matter)

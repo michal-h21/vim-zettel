@@ -472,7 +472,6 @@ function! zettel#vimwiki#zettel_new(...)
   endif
   let front_matter = zettel#vimwiki#get_option("front_matter")
   if g:zettel_disable_front_matter == 0
-    echom("Hodnota disable  " . g:zettel_disable_front_matter)
     if !empty(front_matter)
       let newfile = zettel#vimwiki#save_wiki_page(filename)
       let last_header_line = zettel#vimwiki#find_header_end(newfile)

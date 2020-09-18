@@ -287,7 +287,7 @@ Text used for `%title` formatting string in new Zettel filename if title was
 not provided.
 
                                                      *g:zettel_date_format*
-Date format used for date metadata in front matter for new zettel. It will
+Date format used for date metadata in front matter for a new zettel. It will
 need to be supported by the `strftime()` function.
 
 For example:
@@ -368,6 +368,8 @@ Variables that start with the % will be expanded. Supported variables:
 
 - %title - title of the new note
 - %backlink - back link to the parent note
+- %date - date and time of the new note. Format is based on
+  `g:zettel_date_format` variable.
 - %footer - text from the parent note footer. Footer is separated from  the
  main text by horizontal rule  (----). It can contain some information
  shared by notes. For example notes about publication can share citation of

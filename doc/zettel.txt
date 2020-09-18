@@ -241,6 +241,10 @@ current Zettel ID, for example: >
     [ "id" , function("s:insert_id")]]
   }]
 <
+
+You can disable front matter completely by setting `disable_front_matter`
+option to other value than 0.
+
 The `template` field is discussed in |Vim-Zettel-Templates|.
 
                                                             *g:zettel_format*
@@ -402,6 +406,10 @@ commit changes in wiki and synchronize them with external Git repository.
 
 * autoload/zettel/vimwiki.vim: enable `%date` variable in templates.
   https://github.com/michal-h21/vim-zettel/issues/68
+
+* autoload/zettel/vimwiki.vim: added `disable_front_matter` option. It
+  disables front matter in new zettels.
+  https://github.com/michal-h21/vim-zettel/issues/67
 
 2020-09-08  Michal Hoftich <michal.h21@gmail.com>
 

@@ -103,6 +103,12 @@ if !exists('g:zettel_front_matter')
   let g:zettel_front_matter = {}
 endif
 
+" front matter can be disabled using disable_front_matter local wiki option
+let g:zettel_disable_front_matter = zettel#vimwiki#get_option("disable_front_matter")
+if empty(g:zettel_disable_front_matter)
+  let g:zettel_disable_front_matter=0
+end
+
 if !exists('g:zettel_backlinks_title')
   let g:zettel_backlinks_title = "Backlinks"
 endif
@@ -220,10 +226,12 @@ endfunction
 
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)
-  call <sid>add_line(s:header_delimiter)
-  call <sid>add_to_header("date", a:date)
-  call <sid>add_to_header("title", a:title)
-  call <sid>add_line(s:header_delimiter)
+  if g:zettel_disable_front_matter == 0 
+    call <sid>add_line(s:header_delimiter)
+    call <sid>add_to_header("date", a:date)
+    call <sid>add_to_header("title", a:title)
+    call <sid>add_line(s:header_delimiter)
+  endif
 endfunction
 
 
@@ -463,16 +471,19 @@ function! zettel#vimwiki#zettel_new(...)
     return 0
   endif
   let front_matter = zettel#vimwiki#get_option("front_matter")
-  if !empty(front_matter)
-    let newfile = zettel#vimwiki#save_wiki_page(filename)
-    let last_header_line = zettel#vimwiki#find_header_end(newfile)
-    " ensure that front_matter is a list
-    let front_list = s:front_matter_list(front_matter)
-    " we must reverse the list, because each line is inserted before the
-    " ones inserted earlier
-    for values in reverse(copy(front_list))
-       call append(last_header_line, <sid>make_header_item(values[0], values[1]))
-    endfor
+  if g:zettel_disable_front_matter == 0
+    echom("Hodnota disable  " . g:zettel_disable_front_matter)
+    if !empty(front_matter)
+      let newfile = zettel#vimwiki#save_wiki_page(filename)
+      let last_header_line = zettel#vimwiki#find_header_end(newfile)
+      " ensure that front_matter is a list
+      let front_list = s:front_matter_list(front_matter)
+      " we must reverse the list, because each line is inserted before the
+      " ones inserted earlier
+      for values in reverse(copy(front_list))
+        call append(last_header_line, <sid>make_header_item(values[0], values[1]))
+      endfor
+    endif
   endif
 
   " insert the template text from a template file if it is configured in

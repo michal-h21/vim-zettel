@@ -579,10 +579,16 @@ function! zettel#vimwiki#expand_template(template, variables)
   for key in keys(a:variables)
     let text = substitute(text, "%" . key, a:variables[key], "g")
   endfor
+  " when front_matter is disabled, there is an empty line before 
+  " start of the inserted template. we need to ignore it.
+  let correction = 0
+  if line('$') == 1 
+    let correction = 1
+  endif
   " add template at the end
   " we must split it, 
   for xline in split(text, "\n")
-    call append(line('$'), xline)
+    call append(line('$') - correction, xline)
   endfor
 endfunction
 

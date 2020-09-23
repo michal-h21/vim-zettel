@@ -18,6 +18,7 @@ CONTENTS                                                           *vim-zettel*
    `ZettelOpen`                               |Vim-Zettel_ZettelOpen|
    `ZettelInsertNote`                         |Vim-Zettel_ZettelInsertNote|
    `ZettelCapture`                            |Vim-Zettel_ZettelCapture|
+   `ZettelSetActiveWiki`                      |Vim-Zettel_ZettelSetActiveWiki|
    `ZettelBackLinks`                          |Vim-Zettel_ZettelBackLinks|
    `ZettelInbox`                              |Vim-Zettel_ZettelInbox|
    `ZettelGenerateLinks`                      |Vim-Zettel_ZettelGenerateLinks|
@@ -142,6 +143,14 @@ text will be used as title of the new note.
 >
       vim -c "ZettelCapture 1" filename
 <
+                                             *Vim-Zettel_ZettelSetActiveWiki*
+                                                        *ZettelSetActiveWiki*
+
+- `:ZettelSetActiveWiki`command - select default wiki for commands that can
+  operate when Vimwiki is not active, like `:ZettelOpen` or
+  `:ZettelInsertNote`.
+
+
                                                  *Vim-Zettel_ZettelBackLinks*
                                                             *ZettelBackLinks*
 - `:ZettelBackLinks` command – insert list of notes that link to the current
@@ -401,6 +410,18 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2020-09-23  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/vimwiki.vim: two new functions,
+  `zettel#vimwiki#set_active_wiki` and
+  `zettel#vimwiki#initialize_wiki_number`. Set active wiki number to 0 by
+  default.
+* autoload/zettel/fzf.vim: initialize default wiki number to 0.
+* plugin/zettel.vim: added `:ZettelSetActiveWiki` command.
+* ftplugin/vimwiki/zettel.vim: moved `:ZettelOpen` command
+  to `plugin/zettel.vim`, in order to be available outside Vimwiki
+  https://github.com/michal-h21/vim-zettel/issues/69
 
 2020-09-18  Michal Hoftich <michal.h21@gmail.com>
 

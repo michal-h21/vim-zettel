@@ -13,6 +13,23 @@ function! s:get_visual_selection()
   return join(lines, "\n")
 endfunction
 
+" this function is useful for comands in plugin/zettel.vim
+" set number of the active wiki
+function! zettel#vimwiki#set_active_wiki(number)
+  " this buffer value is used by vimwiki#vars#get_wikilocal to retrieve
+  " the current wiki number
+  call setbufvar("%","vimwiki_wiki_nr", a:number)
+endfunction
+
+" set default wiki number. it is set to -1 when no wiki is initialized
+" we will set it to first wiki in wiki list, with number 0
+function! zettel#vimwiki#initialize_wiki_number()
+  if getbufvar("%", "vimwiki_wiki_nr") == -1
+    call zettel#vimwiki#set_active_wiki(0)
+  endif
+endfunction
+call zettel#vimwiki#initialize_wiki_number()
+
 " get user option for the current wiki
 " it seems that it is not possible to set custom options in g:vimwiki_list
 " so we need to use our own options
@@ -857,3 +874,4 @@ function! zettel#vimwiki#generate_tags(...) abort
 
   call zettel#vimwiki#update_listing(lines, 'Generated Tags', links_rx)
 endfunction
+

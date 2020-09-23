@@ -15,5 +15,13 @@ command! -bang -nargs=* ZettelInsertNote call zettel#fzf#execute_fzf(<q-args>,
       \'--skip-vcs-ignores', fzf#vim#with_preview({
       \'down': '~40%',
       \'sink*':function('zettel#fzf#insert_note'),
-      \'dir': vimwiki#vars#get_wikilocal('path',0),
+      \'dir': vimwiki#vars#get_wikilocal('path'),
       \'options':['--exact']}))
+
+" set number of the active wiki
+command! -nargs=1 -bang ZettelSetActiveWiki call zettel#vimwiki#set_active_wiki(<q-args>)
+
+" make fulltext search in all VimWiki files using FZF and open the found file
+command! -bang -nargs=* ZettelOpen call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#search_open')
+
+

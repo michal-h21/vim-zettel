@@ -411,6 +411,10 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-09-24  Michal Hoftich <michal.h21@gmail.com>
+
+* autoload/zettel/fzf.vim: use `'down': '~40%'` option for FZF.
+
 2020-09-23  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: two new functions,

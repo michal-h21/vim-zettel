@@ -411,6 +411,14 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2020-10-22  Doug Ghormley
+
+* autoload/zettel/vimwiki.vim: detect backlinks without titles in links.
+
+2020-10-11  LeducH
+
+* README.md: `vim-plug` install details.
+
 2020-09-24  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim: use `'down': '~40%'` option for FZF.

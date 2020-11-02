@@ -457,7 +457,7 @@ function! zettel#vimwiki#create(...)
   let wiki_not_exists = s:wiki_file_not_exists(format)
   " let vimwiki to open the wiki file. this is necessary  
   " to support the vimwiki navigation commands.
-  call vimwiki#base#open_link(':e ', format)
+  call vimwiki#base#open_link(':e ', '/'.format)
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)

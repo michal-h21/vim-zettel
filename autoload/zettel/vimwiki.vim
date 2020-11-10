@@ -423,13 +423,15 @@ endfunction
 
 function! zettel#vimwiki#get_title(filename)
   let filename = a:filename
-  let title = ""
   let lsource = readfile(filename)
   " this code comes from vimwiki's html export plugin
   for line in lsource 
+    " matches a title in a YAML front matter style
     if line =~# '^\s*%\=title'
-      let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
-      return title
+      return matchstr(line, '^\s*%\=title:\=\s\zs.*')
+    " matches the first heading of any level found in the note
+    elseif line =~# '^#\{1,6}\s\+\S\+'
+      return matchstr(line, '^#\{1,6}\s\+\zs.\{-}\ze\s*$')
     endif
   endfor 
   return ""

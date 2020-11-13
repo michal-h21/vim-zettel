@@ -150,6 +150,17 @@ function! zettel#vimwiki#make_random_chars()
   return join(str_list, "")
 endfunction
 
+elseif v:version < 802
+function! zettel#vimwiki#make_random_chars()
+  call luaeval("math.randomseed( os.time() )")
+  let char_no = range(g:zettel_random_chars)
+  let str_list = []
+  for x in char_no
+    call add(str_list, nr2char(str2nr(string(luaeval("math.random(97,122)")))))
+  endfor
+  return join(str_list, "")
+endfunction
+
 else
 
 " make string filled with random characters

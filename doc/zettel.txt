@@ -116,6 +116,15 @@ If you use the default mappings provided by `Vim-Zettel`, it is possible to
 call this command by pressing the `z` character in visual mode. The selected
 text will be used as title of the new note.
 
+The newly created wiki-file will be saved in: 
+
+  (1) the current directory if it is in the `g:vimwiki_list` paths
+  (2) the directory-path of the first `g:vimwiki_list` with non-empty `g:zettel_options`
+  (3) the directory-path given by the first `g:vimwiki_list` entry
+  (4) vimwiki's default directory
+
+with the given order.
+
                                                        *Vim-Zettel_ZettelOpen*
                                                                   *ZettelOpen*
 - `:ZettelOpen` command - perform fulltext search using FZF. It keeps the

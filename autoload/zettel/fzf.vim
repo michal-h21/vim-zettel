@@ -37,18 +37,20 @@ endfunction
 " execute fzf function
 function! zettel#fzf#execute_fzf(a, b, options)
   " search only files in the current wiki syntax
-  " it doesn't work with ag searcher
-  let search_ext = "*" . vimwiki#vars#get_wikilocal('ext')
-  " let search_ext = ""
-  " I cannot get `ag` running with fzf#vim#grep, so we use
-  " two different methods
+
+  let l:fullscreen = 0
+
   if g:zettel_fzf_command == "ag"
-    let Fzf_cmd = function("fzf#vim#" . g:zettel_fzf_command)
-    return Fzf_cmd(a:a, a:b, a:options)
+    let search_ext = "--" . substitute(vimwiki#vars#get_wikilocal('ext'), '\.', '', '')
+    let query =  empty(a:a) ? '^(?=.)' : a:a
+    let l:fzf_command = g:zettel_fzf_command . ' --color --smart-case --nogroup --column ' . shellescape(query)  " --ignore-case --smart-case
   else
     " use grep method for other commands
-    return fzf#vim#grep(g:zettel_fzf_command . " " . shellescape(a:a) . " " . search_ext, 1, a:options)
+    let search_ext = "*" . vimwiki#vars#get_wikilocal('ext')
+    let l:fzf_command = g:zettel_fzf_command . " " . shellescape(a:a)
   endif
+
+  return fzf#vim#grep(l:fzf_command . ' ' . search_ext, 1, fzf#vim#with_preview(a:options), l:fullscreen)
 endfunction
 
 

@@ -21,11 +21,32 @@ function! zettel#vimwiki#set_active_wiki(number)
   call setbufvar("%","vimwiki_wiki_nr", a:number)
 endfunction
 
+" get the first non emtpy wiki idx from the options
+function! zettel#vimwiki#get_wiki_nr_from_options()
+  let i = 0
+  let sel_index = 0
+  while i < len(g:zettel_options)
+    if len(keys(g:zettel_options[i])) > 0
+      let sel_index = i
+      break
+    endif
+    let i += 1
+  endwhile
+  return sel_index
+endfunction
+
 " set default wiki number. it is set to -1 when no wiki is initialized
 " we will set it to first wiki in wiki list, with number 0
 function! zettel#vimwiki#initialize_wiki_number()
   if getbufvar("%", "vimwiki_wiki_nr") == -1
-    call zettel#vimwiki#set_active_wiki(0)
+    if !exists('g:zettel_options') && !exists('g:zettel_default_wiki_nr')
+      call zettel#vimwiki#set_active_wiki(0)
+    elseif exists('g:zettel_default_wiki_nr')
+      call zettel#vimwiki#set_active_wiki(g:zettel_default_wiki_nr)
+    else
+      let idx = zettel#vimwiki#get_wiki_nr_from_options()
+      call zettel#vimwiki#set_active_wiki(idx)
+    endif
   endif
 endfunction
 call zettel#vimwiki#initialize_wiki_number()

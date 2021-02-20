@@ -440,8 +440,8 @@ function! zettel#vimwiki#get_title(filename)
     " Check if first headline is present in vimwiki style
     " \zs marks the start of the match part
     " \ze marks the end of the match part
-    if line =~# '^\s*=\s*\S*\s=\s*'
-      let title = matchstr(line, '^\s*=\s*\zs.*\ze\s=\s*')
+     if line =~# '^\s*=\s\+.*\S\s\+=\s*'
+      let title = matchstr(line, '^\s*=\s\+\zs.*\S\ze\s\+=\s*')
       return title
     endif
 

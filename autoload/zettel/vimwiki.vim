@@ -426,9 +426,30 @@ function! zettel#vimwiki#get_title(filename)
   let title = ""
   let lsource = readfile(filename)
   " this code comes from vimwiki's html export plugin
+   
+  " Try to load the title from the front matter entry which is present  
+  " at the head of a file. If the front matter is not present use the first
+  " headline as title either in vimwiki or markup style.
   for line in lsource 
+    " Check if front matter title is present
     if line =~# '^\s*%\=title'
       let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
+      return title
+    endif
+    
+    " Check if first headline is present in vimwiki style
+    " \zs marks the start of the match part
+    " \ze marks the end of the match part
+    if line =~# '^\s*=\s*\S*\s=\s*'
+      let title = matchstr(line, '^\s*=\s*\zs.*\ze\s=\s*')
+      return title
+    endif
+
+    " Check if first headline is present in markdown style
+    " \zs marks the start of the match part
+    " \ze marks the end of the match part
+    if line =~# '^\s*#\s*.*'
+      let title = matchstr(line, '^\s*#\s*\zs.*\ze')
       return title
     endif
   endfor 

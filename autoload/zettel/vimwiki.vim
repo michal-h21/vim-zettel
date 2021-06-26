@@ -106,12 +106,12 @@ if exists("g:zettel_link_format")
 endif
 
 let s:tag_pattern = '^!_TAG'
-function! zettel#vimwiki#update_listing(lines, title, links_rx)
+function! zettel#vimwiki#update_listing(lines, title, links_rx, level)
   let generator = { 'data': a:lines }
   function generator.f() dict
         return self.data
   endfunction
-  call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, 1, 1)
+  call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, a:level, 1)
 endfunction
 
 " user configurable fields that should be inserted to a front matter of a new
@@ -126,8 +126,32 @@ if empty(g:zettel_disable_front_matter)
   let g:zettel_disable_front_matter=0
 end
 
+if !exists('g:zettel_generated_index_title')
+  let g:zettel_generated_index_title = "Generated Index"
+endif
+if !exists('g:zettel_generated_index_title_level')
+  let g:zettel_generated_index_title_level = 1
+endif
+
 if !exists('g:zettel_backlinks_title')
   let g:zettel_backlinks_title = "Backlinks"
+endif
+if !exists('g:zettel_backlinks_title_level')
+  let g:zettel_backlinks_title_level = 1
+endif
+
+if !exists('g:zettel_unlinked_notes_title')
+  let g:zettel_unlinked_notes_title = "Unlinked Notes"
+endif
+if !exists('g:zettel_unlinked_notes_title_level')
+  let g:zettel_unlinked_notes_title_level = 1
+endif
+
+if !exists('g:zettel_generated_tags_title')
+  let g:zettel_generated_tags_title = "Generated Tags"
+endif
+if !exists('g:zettel_generated_tags_title_level')
+  let g:zettel_generated_tags_title_level = 1
 endif
 
 " default title used for %title placeholder in g:zettel_format if the title is
@@ -679,9 +703,9 @@ endfunction
   
 
 " insert list of links to the current page
-function! s:insert_link_array(title, lines)
+function! s:insert_link_array(title, lines, level)
   let links_rx = '\m^\s*'.vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
-  call zettel#vimwiki#update_listing(a:lines, a:title, links_rx)
+  call zettel#vimwiki#update_listing(a:lines, a:title, links_rx, a:level)
 endfunction
 
 
@@ -701,7 +725,7 @@ function! zettel#vimwiki#generate_links()
             \ zettel#vimwiki#get_link(abs_filepath))
     "endif
   endfor
-  call s:insert_link_array('Generated Index', lines)
+  call s:insert_link_array(g:zettel_generated_index_title, lines, g:zettel_generated_index_title_level)
 endfunction
 
 
@@ -746,7 +770,7 @@ function! zettel#vimwiki#backlinks()
   else
     call uniq(locations)
     " Insert back links section
-    call s:insert_link_array(g:zettel_backlinks_title, locations)
+    call s:insert_link_array(g:zettel_backlinks_title, locations, g:zettel_backlinks_title_level)
   endif
 endfunction
 
@@ -775,7 +799,7 @@ function! zettel#vimwiki#inbox()
   else
     " remove duplicates and insert inbox section
     call uniq(paths)
-    call s:insert_link_array('Unlinked Notes', paths)
+    call s:insert_link_array(g:zettel_unlinked_notes_title, paths, g:zettel_unlinked_notes_title_level)
   endif
 
 endfunction
@@ -851,13 +875,14 @@ function! zettel#vimwiki#generate_tags(...) abort
     endfor
   endfor
 
+  let rxH_TemplateName = 'rxH'.(g:zettel_generated_index_title_level + 1).'_Template'
   let lines = []
   let bullet = repeat(' ', vimwiki#lst#get_list_margin()).vimwiki#lst#default_symbol().' '
   for tagname in sort(keys(tags_entries))
     if need_all_tags || index(specific_tags, tagname) != -1
       call extend(lines, [
             \ '',
-            \ substitute(vimwiki#vars#get_syntaxlocal('rxH2_Template'), '__Header__', tagname, ''),
+            \ substitute(vimwiki#vars#get_syntaxlocal(rxH_TemplateName), '__Header__', tagname, ''),
             \ '' ])
       for taglink in reverse(sort(tags_entries[tagname]))
         let filepath = vimwiki#path#abs_path_of_link(taglink)
@@ -872,6 +897,6 @@ function! zettel#vimwiki#generate_tags(...) abort
         \ .vimwiki#u#escape(vimwiki#lst#default_symbol()).' '
         \ .vimwiki#vars#get_syntaxlocal('rxWikiLink').'$\)'
 
-  call zettel#vimwiki#update_listing(lines, 'Generated Tags', links_rx)
+  call zettel#vimwiki#update_listing(lines, g:zettel_generated_tags_title, links_rx, g:zettel_generated_tags_title_level)
 endfunction
 

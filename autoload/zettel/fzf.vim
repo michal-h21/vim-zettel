@@ -164,7 +164,7 @@ function! zettel#fzf#insert_note(lines)
   let input_format = "vimwiki"
   for line in zettel#fzf#get_files(a:lines)
     " convert all files to the destination format
-    let filename = vimwiki#vars#get_wikilocal('path',0). line
+    let filename = vimwiki#vars#get_wikilocal('path'). line
     let ext = fnamemodify(filename, ":e")
     " update the input format
     let input_format = get(s:supported_formats, ext, "vimwiki")

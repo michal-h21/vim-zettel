@@ -327,6 +327,9 @@ endfunction
 
 function! zettel#vimwiki#new_zettel_name(...)
   let newformat = g:zettel_format
+  let s:vimwiki_dir = {}
+  let s:vimwiki_dir.idx = <SID>reference_dir_idx()
+  let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
   if a:0 > 0 && a:1 != ""
     " title contains safe version of the original title
     " raw_title is exact title

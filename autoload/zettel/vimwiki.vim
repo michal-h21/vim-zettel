@@ -91,13 +91,15 @@ function! s:test_header_end_wiki(line, i)
 endfunction
 
 function! s:reference_dir_idx()
-  " (1) return index of current directory if it is in vimwiki_list
-  let idx = vimwiki#base#find_wiki(getcwd())
+  " (1) return index of current filename, if it is in vimwiki_list
+  let idx = vimwiki#base#find_wiki(expand("%:p"))
   if idx != -1 | return idx | endif
 
   " (2) return index of main/first zettel-directory of vimwiki_list if defined g:zettel_options
-  let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
-  if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
+  if exists('g:zettel_options')
+    let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
+    if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
+  endif
 
   " (4) return -1 (vimwiki default)
   if !exists('g:vimwiki_list') || empty(g:vimwiki_list) || empty(g:vimwiki_list[0]) || !exists('g:vimwiki_list[0].path')

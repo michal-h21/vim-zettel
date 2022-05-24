@@ -146,7 +146,7 @@ text will be used as title of the new note.
                                              *Vim-Zettel_ZettelSetActiveWiki*
                                                         *ZettelSetActiveWiki*
 
-- `:ZettelSetActiveWiki`command - select default wiki for commands that can
+- `:ZettelSetActiveWiki` command - select default wiki for commands that can
   operate when Vimwiki is not active, like `:ZettelOpen` or
   `:ZettelInsertNote`.
 

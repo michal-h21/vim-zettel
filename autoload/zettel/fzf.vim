@@ -85,7 +85,7 @@ function! zettel#fzf#search_open(line,...)
     echom("[DEBUG] wikiname: " . wikiname)
     echom("[DEBUG] dir: " . g:zettel_dir)
     echom("[DEBUG] wikidir: " . vimwiki#vars#get_wikilocal('path'))
-    call vimwiki#base#open_link(':e ', wikiname)
+    call vimwiki#base#open_link(':e ', '/'.wikiname)
   endif
 endfunction
 

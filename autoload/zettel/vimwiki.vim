@@ -51,7 +51,7 @@ endfunction
 
 " markdown test for front matter end
 function! s:test_header_end_md(line, i)
-  if a:i > 0 
+  if a:i > 0
     let pos = matchstrpos(a:line, "^\s*---")
     return pos[1]
   endif
@@ -62,18 +62,35 @@ endfunction
 function! s:test_header_end_wiki(line, i)
   " return false for all lines that start with % character
   let pos = matchstrpos(a:line,"^\s*%")
-  if pos[1] > -1 
+  if pos[1] > -1
     return -1
   endif
   " first line which is not tag should be selected
   return 0
 endfunction
 
-let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax') ==? 'markdown' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
+function! s:reference_dir_idx()
+  " (1) return index of current directory if it is in vimwiki_list
+  let idx = vimwiki#base#find_wiki(getcwd())
+  if idx != -1 | return idx | endif
 
+  " (2) return index of main/first zettel-directory of vimwiki_list if defined g:zettel_options
+  let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
+  if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
+
+  " (4) return -1 (vimwiki default)
+  if !exists('g:vimwiki_list') || empty(g:vimwiki_list) || empty(g:vimwiki_list[0]) || !exists('g:vimwiki_list[0].path')
+    return -1
+  else
+  " (3) return index of first vimwiki_list item
+    return 0
+  endif
+endfunction
+
+let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax', <SID>reference_dir_idx()) ==? 'markdown' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
 
 " variables that depend on the wiki syntax
-if vimwiki#vars#get_wikilocal('syntax') ==? 'markdown'
+if vimwiki#vars#get_wikilocal('syntax',  <SID>reference_dir_idx()) ==? 'markdown'
   " add file extension when g:vimwiki_markdown_link_ext is set
   if exists("g:vimwiki_markdown_link_ext") && g:vimwiki_markdown_link_ext == 1
     let s:link_format = "[%title](%link.md)"
@@ -99,7 +116,7 @@ else
   let s:section_pattern = "= %s ="
 end
 
-" enable overriding of 
+" enable overriding of
 if exists("g:zettel_link_format")
   let s:link_format = g:zettel_link_format
   let s:link_stub =  g:zettel_link_format
@@ -195,7 +212,7 @@ function! zettel#vimwiki#find_header_end(filename)
   for line in lines
     " let res = s:test_header_end(line, i)
     let res = Header_test(line, i)
-    if res > -1 
+    if res > -1
       return i
     endif
     let i = i + 1
@@ -212,7 +229,7 @@ function! s:add_line(text)
 endfunction
 
 " enable functions to be passed as front_matter values
-" this can be useful to dynamic value setting 
+" this can be useful to dynamic value setting
 function! s:expand_front_matter_value(value)
   " enable execution of functions that expands to the correct value
   if type(a:value) == v:t_func
@@ -247,13 +264,13 @@ function! s:numtoletter(num)
   let result =  strpart(s:letters, charindex - 1, 1)
   if (quotient>=1)
     return <sid>numtoletter(float2nr(quotient)) . result
-  endif 
+  endif
   return result
 endfunction
 
 " title and date to a new zettel note
 function! zettel#vimwiki#template(title, date)
-  if g:zettel_disable_front_matter == 0 
+  if g:zettel_disable_front_matter == 0
     call <sid>add_line(s:header_delimiter)
     call <sid>add_to_header("date", a:date)
     call <sid>add_to_header("title", a:title)
@@ -272,27 +289,28 @@ function! zettel#vimwiki#escape_filename(name)
   return fnameescape(name)
 endfunction
 
-" count files that match pattern in the current wiki
-function! zettel#vimwiki#count_files(pattern)
-  let cwd = vimwiki#vars#get_wikilocal('path')
+" count files that match pattern in the current wiki or if additional indenx
+" provided in the wiki indentified by the index
+function! zettel#vimwiki#count_files(pattern, ...)
+  let cwd = a:0 ? vimwiki#vars#get_wikilocal('path', a:1) : vimwiki#vars#get_wikilocal('path')
   let filelist = split(globpath(cwd, a:pattern), '\n')
   return len(filelist)
 endfunction
 
-function! zettel#vimwiki#next_counted_file()
-  " count notes in the current wiki and return 
-  let ext = vimwiki#vars#get_wikilocal('ext')
-  let next_file = zettel#vimwiki#count_files("*" . ext) + 1
+function! zettel#vimwiki#next_counted_file(...)
+  " count notes in the current / reference wiki directory and return
+  let ext = a:0 ? vimwiki#vars#get_wikilocal('ext', a:1) : vimwiki#vars#get_wikilocal('ext')
+  let next_file = a:0 ? zettel#vimwiki#count_files("*" . ext, a:1) + 1 : vimwiki#vars#get_wikilocal('ext')
   return next_file
 endfunction
 
 function! zettel#vimwiki#new_zettel_name(...)
   let newformat = g:zettel_format
-  if a:0 > 0 && a:1 != "" 
+  if a:0 > 0 && a:1 != ""
     " title contains safe version of the original title
     " raw_title is exact title
     let title = zettel#vimwiki#escape_filename(a:1)
-    let raw_title = a:1 
+    let raw_title = a:1
   else
     let title = zettel#vimwiki#escape_filename(g:zettel_default_title)
     let raw_title = g:zettel_default_title
@@ -301,13 +319,12 @@ function! zettel#vimwiki#new_zettel_name(...)
   let newformat = substitute(g:zettel_format, "%title", title, "")
   let newformat = substitute(newformat, "%raw_title", raw_title, "")
   if matchstr(newformat, "%file_no") != ""
-    " file_no counts files in the current wiki and adds 1
-    let next_file = zettel#vimwiki#next_counted_file()
+    let next_file = zettel#vimwiki#next_counted_file(s:vimwiki_dir.idx)
     let newformat = substitute(newformat,"%file_no", next_file, "")
   endif
   if matchstr(newformat, "%file_alpha") != ""
     " same as file_no, but convert numbers to letters
-    let next_file = s:numtoletter(zettel#vimwiki#next_counted_file())
+    let next_file = s:numtoletter(zettel#vimwiki#next_counted_file(s:vimwiki_dir.idx))
     let newformat = substitute(newformat,"%file_alpha", next_file, "")
   endif
   if matchstr(newformat, "%random") != ""
@@ -320,10 +337,10 @@ function! zettel#vimwiki#new_zettel_name(...)
     let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
   let final_format =  strftime(newformat)
-  if !s:wiki_file_not_exists(final_format)
+  if !s:wiki_file_not_exists(final_format, s:vimwiki_dir.idx)
     " if the current file name is used, increase counter and add it as a
     " letter to the file name. this ensures that we don't reuse the filename
-    let file_count = zettel#vimwiki#count_files(final_format . "*")
+    let file_count = zettel#vimwiki#count_files(final_format . "*", s:vimwiki_dir.idx)
     let final_format = final_format . s:numtoletter(file_count)
   endif
   let g:zettel_current_id = final_format
@@ -425,7 +442,7 @@ function! zettel#vimwiki#format_search_link(file, title)
 endfunction
 
 " This function is executed when the page referenced by the inserted link
-" doesn't contain  title. The cursor is placed at the position where title 
+" doesn't contain  title. The cursor is placed at the position where title
 " should start, and insert mode is started
 function! zettel#vimwiki#insert_mode_in_title()
   execute "normal! " .s:insert_mode_title_format | :startinsert
@@ -436,20 +453,21 @@ function! zettel#vimwiki#get_title(filename)
   let title = ""
   let lsource = readfile(filename)
   " this code comes from vimwiki's html export plugin
-  for line in lsource 
+  for line in lsource
     if line =~# '^\s*%\=title'
       let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
       return title
     endif
-  endfor 
+  endfor
   return ""
 endfunction
 
 
 " check if the file with the current filename exits in wiki
-function! s:wiki_file_not_exists(filename)
-  let link_info = vimwiki#base#resolve_link(a:filename)
-  return empty(glob(link_info.filename)) 
+function! s:wiki_file_not_exists(filename, ...)
+  let wiki_dir = a:0 ? vimwiki#vars#get_wikilocal('path', a:1) : vimwiki#vars#get_wikilocal('path')
+  let link_info = vimwiki#base#resolve_link(a:filename, wiki_dir)
+  return empty(glob(link_info.filename))
 endfunction
 
 " create new zettel note
@@ -460,14 +478,14 @@ function! zettel#vimwiki#create(...)
   let date_format = g:zettel_date_format
   let date = strftime(date_format)
   echomsg("new zettel: ". format)
-  " update random chars used in %random name format 
+  " update random chars used in %random name format
   let s:randomchars = zettel#vimwiki#make_random_chars()
   let s:zettel_date = date " save zettel date
   " detect if the wiki file exists
-  let wiki_not_exists = s:wiki_file_not_exists(format)
-  " let vimwiki to open the wiki file. this is necessary  
+  let wiki_not_exists = s:wiki_file_not_exists(format, s:vimwiki_dir.idx)
+  " let vimwiki to open the wiki file. this is necessary
   " to support the vimwiki navigation commands.
-  call vimwiki#base#open_link(':e ', '/'.format)
+  call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  " add third argument
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)
@@ -492,6 +510,10 @@ function! s:front_matter_list(front_matter)
 endfunction
 
 function! zettel#vimwiki#zettel_new(...)
+  let s:vimwiki_dir = {}
+  let s:vimwiki_dir.idx = <SID>reference_dir_idx()
+  let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
+
   let filename = zettel#vimwiki#create(a:1)
   " the wiki file already exists
   if filename ==? -1
@@ -528,7 +550,7 @@ function! zettel#vimwiki#zettel_new(...)
     endif
     " we may reuse varaibles from the parent zettel. date would be wrong in this case,
     " so we will overwrite it with the current zettel date
-    let variables.date = s:zettel_date 
+    let variables.date = s:zettel_date
     call zettel#vimwiki#expand_template(template, variables)
   endif
   " save the new wiki file
@@ -578,9 +600,9 @@ function! s:read_footer(filename)
   let footer_lines = []
   let found_footer = -1
   " return empty footer if we couldn't find the footer
-  let footer = "" 
+  let footer = ""
   " process lines from the last one and try to find the rule
-  for line in reverse(lines) 
+  for line in reverse(lines)
     if match(line, "^ \*----") == 0
       let found_footer = 0
       break
@@ -595,25 +617,25 @@ endfunction
 
 " populate new note using template
 function! zettel#vimwiki#expand_template(template, variables)
-  " readfile returns list, we need to convert it to string 
+  " readfile returns list, we need to convert it to string
   " in order to do global replace
   let template_file = expand(a:template)
-  if !filereadable(template_file) 
-    return 
+  if !filereadable(template_file)
+    return
   endif
   let content = readfile(template_file)
   let text = join(content, "\n")
   for key in keys(a:variables)
     let text = substitute(text, "%" . key, a:variables[key], "g")
   endfor
-  " when front_matter is disabled, there is an empty line before 
+  " when front_matter is disabled, there is an empty line before
   " start of the inserted template. we need to ignore it.
   let correction = 0
-  if line('$') == 1 
+  if line('$') == 1
     let correction = 1
   endif
   " add template at the end
-  " we must split it, 
+  " we must split it,
   for xline in split(text, "\n")
     call append(line('$') - correction, xline)
   endfor
@@ -642,7 +664,7 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   " delete contents of the captured file
   execute "normal! ggdG"
   " replace it with a address of the zettel file
-  execute "normal! i" . newfile 
+  execute "normal! i" . newfile
   execute "w"
   " open the new zettel
   execute "e " . newfile
@@ -686,7 +708,7 @@ function! s:add_bulleted_link(lines, abs_filepath)
   return a:lines
 endfunction
 
-  
+
 
 " insert list of links to the current page
 function! s:insert_link_array(title, lines)
@@ -723,7 +745,7 @@ function! s:is_in_backlinks(file, filenamepattern)
   let backlinks_pattern = printf(s:section_pattern, g:zettel_backlinks_title)
   let backlinks_pos = matchstrpos(content, backlinks_pattern)
   " if we cannot find backlinks in the page return false
-  if backlinks_pos[1] == -1 
+  if backlinks_pos[1] == -1
     return -1
   endif
   let file_pos = matchstrpos(content, a:filenamepattern)

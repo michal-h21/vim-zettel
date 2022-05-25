@@ -91,13 +91,15 @@ function! s:test_header_end_wiki(line, i)
 endfunction
 
 function! s:reference_dir_idx()
-  " (1) return index of current directory if it is in vimwiki_list
-  let idx = vimwiki#base#find_wiki(getcwd())
+  " (1) return index of current filename, if it is in vimwiki_list
+  let idx = vimwiki#base#find_wiki(expand("%:p"))
   if idx != -1 | return idx | endif
 
   " (2) return index of main/first zettel-directory of vimwiki_list if defined g:zettel_options
-  let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
-  if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
+  if exists('g:zettel_options')
+    let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
+    if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
+  endif
 
   " (4) return -1 (vimwiki default)
   if !exists('g:vimwiki_list') || empty(g:vimwiki_list) || empty(g:vimwiki_list[0]) || !exists('g:vimwiki_list[0].path')
@@ -330,6 +332,9 @@ function! zettel#vimwiki#new_zettel_name(...)
   let s:vimwiki_dir.idx = <SID>reference_dir_idx()
   let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
   let newformat = g:zettel_format
+  let s:vimwiki_dir = {}
+  let s:vimwiki_dir.idx = <SID>reference_dir_idx()
+  let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
   if a:0 > 0 && a:1 != ""
     " title contains safe version of the original title
     " raw_title is exact title
@@ -509,7 +514,9 @@ function! zettel#vimwiki#create(...)
   let wiki_not_exists = s:wiki_file_not_exists(format, s:vimwiki_dir.idx)
   " let vimwiki to open the wiki file. this is necessary
   " to support the vimwiki navigation commands.
-  call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  " add third argument
+  " the following command doesn't work correctly with the vimwiki navigation
+  " call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  " add third argument
+  call vimwiki#base#open_link(':e ',  "./". format, )  
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)

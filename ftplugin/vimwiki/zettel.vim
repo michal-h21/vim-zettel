@@ -7,14 +7,7 @@ endif
 function! s:wiki_yank_name()
   let filename = expand("%")
   let link = zettel#vimwiki#get_link(filename)
-  let clipboardtype=&clipboard
-  if clipboardtype=="unnamed"  
-    let @* = link
-  elseif clipboardtype=="unnamedplus"
-    let @+ = link
-  else
-    let @@ = link
-  endif
+  call setreg(v:register, link)
   return link
 endfunction
 

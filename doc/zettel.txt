@@ -196,8 +196,8 @@ with the given order.
 
                                                  *Vim-Zettel_ZettelYankName*
                                                             *ZettelYankName*
-- `:ZettelYankName` – copy the current zettel file name and title to the
-  unnamed register as a formatted link.  Mapped to `T` in normal mode.
+- `:ZettelYankName` – copy formatted link to the current zettel to a register.
+  Mapped to `T` in normal mode.
 
 Useful Vimwiki commands ~
 
@@ -473,6 +473,18 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+
+2021-12-08  Marc Mezzarobba 
+
+* ftplugin/vimwiki/zettel.vim: support arbitrary registers in wiki_yank_name()
+https://github.com/michal-h21/vim-zettel/pull/116
+
+2021-10-11  Phorv
+
+* autoload/zettel/fzf.vim: Use current wiki for ZettelInsertNote.
+
+https://github.com/michal-h21/vim-zettel/pull/114
 
 2020-10-22  Doug Ghormley
 

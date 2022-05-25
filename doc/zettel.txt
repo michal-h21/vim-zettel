@@ -91,6 +91,11 @@ Vim-Zettel work to your liking:
 - |g:zettel_fzf_command|
 - |g:zettel_fzf_options|
 - |g:zettel_backlinks_title|
+- |g:zettel_backlinks_title_level|
+- |g:zettel_unlinked_notes_title|
+- |g:zettel_unlinked_notes_title_level|
+- |g:zettel_generated_tags_title|
+- |g:zettel_generated_tags_title_level|
 
 You can also supply a custom template for creating new zettels. See
 |Vim-Zettel-Templates|.
@@ -349,6 +354,20 @@ Options used for the `fzf` command.
 
 >
    let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
+
+<
+                                              *g:zettel_generated_index_title*
+Text used as generated index section.
+
+>
+   let g:zettel_generated_index_title = "Generated Index"
+<
+
+                                        *g:zettel_generated_index_title_level*
+Header level to be used when generating the generated index section.
+
+>
+   let g:zettel_generated_index_title_level = 1
 <
 
                                                     *g:zettel_backlinks_title*
@@ -356,6 +375,41 @@ Text used as back links section.
 
 >
    let g:zettel_backlinks_title = "Backlinks"
+<
+
+                                              *g:zettel_backlinks_title_level*
+Header level to be used when generating the back links section.
+
+>
+   let g:zettel_backlinks_title_level = 1
+<
+
+                                               *g:zettel_unlinked_notes_title*
+Text used as unlinked notes section.
+
+>
+   let g:zettel_unlinked_notes_title = "Unlinked Notes"
+<
+
+                                         *g:zettel_unlinked_notes_title_level*
+Header level to be used when generating the unlinked notes section.
+
+>
+   let g:zettel_unlinked_notes_title_level = 1
+<
+
+                                               *g:zettel_generated_tags_title*
+Text used as generated tags section.
+
+>
+   let g:zettel_generated_tags_title = "Generated Tags"
+<
+
+                                         *g:zettel_generated_tags_title_level*
+Header level to be used when generating the generated tags section.
+
+>
+   let g:zettel_generated_tags_title_level = 1
 <
 
                                                        *g:zettel_link_format*

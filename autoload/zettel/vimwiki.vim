@@ -57,7 +57,7 @@ call zettel#vimwiki#initialize_wiki_number()
 function! zettel#vimwiki#get_option(name)
   if !exists('g:zettel_options')
     return ""
-  end
+  endif
   " the options for particular wikis must be in the same order as wiki
   " definitions in g:vimwiki_list
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
@@ -105,7 +105,7 @@ function! s:reference_dir_idx()
   if !exists('g:vimwiki_list') || empty(g:vimwiki_list) || empty(g:vimwiki_list[0]) || !exists('g:vimwiki_list[0].path')
     return -1
   else
-  " (3) return index of first vimwiki_list item
+    " (3) return index of first vimwiki_list item
     return 0
   endif
 endfunction
@@ -137,7 +137,7 @@ else
   let s:insert_mode_title_format = "h"
   let s:grep_link_pattern = '/\[%s[|#\]]/'
   let s:section_pattern = "= %s ="
-end
+endif
 
 " enable overriding of
 if exists("g:zettel_link_format")
@@ -149,7 +149,7 @@ let s:tag_pattern = '^!_TAG'
 function! zettel#vimwiki#update_listing(lines, title, links_rx)
   let generator = { 'data': a:lines }
   function generator.f() dict
-        return self.data
+    return self.data
   endfunction
   call vimwiki#base#update_listing_in_buffer(generator, a:title, a:links_rx, line('$')+1, 1, 1)
 endfunction
@@ -164,7 +164,7 @@ endif
 let g:zettel_disable_front_matter = zettel#vimwiki#get_option("disable_front_matter")
 if empty(g:zettel_disable_front_matter)
   let g:zettel_disable_front_matter=0
-end
+endif
 
 if !exists('g:zettel_backlinks_title')
   let g:zettel_backlinks_title = "Backlinks"
@@ -179,34 +179,34 @@ endif
 " Fixes for Neovim
 if has('nvim')
 
-" make string filled with random characters
-function! zettel#vimwiki#make_random_chars()
-  call luaeval("math.randomseed( os.time() )")
-  let char_no = range(g:zettel_random_chars)
-  let str_list = []
-  for x in char_no
-    call add(str_list, nr2char(luaeval("math.random(97,122)")))
-  endfor
-  return join(str_list, "")
-endfunction
+  " make string filled with random characters
+  function! zettel#vimwiki#make_random_chars()
+    call luaeval("math.randomseed( os.time() )")
+    let char_no = range(g:zettel_random_chars)
+    let str_list = []
+    for x in char_no
+      call add(str_list, nr2char(luaeval("math.random(97,122)")))
+    endfor
+    return join(str_list, "")
+  endfunction
 
 elseif v:version < 802
-function! zettel#vimwiki#make_random_chars()
-  let char_no = range(g:zettel_random_chars)
-  let str_list = []
-  for x in char_no
-    call add(str_list, nr2char(matchstr(reltimestr(reltime()), '\v\.@<=\d+')%26+97))
-  endfor
-  return join(str_list, "")
-endfunction
+  function! zettel#vimwiki#make_random_chars()
+    let char_no = range(g:zettel_random_chars)
+    let str_list = []
+    for x in char_no
+      call add(str_list, nr2char(matchstr(reltimestr(reltime()), '\v\.@<=\d+')%26+97))
+    endfor
+    return join(str_list, "")
+  endfunction
 
 else
 
-" make string filled with random characters
-function! zettel#vimwiki#make_random_chars()
-  let seed = srand()
-  return range(g:zettel_random_chars)->map({-> (97+rand(seed) % 26)->nr2char()})->join('')
-endfunction
+  " make string filled with random characters
+  function! zettel#vimwiki#make_random_chars()
+    let seed = srand()
+    return range(g:zettel_random_chars)->map({-> (97+rand(seed) % 26)->nr2char()})->join('')
+  endfunction
 endif
 
 " number of random characters used in %random placehoder in new zettel name
@@ -487,28 +487,28 @@ function! zettel#vimwiki#get_title(filename)
   " at the head of a file. If the front matter is not present use the first
   " headline as title either in vimwiki or markup style.
   for line in lsource
-		" Check if front matter title is present
+    " Check if front matter title is present
     if line =~# '^\s*%\=title'
       let title = matchstr(line, '^\s*%\=title:\=\s\zs.*')
       return title
     endif
-		if is_markdown
-			" Check if first headline is present in markdown style
-			" \zs marks the start of the match part
-			" \ze marks the end of the match part
-			if line =~# '^\s*#\s*.*'
-				let title = matchstr(line, '^\s*#\s*\zs.*\ze')
-				return title
-			endif
-		else
-			" Check if first headline is present in vimwiki style
-			" \zs marks the start of the match part
-			" \ze marks the end of the match part
-			if line =~# '^\s*=\s\+.*\S\s\+=\s*'
-				let title = matchstr(line, '^\s*=\s\+\zs.*\S\ze\s\+=\s*')
-				return title
-			endif
-		endif
+    if is_markdown
+      " Check if first headline is present in markdown style
+      " \zs marks the start of the match part
+      " \ze marks the end of the match part
+      if line =~# '^\s*#\s*.*'
+        let title = matchstr(line, '^\s*#\s*\zs.*\ze')
+        return title
+      endif
+    else
+      " Check if first headline is present in vimwiki style
+      " \zs marks the start of the match part
+      " \ze marks the end of the match part
+      if line =~# '^\s*=\s\+.*\S\s\+=\s*'
+        let title = matchstr(line, '^\s*=\s\+\zs.*\S\ze\s\+=\s*')
+        return title
+      endif
+    endif
   endfor
   return ""
 endfunction
@@ -782,8 +782,8 @@ function! zettel#vimwiki#generate_links()
     let abs_filepath = vimwiki#path#abs_path_of_link(link)
     "let abs_filepath = link
     "if !s:is_diary_file(abs_filepath)
-      call add(lines, bullet.
-            \ zettel#vimwiki#get_link(abs_filepath))
+    call add(lines, bullet.
+          \ zettel#vimwiki#get_link(abs_filepath))
     "endif
   endfor
   call s:insert_link_array('Generated Index', lines)

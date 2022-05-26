@@ -49,7 +49,8 @@ function! zettel#fzf#execute_fzf(a, b, options)
     call extend(a:options, {"dir":vimwiki#vars#get_wikilocal('path')})
   endif
   if g:zettel_fzf_command == "ag"
-    let search_ext = "--" . substitute(vimwiki#vars#get_wikilocal('ext'), '\.', '', '')
+    " filetype pattern for ag: -G 'ext$'
+    let search_ext = "-G '" . substitute(vimwiki#vars#get_wikilocal('ext'), '\.', '', '') . "$'"
     let query =  empty(a:a) ? '^(?=.)' : a:a
     let l:fzf_command = g:zettel_fzf_command . ' --color --smart-case --nogroup --column ' . shellescape(query)  " --ignore-case --smart-case
   else

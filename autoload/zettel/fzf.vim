@@ -1,7 +1,9 @@
 " initialize default wiki
 call zettel#vimwiki#initialize_wiki_number()
 " get active VimWiki directory
-let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
+if !exists('g:zettel_dir')
+  let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
+endif
 
 " FZF command used in the ZettelSearch command
 if !exists('g:zettel_fzf_command')
@@ -37,9 +39,15 @@ endfunction
 " execute fzf function
 function! zettel#fzf#execute_fzf(a, b, options)
   " search only files in the current wiki syntax
-
   let l:fullscreen = 0
-
+  " initialize directory for search if it is missing in options
+  if get(a:options, "dir") == 0
+    let wiki_number = getbufvar("%","vimwiki_wiki_nr")
+    if  wiki_number == -1
+      call zettel#vimwiki#initialize_wiki_number()
+    endif
+    call extend(a:options, {"dir":vimwiki#vars#get_wikilocal('path')})
+  endif
   if g:zettel_fzf_command == "ag"
     let search_ext = "--" . substitute(vimwiki#vars#get_wikilocal('ext'), '\.', '', '')
     let query =  empty(a:a) ? '^(?=.)' : a:a

@@ -474,6 +474,12 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2022-05-26  Michal Hoftich <michal.h21@gmail.com>
+
+* plugin/zettel.vim: don't initialize zettelkasten directory in
+  ZettelInsertNote.
+* autoload/zettel/fzf.vim: initialize default wiki for FZF search.
+* autoload/zettel/fzf.vim: fixed ag search.
 
 2021-12-08  Marc Mezzarobba 
 

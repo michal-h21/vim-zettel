@@ -45,7 +45,12 @@ function! zettel#vimwiki#initialize_wiki_number()
       call zettel#vimwiki#set_active_wiki(g:zettel_default_wiki_nr)
     else
       let idx = zettel#vimwiki#get_wiki_nr_from_options()
-      call zettel#vimwiki#set_active_wiki(idx)
+      echom("setting  wiki number: " . idx)
+      if idx > -1
+        call zettel#vimwiki#set_active_wiki(idx)
+      else
+        call zettel#vimwiki#set_active_wiki(0)
+      endif
     endif
   endif
 endfunction

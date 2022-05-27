@@ -35,6 +35,12 @@ function! s:get_wiki_file(filename)
    return join(fileparts[0:-2],".")
 endfunction
 
+function! s:get_line_number(line)
+  " line is in the following format:
+  " filename:linenumber:number:matched_text
+  let linenumber = matchstr(a:line, ":\\zs[0-9]\*\\ze:[0-9]\*")
+  return linenumber
+endfunction
 
 " execute fzf function
 function! zettel#fzf#execute_fzf(a, b, options)
@@ -88,6 +94,7 @@ endfunction
 function! zettel#fzf#search_open(line,...)
   let filename = s:get_fzf_filename(a:line)
   let wikiname = s:get_wiki_file(filename)
+  let linenumber = s:get_line_number(a:line)
   if !empty(wikiname)
     " open the selected note using this Vimwiki function
     " it will keep the history of opened pages, so you can go to the previous
@@ -97,6 +104,10 @@ function! zettel#fzf#search_open(line,...)
     echom("[DEBUG] dir: " . g:zettel_dir)
     echom("[DEBUG] wikidir: " . vimwiki#vars#get_wikilocal('path'))
     call vimwiki#base#open_link(':e ', '/'.wikiname)
+    " scroll to the selected line 
+    if linenumber =~# '^\d\+$'
+      call cursor(linenumber, 1)
+    endif
   endif
 endfunction
 

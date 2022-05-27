@@ -37,6 +37,13 @@ command! -buffer -nargs=* -complete=custom,vimwiki#tags#complete_tags
 command! -buffer ZettelBackLinks call zettel#vimwiki#backlinks()
 command! -buffer ZettelInbox call zettel#vimwiki#inbox()
 
+command! -bang -nargs=* ZettelSelectBuffer call fzf#run({
+      \   'source':  reverse(zettel#fzf#buflist()),
+      \   'sink':    function('zettel#fzf#bufopen'),
+      \   'options': '+m',
+      \   'down':    len(zettel#fzf#buflist()) + 2
+      \ })
+
 if !exists('g:zettel_default_mappings')
   let g:zettel_default_mappings=1
 endif

@@ -194,6 +194,10 @@ with the given order.
    insert a link to the selected zettel in your current note.  Mapped to
    `[[` in insert mode.
 
+                                             *Vim-Zettel_ZettelSelectBuffer*
+                                                        *ZettelSelectBuffer*
+- `:ZettelSelectBuffer` - select from a list of recently opened notes.
+
                                                  *Vim-Zettel_ZettelYankName*
                                                             *ZettelYankName*
 - `:ZettelYankName` – copy formatted link to the current zettel to a register.
@@ -478,6 +482,8 @@ commit changes in wiki and synchronize them with external Git repository.
 
 * autoload/zettel/fzf.vim: scroll to the line selected in :ZettelOpen.
   https://github.com/michal-h21/vim-zettel/issues/120
+* ftplugin/vimwiki/zettel.vim: added `:ZettelSelectBuffer` command.
+  https://github.com/michal-h21/vim-zettel/issues/119
 
 2022-05-26  Michal Hoftich <michal.h21@gmail.com>
 

@@ -211,3 +211,36 @@ function! zettel#fzf#insert_note(lines)
   " Todo: move this to execute_open 
   call setqflist(map(zettel#fzf#get_files(a:lines), '{ "filename": v:val }'))
 endfunction
+
+" buffer handling functions
+" list zettel titles in buffers
+function! zettel#fzf#buflist()
+  " redirect :ls to a variable
+  redir => ls
+  silent ls
+  redir END
+  let lines = split(ls, '\n')
+  let newlines = []
+  " run over buffers
+  for line in lines
+    let filename = matchstr(line, '\v"\zs([^"]+)')
+    " we need to expand the matched filename to a full path
+    let fullname = fnamemodify(filename, ":p")
+    " use vim-zettel command to read title
+    let title = zettel#vimwiki#get_title(fullname)
+    " we don't need the filename in listings
+    let line  = substitute(line, '\".*', '', '')
+    " if we cannot find title, use filename instead
+    if title ==? ""
+      let title = filename
+    endif
+    " add title to the result of :ls
+    call add(newlines, line . " - " . title)
+  endfor
+  return newlines
+endfunction
+
+" switch to a buffer
+function! zettel#fzf#bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction

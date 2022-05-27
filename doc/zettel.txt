@@ -484,13 +484,62 @@ commit changes in wiki and synchronize them with external Git repository.
 2021-12-08  Marc Mezzarobba 
 
 * ftplugin/vimwiki/zettel.vim: support arbitrary registers in wiki_yank_name()
-https://github.com/michal-h21/vim-zettel/pull/116
+  https://github.com/michal-h21/vim-zettel/pull/116
 
 2021-10-11  Phorv
 
 * autoload/zettel/fzf.vim: Use current wiki for ZettelInsertNote.
+  https://github.com/michal-h21/vim-zettel/pull/114
 
-https://github.com/michal-h21/vim-zettel/pull/114
+2021-07-26  Sebastián Zaffarano <sebas@zaffarano.com.ar>
+
+* autoload/zettel/vimwiki.vim: make index, backlinks and unlinked section
+  titles configurable.
+  https://github.com/michal-h21/vim-zettel/pull/110
+
+2021-02-20  Dennis Jung 
+
+* autoload/zettel/vimwiki.vim: extract note title from first heading when
+  title header is missing.
+  https://github.com/michal-h21/vim-zettel/pull/105
+
+2021-02-18  Guillermo Blanco 
+
+* autoload/zettel/vimwiki.vim: correctly set the default wiki upon startup.
+  https://github.com/michal-h21/vim-zettel/pull/104
+
+2021-02-11  Ricky Anderson 
+
+* ftplugin/vimwiki/zettel.vim: change default mappings to buffer local mappings.
+  https://github.com/michal-h21/vim-zettel/pull/100
+
+2021-01-20  Kraxli
+
+* autoload/zettel/fzf.vim: using fzf#vim#grep for ag in
+  zettel#fzf#execute_fzf.
+  https://github.com/michal-h21/vim-zettel/pull/97
+
+2021-01-17  Kraxli
+
+* autoload/zettel/vimwiki.vim: run on non-vimwiki-buffer and directory to save
+  new Zettel to.
+  https://github.com/michal-h21/vim-zettel/pull/96
+
+2021-01-13  Roman Garanin 
+
+* doc/zettel.txt: fixed typo.
+  https://github.com/michal-h21/vim-zettel/pull/92
+
+2020-11-15  Benedikt Wildenhain <benedikt.wildenhain@hs-bochum.de>
+
+* autoload/zettel/vimwiki.vim: make #vimwiki#make_random_chars compatible to
+  Vim 8.1
+  https://github.com/michal-h21/vim-zettel/pull/84
+
+2020-11-02  Shaine Hatch <shaine@squidtree.com>
+
+  * autoload/zettel/vimwiki.vim: Prevent duplicate file creation.
+  https://github.com/michal-h21/vim-zettel/pull/78
 
 2020-10-22  Doug Ghormley
 

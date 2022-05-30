@@ -490,7 +490,7 @@ commit changes in wiki and synchronize them with external Git repository.
 
 2022-05-30  Michal Hoftich <michal.h21@gmail.com> 
 
-* autoload/zettel/fzf.vim: added `g:zettel_bufflist_format`template for
+* autoload/zettel/fzf.vim: added `g:zettel_bufflist_format` template for
   formatting of the bufferlist listing.
 
 2022-05-27  Michal Hoftich <michal.h21@gmail.com>

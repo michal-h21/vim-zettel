@@ -44,7 +44,8 @@ the Vimwiki extension for Vim and supports both Vimwiki and Markdown syntaxes.
 
 Main features:
 
-- customizable filenames (date and time, title, consecutive numbering)
+- customizable filenames (date and time, title, consecutive numbering, random
+  characters)
 - links always show titles, regardless of the actual filename
 - fulltext support using FZF for searching and hyperlinking
 - search your Zettelkasten from LaTeX or Markdown documents and insert
@@ -172,7 +173,9 @@ with the given order.
 
                                                      *Vim-Zettel_ZettelInbox*
                                                                 *ZettelInbox*
-- `:ZettelInbox` command – insert list of notes that no other note links to.
+- `:ZettelInbox` command – insert list of notes that are not reachable from
+  the index file (you can open the index file using the `:VimwikiIndex`
+  command).
 
                                              *Vim-Zettel_ZettelGenerateLinks*
                                                         *ZettelGenerateLinks*

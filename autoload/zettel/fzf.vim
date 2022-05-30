@@ -212,6 +212,10 @@ function! zettel#fzf#insert_note(lines)
   call setqflist(map(zettel#fzf#get_files(a:lines), '{ "filename": v:val }'))
 endfunction
 
+if !exists('g:zettel_bufflist_format')
+  let g:zettel_bufflist_format = " - %title"
+endif
+
 " buffer handling functions
 " list zettel titles in buffers
 function! zettel#fzf#buflist()
@@ -233,9 +237,12 @@ function! zettel#fzf#buflist()
     " if we cannot find title, use filename instead
     if title ==? ""
       let title = filename
+      let filename = ""
     endif
+    let template = substitute(g:zettel_bufflist_format, "%title", title, "g")
+    let template = substitute(template, "%filename", filename, "g")
     " add title to the result of :ls
-    call add(newlines, line . " - " . title)
+    call add(newlines, line . ' ' . template)
   endfor
   return newlines
 endfunction

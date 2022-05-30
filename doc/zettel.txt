@@ -423,9 +423,19 @@ satisfied with the default format.
    let g:zettel_link_format="[%title](%link)"
 <
 
-                                                     *g:zettel_random_chars*
+                                                      *g:zettel_random_chars*
 
 Number of characters used in `%random` zettel name format.
+
+
+                                                   *g:zettel_bufflist_format*
+
+Format used in `ZettelSelectBuffer`. Available variables are `%filename` and
+`%title`. Note that for notes where title cannot be found, filename is used
+as title and filename is empty.
+>
+   let g:zettel_bufflist_format = "%filename - %title
+<
 
 
 ==============================================================================
@@ -477,6 +487,11 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2022-05-30  Michal Hoftich <michal.h21@gmail.com> 
+
+* autoload/zettel/fzf.vim: added `g:zettel_bufflist_format`template for
+  formatting of the bufferlist listing.
 
 2022-05-27  Michal Hoftich <michal.h21@gmail.com>
 

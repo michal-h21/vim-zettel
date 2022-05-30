@@ -104,6 +104,9 @@ You can also supply a custom template for creating new zettels. See
 ==============================================================================
 3. Commands                                              *Vim-Zettel-Commands*
 
+Once you have Vim-Zettel installed, use the `:VimwikiIndex` command to open
+the main file of your wiki. You can link to your notes from this page.
+
 Vim-Zettel implements the following commands on top of Vimwiki.
 
                                                        *Vim-Zettel_ZettelNew*

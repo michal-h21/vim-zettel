@@ -463,6 +463,7 @@ Sample template: >
 Variables that start with the % will be expanded. Supported variables:
 
 - %title - title of the new note
+- %id - filename of the new note
 - %backlink - back link to the parent note
 - %date - date and time of the new note. Format is based on
   `g:zettel_date_format` variable.
@@ -493,6 +494,10 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2022-05-31  Michal Hoftich <michal.h21@gmail.com> 
+
+* autoload/zettel/vimwiki.vim: added %id variable to the new zettel templates.
 
 2022-05-30  Michal Hoftich <michal.h21@gmail.com> 
 

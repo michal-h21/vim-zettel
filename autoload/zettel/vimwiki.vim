@@ -633,6 +633,8 @@ function! zettel#vimwiki#zettel_new(...)
     " we may reuse varaibles from the parent zettel. date would be wrong in this case,
     " so we will overwrite it with the current zettel date
     let variables.date = s:zettel_date
+    " enable also Zettel ID
+    let variables.id   = filename
     call zettel#vimwiki#expand_template(template, variables)
   endif
   " save the new wiki file

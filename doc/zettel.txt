@@ -294,7 +294,6 @@ It is also possible to use other formatting strings:
    instead of numbers
 - %random -- use random characters. Their number can be configured using 
   `g:zettel_random_chars` option, eight is used by default.
-  This option requires Vim v8.1.2342 and higher or Neovim.
 
 To use filename based on current time and note title, you can use the
 following format: 

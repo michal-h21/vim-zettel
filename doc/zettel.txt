@@ -357,6 +357,8 @@ setting. >
      --no-heading --color=always "
 
 <
+Note that if you want to use Ripgrep, you need to pass at least the `--column`
+option for the correct handling.
 
                                                        *g:zettel_fzf_options*
 Options used for the `fzf` command.
@@ -498,6 +500,8 @@ commit changes in wiki and synchronize them with external Git repository.
 
 * autoload/zettel/fzf.vim: removed debugging messages.
   https://github.com/michal-h21/vim-zettel/issues/101
+* doc/zettel.txt: info about necessary command line options for Ripgrep
+  https://github.com/michal-h21/vim-zettel/issues/71
 
 2022-05-31  Michal Hoftich <michal.h21@gmail.com> 
 

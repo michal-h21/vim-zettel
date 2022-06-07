@@ -99,10 +99,6 @@ function! zettel#fzf#search_open(line,...)
     " open the selected note using this Vimwiki function
     " it will keep the history of opened pages, so you can go to the previous
     " page using backspace
-    echom("[DEBUG] filename: " . filename)
-    echom("[DEBUG] wikiname: " . wikiname)
-    echom("[DEBUG] dir: " . g:zettel_dir)
-    echom("[DEBUG] wikidir: " . vimwiki#vars#get_wikilocal('path'))
     call vimwiki#base#open_link(':e ', '/'.wikiname)
     " scroll to the selected line 
     if linenumber =~# '^\d\+$'

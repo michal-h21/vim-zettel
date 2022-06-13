@@ -496,6 +496,15 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2022-06-13  Michal Hoftich <michal.h21@gmail.com> 
+
+* autoload/zettel/vimwiki.vim: use the new parameter for `:ZettelInbox` only
+  with development version of Vimwiki.
+
+2022-06-13  Edward Joshua Evans 
+
+* autoload/zettel/vimwiki.vim: select current Wiki for the `:ZettelInbox`.
+
 2022-06-07  Michal Hoftich <michal.h21@gmail.com> 
 
 * autoload/zettel/fzf.vim: removed debugging messages.

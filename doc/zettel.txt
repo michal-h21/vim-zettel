@@ -498,6 +498,9 @@ commit changes in wiki and synchronize them with external Git repository.
 
 2022-06-13  Michal Hoftich <michal.h21@gmail.com> 
 
+* autoload/zettel/vimwiki.vim: added `s:is_wiki_devel` function for detection
+  of the development version of Vimwiki.
+
 * autoload/zettel/vimwiki.vim: use the new parameter for `:ZettelInbox` only
   with development version of Vimwiki.
 

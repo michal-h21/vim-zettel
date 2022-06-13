@@ -870,7 +870,7 @@ function! zettel#vimwiki#backlinks()
 endfunction
 
 function! zettel#vimwiki#inbox()
-  call vimwiki#base#check_links()
+  call vimwiki#base#check_links(0)
   let linklist = getqflist()
   cclose
   let paths = []

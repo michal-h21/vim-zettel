@@ -824,6 +824,11 @@ function! s:is_markdown()
   return vimwiki#vars#get_wikilocal('syntax', <SID>reference_dir_idx()) ==? 'markdown'
 endfunction
 
+" detect if we are running in the development version of Vimwiki
+function! s:is_vimwiki_devel()
+  return exists("vimwiki#base#complete_file")
+endfunction
+
 " test if link in the Backlinks section
 function! s:is_in_backlinks(file, filenamepattern)
   let f = readfile(a:file)
@@ -870,7 +875,13 @@ function! zettel#vimwiki#backlinks()
 endfunction
 
 function! zettel#vimwiki#inbox()
-  call vimwiki#base#check_links()
+  " detect development version of Vimwiki, where check_links can take arguments
+  if <sid>is_vimwiki_devel()
+    " 0 means that it will search only the current wiki
+    call vimwiki#base#check_links(0)
+  else
+    call vimwiki#base#check_links()
+  endif
   let linklist = getqflist()
   cclose
   let paths = []

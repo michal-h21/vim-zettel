@@ -496,6 +496,10 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2022-06-20  Leandro 
+
+* ftplugin/vimwiki/zettel.vim: use noremap for mapings.
+
 2022-06-13  Michal Hoftich <michal.h21@gmail.com> 
 
 * autoload/zettel/vimwiki.vim: added `s:is_wiki_devel` function for detection

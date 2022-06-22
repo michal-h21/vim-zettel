@@ -107,6 +107,15 @@ function! zettel#fzf#search_open(line,...)
   endif
 endfunction
 
+" search for a file, and use visually selected text as a title
+function! zettel#fzf#title_selected(line, ...)
+  let filename = s:get_fzf_filename(a:line)
+  let wikiname = s:get_wiki_file(filename)
+  " this code is reused from zettel#vimwiki#zettel_new_selected()
+  " \\\\0 contains the selected text
+  execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( wikiname, "\\\\0") ."\<cr>\<C-o>"
+endfunction
+
 " get options for fzf#vim#with_preview function
 " pass empty dictionary {} if you don't want additinal_options
 function! zettel#fzf#preview_options(sink_function, additional_options)

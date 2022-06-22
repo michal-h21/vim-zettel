@@ -23,10 +23,11 @@ endfunction
 
 
 
-" make fulltext search in all VimWiki files using FZF and insert link to the
-" found file
-" command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
+" use visually selected text as a text for a link to note returned by FZF
+
 command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#wiki_search')
+
+command! -bang -nargs=* ZettelTitleSelected call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#title_selected')
 
 command! -bang -nargs=* ZettelYankName call <sid>wiki_yank_name()
 
@@ -53,6 +54,10 @@ nnoremap <silent> <Plug>ZettelSearchMap :ZettelSearch<cr>
 nnoremap <silent> <Plug>ZettelYankNameMap :ZettelYankName<cr> 
 nnoremap <silent> <Plug>ZettelReplaceFileWithLink :call <sid>replace_file_with_link()<cr> 
 xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
+" make fulltext search in all VimWiki files using FZF and insert link to the
+" found file
+" <C-U> is needed to prevent the "E481: No range alllowed" error
+xnoremap <silent> <Plug>ZettelTitleSelectedMap :<C-U>ZettelTitleSelected<CR>
 
 
 if g:zettel_default_mappings==1
@@ -61,5 +66,6 @@ if g:zettel_default_mappings==1
   nnoremap <buffer> T <Plug>ZettelYankNameMap
   " xnoremap z :call zettel#vimwiki#zettel_new_selected()<CR>
   xnoremap <buffer> z <Plug>ZettelNewSelectedMap
+  xnoremap <buffer> [[ <Plug>ZettelTitleSelectedMap
   nnoremap <buffer> gZ <Plug>ZettelReplaceFileWithLink
 endif

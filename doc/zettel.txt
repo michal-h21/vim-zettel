@@ -204,6 +204,11 @@ with the given order.
                                                         *ZettelSelectBuffer*
 - `:ZettelSelectBuffer` - select from a list of recently opened notes.
 
+                                             *Vim-Zettel_ZettelTitleSelected*
+                                                        *ZettelTitleSelected*
+- `:ZettelTitleSelected` - select note using FZF and use actually selected
+  text as a title.
+
                                                  *Vim-Zettel_ZettelYankName*
                                                             *ZettelYankName*
 - `:ZettelYankName` – copy formatted link to the current zettel to a register.
@@ -228,6 +233,9 @@ details.
                                                               *Vim-Zettel_[[*
 - [[ command in insert mode – create a link to a note. It uses FZF for the
    note searching.
+
+- [[ command for visual selection - create a link to a note, with the selected
+  text as a title.
 
                                                                *Vim-Zettel_T*
 - T command in normal mode – yank the current note filename and title as a
@@ -495,6 +503,11 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2022-06-22  Michal Hoftich <michal.h21@gmail.com> 
+
+* ftplugin/vimwiki/zettel.vim: added a new command, `:ZettelTitleSelected`. It
+  uses visually selected text as a title for a link to a selected note.
 
 2022-06-20  Leandro 
 

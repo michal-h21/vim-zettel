@@ -13,6 +13,10 @@ function! s:get_visual_selection()
   return join(lines, "\n")
 endfunction
 
+function! zettel#vimwiki#get_visual_selection()
+  return <sid>get_visual_selection()
+endfunction 
+
 " this function is useful for comands in plugin/zettel.vim
 " set number of the active wiki
 function! zettel#vimwiki#set_active_wiki(number)
@@ -655,6 +659,7 @@ function! zettel#vimwiki#zettel_new_selected()
   execute "normal! :'<,'>s/\\%V.*\\%V./" . zettel#vimwiki#format_link( name, "\\\\0") ."\<cr>\<C-o>"
   call zettel#vimwiki#zettel_new(title, variables)
 endfunction
+
 
 " prepare variables that will be available to expand in the new note template
 function! zettel#vimwiki#prepare_template_variables(filename, title)

@@ -66,6 +66,6 @@ if g:zettel_default_mappings==1
   nnoremap <buffer> T <Plug>ZettelYankNameMap
   " xnoremap z :call zettel#vimwiki#zettel_new_selected()<CR>
   xnoremap <buffer> z <Plug>ZettelNewSelectedMap
-  xnoremap <buffer> [[ <Plug>ZettelTitleSelectedMap
+  xnoremap <buffer> g[ <Plug>ZettelTitleSelectedMap
   nnoremap <buffer> gZ <Plug>ZettelReplaceFileWithLink
 endif

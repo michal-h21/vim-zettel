@@ -831,7 +831,7 @@ endfunction
 
 " detect if we are running in the development version of Vimwiki
 function! s:is_vimwiki_devel()
-  return exists("vimwiki#base#complete_file")
+  return exists("*vimwiki#base#complete_file")
 endfunction
 
 " test if link in the Backlinks section
@@ -883,7 +883,7 @@ function! zettel#vimwiki#inbox()
   " detect development version of Vimwiki, where check_links can take arguments
   if <sid>is_vimwiki_devel()
     " 0 means that it will search only the current wiki
-    call vimwiki#base#check_links(0)
+    call vimwiki#base#check_links(0,0,0)
   else
     call vimwiki#base#check_links()
   endif

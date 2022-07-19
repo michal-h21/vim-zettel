@@ -504,6 +504,13 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2022-07-19  Michal Hoftich <michal.h21@gmail.com> 
+
+* autoload/zettel/vimwiki.vim: fixed passed parameters for
+  `vimwiki#base#check_links` in Vimwiki development mode, to prevent runtime
+  errors in `:ZettelInbox`.
+  https://github.com/michal-h21/vim-zettel/issues/127
+
 2022-06-27  Michal Hoftich <michal.h21@gmail.com> 
 
 * ftplugin/vimwiki/zettel.vim: use `g[` mapping instead of `[[` in the visual

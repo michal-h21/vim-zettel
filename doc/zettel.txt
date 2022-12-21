@@ -504,6 +504,12 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2022-12-21  Michal Hoftich <michal.h21@gmail.com> 
+
+* autoload/zettel/fzf.vim: don't limit `execute_fzf` function to the wiki file
+  extension. It caused search error on Windows.
+  https://github.com/michal-h21/vim-zettel/issues/133
+
 2022-07-19  Michal Hoftich <michal.h21@gmail.com> 
 
 * autoload/zettel/vimwiki.vim: fixed passed parameters for

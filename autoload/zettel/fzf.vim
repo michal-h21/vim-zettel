@@ -65,7 +65,11 @@ function! zettel#fzf#execute_fzf(a, b, options)
     let l:fzf_command = g:zettel_fzf_command . " " . shellescape(a:a)
   endif
 
-  return fzf#vim#grep(l:fzf_command . ' ' . search_ext, 1, fzf#vim#with_preview(a:options), l:fullscreen)
+  " it seems that when we limit search only to current extension, FZF fails on
+  " Windows. I couldn't find a better solution than to remove the seach
+  " extension completely
+  " return fzf#vim#grep(l:fzf_command . ' ' . search_ext, 1, fzf#vim#with_preview(a:options), l:fullscreen)
+  return fzf#vim#grep(l:fzf_command, 1, fzf#vim#with_preview(a:options), l:fullscreen)
 endfunction
 
 

@@ -506,7 +506,9 @@ commit changes in wiki and synchronize them with external Git repository.
 
 2022-12-22  Michal Hoftich <michal.h21@gmail.com> 
 
-* autoload/zettel/fzf.vim, 
+* autoload/zettel/vimwiki.vim: fixed wiki `idx` retrieval when `:ZettelNew` is
+  used outside of wiki.
+* autoload/zettel/vimwiki.vim,
 * ftplugin/vimwiki/zettel.vim: moved `g:zettel_format` declaration, to prevent
   errors in `zettel_new` executed outside of wiki.
 

@@ -417,8 +417,7 @@ endfunction
 
 " the optional argument is the wiki number
 function! zettel#vimwiki#save_wiki_page(format, ...)
-  let defaultidx = vimwiki#vars#get_bufferlocal('wiki_nr')
-  let idx = get(a:, 1, defaultidx)
+  let idx = <SID>reference_dir_idx()
   let newfile = vimwiki#vars#get_wikilocal('path',idx ) . a:format . vimwiki#vars#get_wikilocal('ext',idx )
   " copy the captured file to a new zettel
   execute "w! " . newfile
@@ -477,7 +476,7 @@ endfunction
 " return list of files that match a pattern
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
-  let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
+  let idx = <SID>reference_dir_idx()
   let path = fnameescape(vimwiki#vars#get_wikilocal('path', idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
@@ -605,6 +604,7 @@ function! zettel#vimwiki#zettel_new(...)
   let s:vimwiki_dir = {}
   let s:vimwiki_dir.idx = <SID>reference_dir_idx()
   let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
+
 
   let filename = zettel#vimwiki#create(a:1)
   " the wiki file already exists

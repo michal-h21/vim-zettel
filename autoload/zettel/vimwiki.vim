@@ -203,6 +203,12 @@ if !exists('g:zettel_generated_tags_title_level')
   let g:zettel_generated_tags_title_level = 1
 endif
 
+" format of a new zettel filename
+if !exists('g:zettel_format')
+  let g:zettel_format = "%y%m%d-%H%M"
+endif
+
+
 " default title used for %title placeholder in g:zettel_format if the title is
 " empty
 if !exists('g:zettel_default_title')

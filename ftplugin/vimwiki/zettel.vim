@@ -1,8 +1,3 @@
-" format of a new zettel filename
-if !exists('g:zettel_format')
-  let g:zettel_format = "%y%m%d-%H%M"
-endif
-
 
 function! s:wiki_yank_name()
   let filename = expand("%")

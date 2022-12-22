@@ -574,9 +574,13 @@ function! zettel#vimwiki#create(...)
   let wiki_not_exists = s:wiki_file_not_exists(format, s:vimwiki_dir.idx)
   " let vimwiki to open the wiki file. this is necessary
   " to support the vimwiki navigation commands.
-  " the following command doesn't work correctly with the vimwiki navigation
-  " call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  
-  call vimwiki#base#open_link(':e ',  "./". format, )  
+  " this command doesn't support Vimwiki navigation commands - it will be not
+  " possible to get back to the previous note. but it works when the current
+  " directory is outside of the wiki
+  call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  
+  " this doesn't work when we capture file or create note from the outside of
+  " the wiki
+  " call vimwiki#base#open_link(':e ',  "./". format, )  
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)

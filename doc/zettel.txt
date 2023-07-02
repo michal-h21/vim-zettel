@@ -155,7 +155,7 @@ with the given order.
 
        vim -c ZettelCapture filename
 <
-    you can specify wiki numbner (starting from 0) if you have multiple
+    you can specify wiki number (starting from 0) if you have multiple
     wikis. It opens first declared wiki by default:
 
 >

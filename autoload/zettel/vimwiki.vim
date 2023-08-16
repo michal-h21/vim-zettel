@@ -575,14 +575,14 @@ function! zettel#vimwiki#create(...)
   " let vimwiki to open the wiki file. this is necessary
   " to support the vimwiki navigation commands.
   " test if the current file is in wiki
-  if vimwiki#path#current_wiki_file() == s:vimwiki_dir.path
-    " this happens when we run :ZettelNew outside of wiki. we need to pass 
+  if s:vimwiki_dir.path =~ vimwiki#path#current_wiki_file()
+    " this call should support Vimwiki navigation commands
+    call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)
+  else
+    " this happens when we run :ZettelNew outside of wiki. we need to pass
     " the full path, so the file will be saved in the correct directory.
     " Vimwiki navigation commands will not work in the new note.
-    call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)  
-  else
-    " this call should support Vimwiki navigation commands
-    call vimwiki#base#open_link(':e ',  "./". format, )  
+    call vimwiki#base#open_link(':e ',  "./". format, )
   endif
   " add basic template to the new file
   if wiki_not_exists

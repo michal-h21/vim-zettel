@@ -139,7 +139,7 @@ function! zettel#fzf#sink_onefile(params, sink_function,...)
   " get optional argument that should contain additional options for the fzf
   " preview window
   let additional_options = get(a:, 1, {})
-  call zettel#fzf#execute_fzf(a:params, 
+  call zettel#fzf#execute_fzf(a:params,
       \'--skip-vcs-ignores', fzf#vim#with_preview(zettel#fzf#preview_options(a:sink_function, additional_options)))
 endfunction
 
@@ -148,12 +148,12 @@ function! zettel#fzf#execute_open(params)
   call zettel#fzf#sink_onefile(a:params, 'zettel#fzf#search_open')
 endfunction
 
-" return list of unique wiki pages selected in FZF 
+" return list of unique wiki pages selected in FZF
 function! zettel#fzf#get_files(lines)
   " remove duplicate lines
-  let new_list = [] 
+  let new_list = []
   for line in a:lines
-    if line !="" 
+    if line !=""
       let new_list = add(new_list, s:get_fzf_filename(line))
     endif
   endfor
@@ -217,7 +217,7 @@ function! zettel#fzf#insert_note(lines)
   echom("Executing :" .command_to_execute)
   let result = systemlist(command_to_execute, lines_to_convert)
   call append(line("."), result)
-  " Todo: move this to execute_open 
+  " Todo: move this to execute_open
   call setqflist(map(zettel#fzf#get_files(a:lines), '{ "filename": v:val }'))
 endfunction
 

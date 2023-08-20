@@ -15,7 +15,7 @@ endfunction
 
 function! zettel#vimwiki#get_visual_selection()
   return <sid>get_visual_selection()
-endfunction 
+endfunction
 
 " this function is useful for comands in plugin/zettel.vim
 " set number of the active wiki
@@ -518,7 +518,7 @@ function! zettel#vimwiki#get_title(filename)
   let lsource = readfile(filename)
   let is_markdown = <sid>is_markdown()
   " this code comes from vimwiki's html export plugin
-  " Try to load the title from the front matter entry which is present  
+  " Try to load the title from the front matter entry which is present
   " at the head of a file. If the front matter is not present use the first
   " headline as title either in vimwiki or markup style.
   for line in lsource
@@ -1020,4 +1020,3 @@ function! zettel#vimwiki#generate_tags(...) abort
 
   call zettel#vimwiki#update_listing(lines, g:zettel_generated_tags_title, links_rx, g:zettel_generated_tags_title_level)
 endfunction
-

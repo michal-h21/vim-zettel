@@ -260,7 +260,8 @@ first wiki in your g:zettel_options list as a set of empty braces:
                    first wiki     zettelkasten wiki
                             ↓     ↓
    let g:zettel_options = [{}, {"front_matter" : [["tags", ""], ["type","note"]],
-   \ "template" :  "~/mytemplate.tpl"}]
+   \ "template" : "~/mytemplate.tpl",
+   \ "rel_path" : "zettel/"}]
 <
 `front_matter` contains additional fields to be inserted in the header of a
 new note. It should be list of lists, where the first item contains key and
@@ -287,6 +288,11 @@ You can disable front matter completely by setting `disable_front_matter`
 option to other value than 0.
 
 The `template` field is discussed in |Vim-Zettel-Templates|.
+
+The `rel_path` field determines where new notes will be created, relative to
+the current vimwiki path. The trailing slash is required, e.g. if your vimwiki
+path is `~/vimwiki`, then `"rel_path": "zettel/"` will place zettels in
+`~/vimwiki/zettel/`.
 
                                                             *g:zettel_format*
 By default, Vim-Zettel creates filenames in the form YYMMDD-HHMM. This

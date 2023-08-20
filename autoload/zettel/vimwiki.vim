@@ -354,7 +354,7 @@ endfunction
 " count files that match pattern in the current wiki or if additional indenx
 " provided in the wiki indentified by the index
 function! zettel#vimwiki#count_files(pattern, ...)
-  let cwd = a:0 ? vimwiki#vars#get_wikilocal('path', a:1) : vimwiki#vars#get_wikilocal('path')
+  let cwd = a:0 ? s:zettel_path(a:1) : s:zettel_path()
   let filelist = split(globpath(cwd, a:pattern), '\n')
   return len(filelist)
 endfunction
@@ -368,9 +368,7 @@ endfunction
 
 function! zettel#vimwiki#new_zettel_name(...)
   let newformat = g:zettel_format
-  let s:vimwiki_dir = {}
-  let s:vimwiki_dir.idx = <SID>reference_dir_idx()
-  let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
+  let l:idx = <SID>reference_dir_idx()
   if a:0 > 0 && a:1 != ""
     " title contains safe version of the original title
     " raw_title is exact title
@@ -384,12 +382,12 @@ function! zettel#vimwiki#new_zettel_name(...)
   let newformat = substitute(g:zettel_format, "%title", title, "")
   let newformat = substitute(newformat, "%raw_title", raw_title, "")
   if matchstr(newformat, "%file_no") != ""
-    let next_file = zettel#vimwiki#next_counted_file(s:vimwiki_dir.idx)
+    let next_file = zettel#vimwiki#next_counted_file(l:idx)
     let newformat = substitute(newformat,"%file_no", next_file, "")
   endif
   if matchstr(newformat, "%file_alpha") != ""
     " same as file_no, but convert numbers to letters
-    let next_file = s:numtoletter(zettel#vimwiki#next_counted_file(s:vimwiki_dir.idx))
+    let next_file = s:numtoletter(zettel#vimwiki#next_counted_file(l:idx))
     let newformat = substitute(newformat,"%file_alpha", next_file, "")
   endif
   if matchstr(newformat, "%random") != ""
@@ -402,10 +400,10 @@ function! zettel#vimwiki#new_zettel_name(...)
     let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
   let final_format =  strftime(newformat)
-  if !s:wiki_file_not_exists(final_format, s:vimwiki_dir.idx)
+  if !s:wiki_file_not_exists(final_format)
     " if the current file name is used, increase counter and add it as a
     " letter to the file name. this ensures that we don't reuse the filename
-    let file_count = zettel#vimwiki#count_files(final_format . "*", s:vimwiki_dir.idx)
+    let file_count = zettel#vimwiki#count_files(final_format . "*", l:idx)
     let final_format = final_format . s:numtoletter(file_count)
   endif
   let g:zettel_current_id = final_format
@@ -551,14 +549,21 @@ endfunction
 
 " check if the file with the current filename exits in wiki
 function! s:wiki_file_not_exists(filename, ...)
-  let wiki_dir = a:0 ? vimwiki#vars#get_wikilocal('path', a:1) : vimwiki#vars#get_wikilocal('path')
-  let link_info = vimwiki#base#resolve_link(a:filename, wiki_dir)
+  let l:zettel_path = a:0 ?  s:zettel_path(a:1) : s:zettel_path()
+  let link_info = vimwiki#base#resolve_link(a:filename, zettel_path)
   return empty(glob(link_info.filename))
+endfunction
+
+function! s:zettel_path(...) abort
+  " Return: diary directory path <String>
+  " calling with wnum = 0 means we let vimwiki figure it out
+  let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
+  return vimwiki#vars#get_wikilocal('path', idx).zettel#vimwiki#get_option('rel_path', idx)
 endfunction
 
 " create new zettel note
 " there is one optional argument, the zettel title
-function! zettel#vimwiki#create(...)
+function! zettel#vimwiki#create(wiki_nr,...)
   " name of the new note
   let format = zettel#vimwiki#new_zettel_name(a:1)
   let date_format = g:zettel_date_format
@@ -568,19 +573,11 @@ function! zettel#vimwiki#create(...)
   let s:randomchars = zettel#vimwiki#make_random_chars()
   let s:zettel_date = date " save zettel date
   " detect if the wiki file exists
-  let wiki_not_exists = s:wiki_file_not_exists(format, s:vimwiki_dir.idx)
+  let wiki_not_exists = s:wiki_file_not_exists(format, a:wiki_nr)
+  echom "wikiexists".wiki_not_exists
   " let vimwiki to open the wiki file. this is necessary
   " to support the vimwiki navigation commands.
-  " test if the current file is in wiki
-  if s:vimwiki_dir.path =~ vimwiki#path#current_wiki_file()
-    " this call should support Vimwiki navigation commands
-    call vimwiki#base#open_link(':e ', format, s:vimwiki_dir.path)
-  else
-    " this happens when we run :ZettelNew outside of wiki. we need to pass
-    " the full path, so the file will be saved in the correct directory.
-    " Vimwiki navigation commands will not work in the new note.
-    call vimwiki#base#open_link(':e ',  "./". format, )
-  endif
+  call vimwiki#base#open_link(':e ', format, s:zettel_path(a:wiki_nr))
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)
@@ -605,12 +602,21 @@ function! s:front_matter_list(front_matter)
 endfunction
 
 function! zettel#vimwiki#zettel_new(...)
-  let s:vimwiki_dir = {}
-  let s:vimwiki_dir.idx = <SID>reference_dir_idx()
-  let s:vimwiki_dir.path = vimwiki#vars#get_wikilocal('path', s:vimwiki_dir.idx)
+  " TODO: the user should be able to pass a wiki number (1 indexed)
+  let wiki_nr = vimwiki#vars#get_bufferlocal('wiki_nr')
+  if wiki_nr < 0  " this happens when e.g. VimwikiMakeDiaryNote was called outside a wiki buffer
+    let wiki_nr = 0
+  endif
 
 
-  let filename = zettel#vimwiki#create(a:1)
+  if wiki_nr >= vimwiki#vars#number_of_wikis()
+    call vimwiki#u#error('Wiki '.wiki_nr.' is not registered in g:vimwiki_list!')
+    return
+  endif
+  call vimwiki#path#mkdir(vimwiki#vars#get_wikilocal('path', wiki_nr).
+        \ zettel#vimwiki#get_option('rel_path', wiki_nr))
+
+  let filename = zettel#vimwiki#create(wiki_nr, a:1)
   " the wiki file already exists
   if filename ==? -1
     return 0

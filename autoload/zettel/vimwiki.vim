@@ -63,13 +63,13 @@ call zettel#vimwiki#initialize_wiki_number()
 " get user option for the current wiki
 " it seems that it is not possible to set custom options in g:vimwiki_list
 " so we need to use our own options
-function! zettel#vimwiki#get_option(name)
+function! zettel#vimwiki#get_option(name, ...)
   if !exists('g:zettel_options')
     return ""
   endif
   " the options for particular wikis must be in the same order as wiki
   " definitions in g:vimwiki_list
-  let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
+  let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
   let option_number = "g:zettel_options[" . idx . "]"
   if exists(option_number)
     if exists(option_number . "." . a:name)

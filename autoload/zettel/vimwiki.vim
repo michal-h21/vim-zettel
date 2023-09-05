@@ -473,7 +473,7 @@ endfunction
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
   let idx = <SID>reference_dir_idx()
-  let path = fnameescape(vimwiki#vars#get_wikilocal('path', idx))
+  let path = fnameescape(s:zettel_path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
     let command = 'vimgrep ' . a:pattern . 'j ' . path . "*" . ext

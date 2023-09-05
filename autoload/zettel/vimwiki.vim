@@ -412,8 +412,9 @@ endfunction
 
 " the optional argument is the wiki number
 function! zettel#vimwiki#save_wiki_page(format, ...)
-  let idx = <SID>reference_dir_idx()
-  let newfile = vimwiki#vars#get_wikilocal('path',idx ) . a:format . vimwiki#vars#get_wikilocal('ext',idx )
+  let l:zettel_path = a:0 ? s:zettel_path(a:1) : s:zettel_path()
+  let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
+  let newfile = l:zettel_path . a:format . vimwiki#vars#get_wikilocal('ext',idx )
   " copy the captured file to a new zettel
   execute "w! " . newfile
   return newfile

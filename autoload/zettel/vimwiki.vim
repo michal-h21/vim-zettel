@@ -782,9 +782,9 @@ function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
   if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
     let cwd = vimwiki#path#wikify_path(expand('%:p:h'))
   elseif a:wiki_nr < 0
-    let cwd = vimwiki#vars#get_wikilocal('path') . vimwiki#vars#get_wikilocal('diary_rel_path')
+    let cwd = s:zettel_path()
   else
-    let cwd = vimwiki#vars#get_wikilocal('path', a:wiki_nr)
+    let cwd = s:zettel_path(a:wiki_nr)
   endif
   let result = []
   for wikifile in files
@@ -794,9 +794,9 @@ function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
   if a:also_absolute_links
     for wikifile in files
       if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
-        let cwd = vimwiki#vars#get_wikilocal('path')
+        let cwd = s:zettel_path(wiki_nr)
       elseif a:wiki_nr < 0
-        let cwd = vimwiki#vars#get_wikilocal('path') . vimwiki#vars#get_wikilocal('diary_rel_path')
+        let cwd = s:zettel_path()
       endif
       let wikifile = '/'.vimwiki#path#relpath(cwd, wikifile)
       call add(result, wikifile)

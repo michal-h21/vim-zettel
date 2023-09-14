@@ -1,9 +1,6 @@
 " initialize default wiki
 call zettel#vimwiki#initialize_wiki_number()
 " get active VimWiki directory
-if !exists('g:zettel_dir')
-  let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
-endif
 
 " FZF command used in the ZettelSearch command
 if !exists('g:zettel_fzf_command')
@@ -52,7 +49,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
     if  wiki_number == -1
       call zettel#vimwiki#initialize_wiki_number()
     endif
-    call extend(a:options, {"dir":vimwiki#vars#get_wikilocal('path')})
+    call extend(a:options, {"dir":zettel#vimwiki#path()})
   endif
   if g:zettel_fzf_command == "ag"
     " filetype pattern for ag: -G 'ext$'
@@ -69,7 +66,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
   " Windows. I couldn't find a better solution than to remove the seach
   " extension completely
   " return fzf#vim#grep(l:fzf_command . ' ' . search_ext, 1, fzf#vim#with_preview(a:options), l:fullscreen)
-  return fzf#vim#grep(l:fzf_command, 1, fzf#vim#with_preview(a:options), l:fullscreen)
+  return fzf#vim#grep(l:fzf_command, fzf#vim#with_preview(a:options), l:fullscreen)
 endfunction
 
 
@@ -103,8 +100,8 @@ function! zettel#fzf#search_open(line,...)
     " open the selected note using this Vimwiki function
     " it will keep the history of opened pages, so you can go to the previous
     " page using backspace
-    call vimwiki#base#open_link(':e ', '/'.wikiname)
-    " scroll to the selected line 
+    call vimwiki#base#open_link(':e ', wikiname, zettel#vimwiki#path())
+    " scroll to the selected line
     if linenumber =~# '^\d\+$'
       call cursor(linenumber, 1)
     endif
@@ -125,7 +122,7 @@ endfunction
 function! zettel#fzf#preview_options(sink_function, additional_options)
   let options = {'sink':function(a:sink_function),
       \'down': '~40%',
-      \'dir':g:zettel_dir,
+      \'dir':zettel#vimwiki#path(),
       \'options':g:zettel_fzf_options}
   " make it possible to pass additional options that overwrite the default
   " ones

@@ -908,7 +908,7 @@ function! zettel#vimwiki#inbox()
   cclose
   let paths = []
   " normalize the current wiki path
-  let cwd = fnamemodify(vimwiki#vars#get_wikilocal('path'), ":p:h")
+  let cwd = fnamemodify(zettel#vimwiki#path(), ":p:h")
   let bullet = repeat(' ', vimwiki#lst#get_list_margin()) . vimwiki#lst#default_symbol().' '
   for d in linklist
     " detect files that are not reachable from the wiki index
@@ -918,6 +918,7 @@ function! zettel#vimwiki#inbox()
       " wikis here
       let filepath = fnamemodify(filenamematch, ":p:h")
       if filepath ==# cwd
+        " TODO: make the links a valid path from the current file
         call add(paths, bullet.
               \ zettel#vimwiki#get_link(filenamematch))
       endif

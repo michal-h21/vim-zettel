@@ -99,30 +99,10 @@ function! s:test_header_end_wiki(line, i)
   return 0
 endfunction
 
-function! s:reference_dir_idx()
-  " (1) return index of current filename, if it is in vimwiki_list
-  let idx = vimwiki#base#find_wiki(expand("%:p"))
-  if idx != -1 | return idx | endif
-
-  " (2) return index of main/first zettel-directory of vimwiki_list if defined g:zettel_options
-  if exists('g:zettel_options')
-    let idx = index(map(copy(g:zettel_options), {_, val -> val != {}}), 1)
-    if idx != -1 && exists('g:vimwiki_list[' . idx . '].path') | return idx | endif
-  endif
-
-  " (4) return -1 (vimwiki default)
-  if !exists('g:vimwiki_list') || empty(g:vimwiki_list) || empty(g:vimwiki_list[0]) || !exists('g:vimwiki_list[0].path')
-    return -1
-  else
-    " (3) return index of first vimwiki_list item
-    return 0
-  endif
-endfunction
-
-let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax', <SID>reference_dir_idx()) ==? 'markdown' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
+let s:test_header_end = function(vimwiki#vars#get_wikilocal('syntax', vimwiki#vars#get_bufferlocal('wiki_nr')) ==? 'markdown' ? '<sid>test_header_end_md' : '<sid>test_header_end_wiki')
 
 " variables that depend on the wiki syntax
-if vimwiki#vars#get_wikilocal('syntax',  <SID>reference_dir_idx()) ==? 'markdown'
+if vimwiki#vars#get_wikilocal('syntax',  vimwiki#vars#get_bufferlocal('wiki_nr')) ==? 'markdown'
   " add file extension when g:vimwiki_markdown_link_ext is set
   if exists("g:vimwiki_markdown_link_ext") && g:vimwiki_markdown_link_ext == 1
     let s:link_format = "[%title](%link.md)"
@@ -368,7 +348,7 @@ endfunction
 
 function! zettel#vimwiki#new_zettel_name(...)
   let newformat = g:zettel_format
-  let l:idx = <SID>reference_dir_idx()
+  let l:idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   if a:0 > 0 && a:1 != ""
     " title contains safe version of the original title
     " raw_title is exact title
@@ -472,7 +452,7 @@ endfunction
 " return list of files that match a pattern
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
-  let idx = <SID>reference_dir_idx()
+  let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
@@ -843,7 +823,7 @@ function! zettel#vimwiki#generate_links()
 endfunction
 
 function! s:is_markdown()
-  return vimwiki#vars#get_wikilocal('syntax', <SID>reference_dir_idx()) ==? 'markdown'
+  return vimwiki#vars#get_wikilocal('syntax', vimwiki#vars#get_bufferlocal('wiki_nr')) ==? 'markdown'
 endfunction
 
 " detect if we are running in the development version of Vimwiki

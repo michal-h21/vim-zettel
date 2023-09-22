@@ -756,28 +756,65 @@ function! zettel#vimwiki#zettel_capture(wnum,...)
   execute "e " . newfile
 endfunction
 
+
+function! zettel#vimwiki#find_files(wiki_nr, directories_only, ...) abort
+  " adapted from vimwiki
+  " Returns: a list containing all files of the given wiki as absolute file path.
+  " If the given wiki number is negative, the current wiki is used
+  " If the second argument is not zero, only directories are found
+  " If third argument: pattern to search for
+  let wiki_nr = a:wiki_nr
+  if wiki_nr >= 0
+    let root_directory = zettel#vimwiki#path(wiki_nr)
+  else
+    let root_directory = zettel#vimwiki#path()
+    let wiki_nr = vimwiki#vars#get_bufferlocal('wiki_nr')
+  endif
+  if a:directories_only
+    let ext = '/'
+  else
+    let ext = vimwiki#vars#get_wikilocal('ext', wiki_nr)
+  endif
+  " If pattern is given, use it
+  " if current wiki is temporary -- was added by an arbitrary wiki file then do
+  " not search wiki files in subdirectories. Or it would hang the system if
+  " wiki file was created in $HOME or C:/ dirs.
+  if a:0 && a:1 !=# ''
+    let pattern = a:1
+  elseif vimwiki#vars#get_wikilocal('is_temporary_wiki', wiki_nr)
+    let pattern = '*'.ext
+  else
+    let pattern = '**/*'.ext
+  endif
+  let files = split(globpath(root_directory, pattern), '\n')
+
+  " filter excluded files before returning
+  for pattern in vimwiki#vars#get_wikilocal('exclude_files')
+    let efiles = split(globpath(root_directory, pattern), '\n')
+    let files = filter(files, 'index(efiles, v:val) == -1')
+  endfor
+
+  return files
+endfunction
+
 " based on vimwikis "get wiki links", not stripping file extension
 function! zettel#vimwiki#get_wikilinks(wiki_nr, also_absolute_links)
-  let files = vimwiki#base#find_files(a:wiki_nr, 0)
+  let files = zettel#vimwiki#find_files(a:wiki_nr, 0)
   if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
     let cwd = vimwiki#path#wikify_path(expand('%:p:h'))
   elseif a:wiki_nr < 0
     let cwd = zettel#vimwiki#path()
   else
-    let cwd = zettel#vimwiki#path(a:wiki_nr)
+    let cwd = vimwiki#vars#get_wikilocal('path', a:wiki_nr)
   endif
+
   let result = []
   for wikifile in files
-    let wikifile = vimwiki#path#relpath(cwd, wikifile)
+    let wikifile = vimwiki#path#relpath(cwd,  wikifile)
     call add(result, wikifile)
   endfor
   if a:also_absolute_links
     for wikifile in files
-      if a:wiki_nr == vimwiki#vars#get_bufferlocal('wiki_nr')
-        let cwd = zettel#vimwiki#path(wiki_nr)
-      elseif a:wiki_nr < 0
-        let cwd = zettel#vimwiki#path()
-      endif
       let wikifile = '/'.vimwiki#path#relpath(cwd, wikifile)
       call add(result, wikifile)
     endfor

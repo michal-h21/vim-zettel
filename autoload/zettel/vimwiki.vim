@@ -555,10 +555,19 @@ function! zettel#vimwiki#create(wiki_nr,...)
   let s:zettel_date = date " save zettel date
   " detect if the wiki file exists
   let wiki_not_exists = s:wiki_file_not_exists(format, a:wiki_nr)
-  echom "wikiexists".wiki_not_exists
-  " let vimwiki to open the wiki file. this is necessary
-  " to support the vimwiki navigation commands.
-  call vimwiki#base#open_link(':e ', format, zettel#vimwiki#path(a:wiki_nr))
+
+  if match(vimwiki#path#current_wiki_file(), vimwiki#vars#get_wikilocal('path',a:wiki_nr)) == 0
+    " let vimwiki to open the wiki file. this is necessary
+    " to support the vimwiki navigation commands.
+    let vimwikiabspath = "/". zettel#vimwiki#get_option('rel_path', a:wiki_nr) . format
+    call vimwiki#base#open_link(':e ', vimwikiabspath)
+  else
+    " this happens when we run :ZettelNew outside of wiki. we need to pass
+    " the full path, so the file will be saved in the correct directory.
+    " Vimwiki navigation commands will not work in the new note.
+    let zettelpath = zettel#vimwiki#path(a:wiki_nr)
+    execute(':e ' . zettelpath . format)
+  endif
   " add basic template to the new file
   if wiki_not_exists
     call zettel#vimwiki#template(a:1, date)

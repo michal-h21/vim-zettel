@@ -1,9 +1,6 @@
 " initialize default wiki
 call zettel#vimwiki#initialize_wiki_number()
 " get active VimWiki directory
-if !exists('g:zettel_dir')
-  let g:zettel_dir = vimwiki#vars#get_wikilocal('path') "VimwikiGet('path',g:vimwiki_current_idx)
-endif
 
 " FZF command used in the ZettelSearch command
 if !exists('g:zettel_fzf_command')
@@ -52,7 +49,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
     if  wiki_number == -1
       call zettel#vimwiki#initialize_wiki_number()
     endif
-    call extend(a:options, {"dir":vimwiki#vars#get_wikilocal('path')})
+    call extend(a:options, {"dir":zettel#vimwiki#path()})
   endif
   if g:zettel_fzf_command == "ag"
     " filetype pattern for ag: -G 'ext$'
@@ -69,7 +66,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
   " Windows. I couldn't find a better solution than to remove the seach
   " extension completely
   " return fzf#vim#grep(l:fzf_command . ' ' . search_ext, 1, fzf#vim#with_preview(a:options), l:fullscreen)
-  return fzf#vim#grep(l:fzf_command, 1, fzf#vim#with_preview(a:options), l:fullscreen)
+  return fzf#vim#grep(l:fzf_command, fzf#vim#with_preview(a:options), l:fullscreen)
 endfunction
 
 
@@ -103,8 +100,8 @@ function! zettel#fzf#search_open(line,...)
     " open the selected note using this Vimwiki function
     " it will keep the history of opened pages, so you can go to the previous
     " page using backspace
-    call vimwiki#base#open_link(':e ', '/'.wikiname)
-    " scroll to the selected line 
+    call vimwiki#base#open_link(':e ', wikiname, zettel#vimwiki#path())
+    " scroll to the selected line
     if linenumber =~# '^\d\+$'
       call cursor(linenumber, 1)
     endif
@@ -125,7 +122,7 @@ endfunction
 function! zettel#fzf#preview_options(sink_function, additional_options)
   let options = {'sink':function(a:sink_function),
       \'down': '~40%',
-      \'dir':g:zettel_dir,
+      \'dir':zettel#vimwiki#path(),
       \'options':g:zettel_fzf_options}
   " make it possible to pass additional options that overwrite the default
   " ones
@@ -139,7 +136,7 @@ function! zettel#fzf#sink_onefile(params, sink_function,...)
   " get optional argument that should contain additional options for the fzf
   " preview window
   let additional_options = get(a:, 1, {})
-  call zettel#fzf#execute_fzf(a:params, 
+  call zettel#fzf#execute_fzf(a:params,
       \'--skip-vcs-ignores', fzf#vim#with_preview(zettel#fzf#preview_options(a:sink_function, additional_options)))
 endfunction
 
@@ -148,12 +145,12 @@ function! zettel#fzf#execute_open(params)
   call zettel#fzf#sink_onefile(a:params, 'zettel#fzf#search_open')
 endfunction
 
-" return list of unique wiki pages selected in FZF 
+" return list of unique wiki pages selected in FZF
 function! zettel#fzf#get_files(lines)
   " remove duplicate lines
-  let new_list = [] 
+  let new_list = []
   for line in a:lines
-    if line !="" 
+    if line !=""
       let new_list = add(new_list, s:get_fzf_filename(line))
     endif
   endfor
@@ -195,7 +192,7 @@ function! zettel#fzf#insert_note(lines)
   let input_format = "vimwiki"
   for line in zettel#fzf#get_files(a:lines)
     " convert all files to the destination format
-    let filename = vimwiki#vars#get_wikilocal('path'). line
+    let filename = zettel#vimwiki#path() . line
     let ext = fnamemodify(filename, ":e")
     " update the input format
     let input_format = get(s:supported_formats, ext, "vimwiki")
@@ -217,7 +214,7 @@ function! zettel#fzf#insert_note(lines)
   echom("Executing :" .command_to_execute)
   let result = systemlist(command_to_execute, lines_to_convert)
   call append(line("."), result)
-  " Todo: move this to execute_open 
+  " Todo: move this to execute_open
   call setqflist(map(zettel#fzf#get_files(a:lines), '{ "filename": v:val }'))
 endfunction
 

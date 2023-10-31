@@ -50,7 +50,7 @@ Main features:
 - fulltext support using FZF for searching and hyperlinking
 - search your Zettelkasten from LaTeX or Markdown documents and insert
   selected notes to the document
-- template support 
+- template support
 - automatically updated tag index
 - backlinks
 
@@ -76,7 +76,7 @@ First of all, it is necessary to configure Vimwiki, as Vim-Zettel builds
 on top of it.  Vim-Zettel can be used out of the box without further
 configuration if you have only one wiki.  However, you will probably want to
 customize your Vim-Zettel configuration and will have to if you have more than
-one wiki. 
+one wiki.
 >
    " Settings for Vimwiki
    let g:vimwiki_list = \
@@ -113,7 +113,7 @@ Vim-Zettel implements the following commands on top of Vimwiki.
                                                                   *ZettelNew*
 - `:ZettelNew` command – it will create a new wiki file named as
  %y%m%d-%H%M.wiki (it is possible to change the file name format using
- |g:zettel_format| variable). The file uses basic template in the form 
+ |g:zettel_format| variable). The file uses basic template in the form
 
 >
    %title Note title
@@ -125,7 +125,7 @@ If you use the default mappings provided by `Vim-Zettel`, it is possible to
 call this command by pressing the `z` character in visual mode. The selected
 text will be used as title of the new note.
 
-The newly created wiki-file will be saved in: 
+The newly created wiki-file will be saved in:
 
   (1) the current directory if it is in the `g:vimwiki_list` paths
   (2) the directory-path of the first `g:vimwiki_list` with non-empty `g:zettel_options`
@@ -244,7 +244,7 @@ details.
                                                               *Vim-Zettel_gZ*
 - gZ command in normal mode – replace file path under cursor with Wiki link
 
-It may be convenient to map `ZettelNew` to prompt for a note title also: 
+It may be convenient to map `ZettelNew` to prompt for a note title also:
 >
    nnoremap <leader>zn :ZettelNew<space>
 <
@@ -255,16 +255,17 @@ It may be convenient to map `ZettelNew` to prompt for a note title also:
 The g:zettel_options variable corresponds to the g:vimwiki_list variable.  If
 you have more than one vimwiki and the second wiki listed in your
 g:vimwiki_list variable is your zettelkasten, then you must represent the
-first wiki in your g:zettel_options list as a set of empty braces: 
+first wiki in your g:zettel_options list as a set of empty braces:
 >
                    first wiki     zettelkasten wiki
                             ↓     ↓
    let g:zettel_options = [{}, {"front_matter" : [["tags", ""], ["type","note"]],
-   \ "template" :  "~/mytemplate.tpl"}]
+   \ "template" : "~/mytemplate.tpl",
+   \ "rel_path" : "zettel/"}]
 <
 `front_matter` contains additional fields to be inserted in the header of a
 new note. It should be list of lists, where the first item contains key and
-the second contains value. 
+the second contains value.
 
 The second item can contain funcref. The function will be executed each time
 when this `front_matter` option is used. This can be used to insert the
@@ -276,8 +277,8 @@ current Zettel ID, for example: >
       return "unnamed"
     endif
   endfunction
-      
-  let g:zettel_options = [{"front_matter" : 
+
+  let g:zettel_options = [{"front_matter" :
     [["tags" , ":hello:"],
     [ "id" , function("s:insert_id")]]
   }]
@@ -287,6 +288,11 @@ You can disable front matter completely by setting `disable_front_matter`
 option to other value than 0.
 
 The `template` field is discussed in |Vim-Zettel-Templates|.
+
+The `rel_path` field determines where new notes will be created, relative to
+the current vimwiki path. The trailing slash is required, e.g. if your vimwiki
+path is `~/vimwiki`, then `"rel_path": "zettel/"` will place zettels in
+`~/vimwiki/zettel/`.
 
                                                             *g:zettel_format*
 By default, Vim-Zettel creates filenames in the form YYMMDD-HHMM. This
@@ -300,15 +306,15 @@ It is also possible to use other formatting strings:
 - %file_no -- sequentially number files in wiki
 - %file_alpha -- sequentially number files in wiki, but use characters
    instead of numbers
-- %random -- use random characters. Their number can be configured using 
+- %random -- use random characters. Their number can be configured using
   `g:zettel_random_chars` option, eight is used by default.
 
 To use filename based on current time and note title, you can use the
-following format: 
+following format:
 >
    let g:zettel_format = "%y%m%d-%H%M-%title"
 <
-For sequentialy named files use: 
+For sequentialy named files use:
 >
    let g:zettel_format = "%file_no"
 <
@@ -504,7 +510,7 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
-2022-12-22  Michal Hoftich <michal.h21@gmail.com> 
+2022-12-22  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: pass full path when creating new zettel, it is
   necessary for the correct capture.
@@ -515,35 +521,35 @@ commit changes in wiki and synchronize them with external Git repository.
 * ftplugin/vimwiki/zettel.vim: moved `g:zettel_format` declaration, to prevent
   errors in `zettel_new` executed outside of wiki.
 
-2022-12-21  Michal Hoftich <michal.h21@gmail.com> 
+2022-12-21  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim: don't limit `execute_fzf` function to the wiki file
   extension. It caused search error on Windows.
   https://github.com/michal-h21/vim-zettel/issues/133
 
-2022-07-19  Michal Hoftich <michal.h21@gmail.com> 
+2022-07-19  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: fixed passed parameters for
   `vimwiki#base#check_links` in Vimwiki development mode, to prevent runtime
   errors in `:ZettelInbox`.
   https://github.com/michal-h21/vim-zettel/issues/127
 
-2022-06-27  Michal Hoftich <michal.h21@gmail.com> 
+2022-06-27  Michal Hoftich <michal.h21@gmail.com>
 
 * ftplugin/vimwiki/zettel.vim: use `g[` mapping instead of `[[` in the visual
   mode for execution of the `:ZettelTitleSelected`. The former mapping didn't
   work for some users.
 
-2022-06-22  Michal Hoftich <michal.h21@gmail.com> 
+2022-06-22  Michal Hoftich <michal.h21@gmail.com>
 
 * ftplugin/vimwiki/zettel.vim: added a new command, `:ZettelTitleSelected`. It
   uses visually selected text as a title for a link to a selected note.
 
-2022-06-20  Leandro 
+2022-06-20  Leandro
 
 * ftplugin/vimwiki/zettel.vim: use noremap for mapings.
 
-2022-06-13  Michal Hoftich <michal.h21@gmail.com> 
+2022-06-13  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: added `s:is_wiki_devel` function for detection
   of the development version of Vimwiki.
@@ -551,22 +557,22 @@ commit changes in wiki and synchronize them with external Git repository.
 * autoload/zettel/vimwiki.vim: use the new parameter for `:ZettelInbox` only
   with development version of Vimwiki.
 
-2022-06-13  Edward Joshua Evans 
+2022-06-13  Edward Joshua Evans
 
 * autoload/zettel/vimwiki.vim: select current Wiki for the `:ZettelInbox`.
 
-2022-06-07  Michal Hoftich <michal.h21@gmail.com> 
+2022-06-07  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim: removed debugging messages.
   https://github.com/michal-h21/vim-zettel/issues/101
 * doc/zettel.txt: info about necessary command line options for Ripgrep
   https://github.com/michal-h21/vim-zettel/issues/71
 
-2022-05-31  Michal Hoftich <michal.h21@gmail.com> 
+2022-05-31  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: added %id variable to the new zettel templates.
 
-2022-05-30  Michal Hoftich <michal.h21@gmail.com> 
+2022-05-30  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim: added `g:zettel_bufflist_format` template for
   formatting of the bufferlist listing.
@@ -585,7 +591,7 @@ commit changes in wiki and synchronize them with external Git repository.
 * autoload/zettel/fzf.vim: initialize default wiki for FZF search.
 * autoload/zettel/fzf.vim: fixed ag search.
 
-2021-12-08  Marc Mezzarobba 
+2021-12-08  Marc Mezzarobba
 
 * ftplugin/vimwiki/zettel.vim: support arbitrary registers in wiki_yank_name()
   https://github.com/michal-h21/vim-zettel/pull/116
@@ -601,18 +607,18 @@ commit changes in wiki and synchronize them with external Git repository.
   titles configurable.
   https://github.com/michal-h21/vim-zettel/pull/110
 
-2021-02-20  Dennis Jung 
+2021-02-20  Dennis Jung
 
 * autoload/zettel/vimwiki.vim: extract note title from first heading when
   title header is missing.
   https://github.com/michal-h21/vim-zettel/pull/105
 
-2021-02-18  Guillermo Blanco 
+2021-02-18  Guillermo Blanco
 
 * autoload/zettel/vimwiki.vim: correctly set the default wiki upon startup.
   https://github.com/michal-h21/vim-zettel/pull/104
 
-2021-02-11  Ricky Anderson 
+2021-02-11  Ricky Anderson
 
 * ftplugin/vimwiki/zettel.vim: change default mappings to buffer local mappings.
   https://github.com/michal-h21/vim-zettel/pull/100
@@ -629,7 +635,7 @@ commit changes in wiki and synchronize them with external Git repository.
   new Zettel to.
   https://github.com/michal-h21/vim-zettel/pull/96
 
-2021-01-13  Roman Garanin 
+2021-01-13  Roman Garanin
 
 * doc/zettel.txt: fixed typo.
   https://github.com/michal-h21/vim-zettel/pull/92
@@ -703,7 +709,7 @@ commit changes in wiki and synchronize them with external Git repository.
 
 2020-09-02  Michal Hoftich <michal.h21@gmail.com>
 
-* autoload/zettel/vimwiki.vim: added support for `%random` zettel name format. 
+* autoload/zettel/vimwiki.vim: added support for `%random` zettel name format.
   https://github.com/michal-h21/vim-zettel/issues/63
 * autoload/zettel/vimwiki.vim: `front_matter` variable should be list now,
   because it needs to keep a correct order.
@@ -729,7 +735,7 @@ commit changes in wiki and synchronize them with external Git repository.
 * doc/zettel.txt: link to mapping configuration from the mapping section.
 
 * doc/zettel.txt,
-* README.md: added main features of `vim-zettel`. 
+* README.md: added main features of `vim-zettel`.
 
 2020-08-13  Michal Hoftich <michal.h21@gmail.com>
 
@@ -751,7 +757,7 @@ commit changes in wiki and synchronize them with external Git repository.
 
 2020-07-17  Michal Hoftich <michal.h21@gmail.com>
 
-* autoload/zettel/vimwiki.vim: added support for `g:vimwiki_markdown_link_ext` 
+* autoload/zettel/vimwiki.vim: added support for `g:vimwiki_markdown_link_ext`
   setting.
 
 2020-07-15  Dan Pilone

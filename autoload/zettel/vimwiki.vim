@@ -566,7 +566,8 @@ function! zettel#vimwiki#create(wiki_nr,...)
     " the full path, so the file will be saved in the correct directory.
     " Vimwiki navigation commands will not work in the new note.
     let zettelpath = zettel#vimwiki#path(a:wiki_nr)
-    execute(':e ' . zettelpath . format)
+    let ext = vimwiki#vars#get_wikilocal('ext', a:wiki_nr)
+    execute(':e ' . zettelpath . format . ext)
   endif
   " add basic template to the new file
   if wiki_not_exists

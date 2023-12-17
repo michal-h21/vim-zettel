@@ -510,6 +510,16 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2023-12-17  Ulrich Wolf
+
+* autoload/zettel/vimwiki.vim: add extension to new notes created using
+  `:ZettelNew` outside of the Zettel dir.
+
+2023-10-31  Bence Ferdinandy <bence@ferdinandy.com>
+
+* autoload/zettel/vimwiki.vim: added basic support for notes in subdirectories
+  of the main wiki
+
 2022-12-22  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/vimwiki.vim: pass full path when creating new zettel, it is

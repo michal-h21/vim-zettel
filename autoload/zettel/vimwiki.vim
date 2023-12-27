@@ -480,8 +480,31 @@ function! zettel#vimwiki#format_link(file, title)
   return zettel#vimwiki#format_file_title(s:link_format, a:file, a:title)
 endfunction
 
+function zettel#vimwiki#make_path_relative_to_curfile(targetfile, curfile)
+    let path_target = split(a:targetfile, '/')
+    let path_current = split(a:curfile, '/')
+
+    " drop common prefix
+    while(path_target[0] == path_current[0])
+        let path_target = path_target[1:]
+        let path_current = path_current[1:]
+    endwhile
+
+    " add as many '..' elements to the target path as we have elements in our current path
+    while(len(path_current) > 1)
+        let path_current = path_current[1:]
+        let path_target = extend(path_target, ['..'], 0)
+    endwhile
+
+    return join(path_target, '/')
+endfunction
+
 function! zettel#vimwiki#format_search_link(file, title)
-  return zettel#vimwiki#format_file_title(s:link_stub, a:file, a:title)
+  " in case the target we're linking to is not where we are, we need to figure out the
+  " relativ path to where it is, so that the links will work
+  let new_rel_file_path = zettel#vimwiki#make_path_relative_to_curfile(fnamemodify(a:file, ':p'), fnamemodify(@%, ':p'))
+
+  return zettel#vimwiki#format_file_title(s:link_stub, l:new_rel_file_path, a:title)
 endfunction
 
 " This function is executed when the page referenced by the inserted link

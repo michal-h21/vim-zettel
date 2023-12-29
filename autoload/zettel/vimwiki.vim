@@ -481,8 +481,9 @@ function! zettel#vimwiki#format_link(file, title)
 endfunction
 
 function zettel#vimwiki#make_path_relative_to_curfile(targetfile, curfile)
-    let path_target = split(a:targetfile, '/')
-    let path_current = split(a:curfile, '/')
+    let s:path_sep = execute('version') =~# 'Windows' ? '\' : '/'
+    let path_target = split(a:targetfile, s:path_sep)
+    let path_current = split(a:curfile, s:path_sep)
 
     " drop common prefix
     while(path_target[0] == path_current[0])
@@ -496,7 +497,7 @@ function zettel#vimwiki#make_path_relative_to_curfile(targetfile, curfile)
         let path_target = extend(path_target, ['..'], 0)
     endwhile
 
-    return join(path_target, '/')
+    return join(path_target, s:path_sep)
 endfunction
 
 function! zettel#vimwiki#format_search_link(file, title)

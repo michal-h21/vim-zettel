@@ -969,20 +969,20 @@ function! zettel#vimwiki#inbox()
 
 endfunction
 
-" based on vimwiki
-"   Loads tags metadata from file, returns a dictionary
+" copy from vimtiki#tags.vim
 function! s:load_tags_metadata() abort
+  " Load tags metadata from file, returns a dictionary
   let metadata_path = vimwiki#tags#metadata_file_path()
   if !filereadable(metadata_path)
     return {}
   endif
   let metadata = {}
   for line in readfile(metadata_path)
-    if line =~ s:tag_pattern
+    if line =~# '^!_TAG_.*$'
       continue
     endif
     let parts = matchlist(line, '^\(.\{-}\);"\(.*\)$')
-    if parts[0] == '' || parts[1] == '' || parts[2] == ''
+    if parts[0] ==? '' || parts[1] ==? '' || parts[2] ==? ''
       throw 'VimwikiTags1: Metadata file corrupted'
     endif
     let std_fields = split(parts[1], '\t')
@@ -990,11 +990,11 @@ function! s:load_tags_metadata() abort
       throw 'VimwikiTags2: Metadata file corrupted'
     endif
     let vw_part = parts[2]
-    if vw_part[0] != "\t"
+    if vw_part[0] !=? "\t"
       throw 'VimwikiTags3: Metadata file corrupted'
     endif
     let vw_fields = split(vw_part[1:], "\t")
-    if len(vw_fields) != 1 || vw_fields[0] !~ '^vimwiki:'
+    if len(vw_fields) != 1 || vw_fields[0] !~# '^vimwiki:'
       throw 'VimwikiTags4: Metadata file corrupted'
     endif
     let vw_data = substitute(vw_fields[0], '^vimwiki:', '', '')
@@ -1003,15 +1003,16 @@ function! s:load_tags_metadata() abort
     let vw_data = substitute(vw_data, '\\t', "\t", 'g')
     let vw_data = substitute(vw_data, '\\\\', "\\", 'g')
     let vw_fields = split(vw_data, "\t")
-    if len(vw_fields) != 2
+    if len(vw_fields) != 3
       throw 'VimwikiTags5: Metadata file corrupted'
     endif
     let pagename = vw_fields[0]
     let entry = {}
     let entry.tagname  = std_fields[0]
-    let entry.filename  = std_fields[1]
     let entry.lineno   = std_fields[2]
+    let entry.filename  = std_fields[1]
     let entry.link     = vw_fields[1]
+    let entry.description = vw_fields[2]
     if has_key(metadata, pagename)
       call add(metadata[pagename], entry)
     else
@@ -1020,6 +1021,7 @@ function! s:load_tags_metadata() abort
   endfor
   return metadata
 endfunction
+
 
 " based on vimwiki
 function! zettel#vimwiki#generate_tags(...) abort

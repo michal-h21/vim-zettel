@@ -481,20 +481,23 @@ function! zettel#vimwiki#format_link(file, title)
 endfunction
 
 function zettel#vimwiki#make_path_relative_to_curfile(targetfile, curfile)
-    let s:path_sep = execute('version') =~# 'Windows' ? '\' : '/'
-    let path_target = split(a:targetfile, s:path_sep)
-    let path_current = split(a:curfile, s:path_sep)
+  " the following line should support Windows paths with backslashes, but I
+  " don't think Windows require backslashes in paths anymore:
+  " let s:path_sep = execute('version') =~# 'Windows' ? '\' : '/'
+  let s:path_sep = '/'
+  let path_target = split(a:targetfile, s:path_sep)
+  let path_current = split(a:curfile, s:path_sep)
 
-    " drop common prefix
-    while(path_target[0] == path_current[0])
-        let path_target = path_target[1:]
-        let path_current = path_current[1:]
+  " drop common prefix
+  while(path_target[0] == path_current[0])
+  let path_target = path_target[1:]
+  let path_current = path_current[1:]
     endwhile
 
     " add as many '..' elements to the target path as we have elements in our current path
     while(len(path_current) > 1)
-        let path_current = path_current[1:]
-        let path_target = extend(path_target, ['..'], 0)
+    let path_current = path_current[1:]
+    let path_target = extend(path_target, ['..'], 0)
     endwhile
 
     return join(path_target, s:path_sep)

@@ -1,0 +1,28 @@
+" Determine absolute path of the `tests/` folder
+let TEST_DIR_PATH = expand('<sfile>:p:h')
+
+" Discover the rtp configuration file
+let rtp_file = TEST_DIR_PATH."/"."rtp.vim"
+if filereadable(rtp_file)
+	execute 'source ' . rtp_file
+else
+	echohl WarningMsg
+	echo 'Define a file named `rtp.vim`, setting the rtp for vader, vimwiki and vim-zettel!'
+       	echohl None
+	finish
+endif
+
+" cleanup files generated during previous test run
+call system('rm -f  '.TEST_DIR_PATH.'/resources/tmp-wiki/*')
+
+" vimrc configuration
+filetype plugin indent on
+syntax enable
+set nocompatible
+
+let vimwiki_markdown = {}
+let vimwiki_markdown.path = TEST_DIR_PATH .'/resources/tmp-wiki'
+let vimwiki_markdown.syntax = 'markdown'
+let vimwiki_markdown.ext = '.md'
+
+let g:vimwiki_list = [ vimwiki_markdown ] 

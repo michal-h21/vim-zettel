@@ -1,0 +1,98 @@
+Before (Open wiki index and go to beginning of the file):
+  VimwikiIndex
+  execute "normal! gg"
+
+--------------------------------------------------------------------------------
+Do (create new zettel with z):
+  cc
+  new zettel with default settings\<Esc>
+  0wwv3ez\<CR>
+
+Then (new zettel with default frontmatter has been created):
+  :let date=strftime('%Y-%m-%d %H:%M')
+  :AssertEqual '---', getline(1)
+  :AssertEqual 'title: with default settings', getline(2)
+  :AssertEqual 'date: '.date, getline(3)
+  :AssertEqual '---', getline(4)
+
+--------------------------------------------------------------------------------
+Do (check index.md):
+  k
+
+Then (link has been created in place of highlighted text):
+  :AssertEqual 'new zettel [with default settings]('.strftime('%y%m%d-%H%M').')', getline(1)
+
+--------------------------------------------------------------------------------
+Execute (define front_matter):
+  let zo_markdown = {}
+  let zo_markdown.front_matter = [ ["tags", ""], ["type", "note"] ]
+  let g:zettel_options = [ zo_markdown ]
+  Log 'zettel_options: ' . string(g:zettel_options)
+
+Do (create new zettel with z):
+  Go
+  zettel with user defined frontmatter\<Esc>
+  0wwv3ez\<CR>
+
+Then (new zettel with user defined frontmatter has been created):
+  :let date=strftime('%Y-%m-%d %H:%M')
+  :AssertEqual '---', getline(1)
+  :AssertEqual 'title: user defined frontmatter', getline(2)
+  :AssertEqual 'date: '.date, getline(3)
+  :AssertEqual 'tags: ', getline(4)
+  :AssertEqual 'type: note', getline(5)
+  :AssertEqual '---', getline(6)
+
+--------------------------------------------------------------------------------
+Execute (define template):
+  let zo_markdown = {}
+  let zo_markdown.template = "./resources/templ.tpl"
+  let g:zettel_options = [ zo_markdown ]
+  Log 'zettel_options: ' . string(g:zettel_options)
+
+Do (create new zettel with z):
+  Go
+  zettel with user defined template\<Esc>
+  0wwv3ez\<CR>
+
+Then (new zettel with default frontmatter and template has been created):
+  :let date=strftime('%Y-%m-%d %H:%M')
+  :AssertEqual '---', getline(1)
+  :AssertEqual 'title: user defined template', getline(2)
+  :AssertEqual 'date: '.date, getline(3)
+  :AssertEqual '---', getline(4)
+  :AssertEqual '', getline(5)
+  :AssertEqual 'go back: [index](index)', getline(6)
+  :AssertEqual '', getline(7)
+  :AssertEqual '# user defined template', getline(8)
+  :AssertEqual '', getline(9)
+  :AssertEqual 'type: %type', getline(10)
+
+--------------------------------------------------------------------------------
+Execute (define front_matter and template):
+  let zo_markdown = {}
+  let zo_markdown.front_matter = [ ["tags", ""], ["type", "note"] ]
+  let zo_markdown.template = "./resources/templ.tpl"
+  let g:zettel_options = [ zo_markdown ]
+  Log 'zettel_options: ' . string(g:zettel_options)
+
+Do (create new zettel with z):
+  Go
+  zettel with frontmatter and template\<Esc>
+  0wwv3ez\<CR>
+
+Then (new zettel with user defined frontmatter and template has been created):
+  :let date=strftime('%Y-%m-%d %H:%M')
+  :AssertEqual '---', getline(1)
+  :AssertEqual 'title: frontmatter and template', getline(2)
+  :AssertEqual 'date: '.date, getline(3)
+  :AssertEqual 'tags: ', getline(4)
+  :AssertEqual 'type: note', getline(5)
+  :AssertEqual '---', getline(6)
+  :AssertEqual '', getline(7)
+  :AssertEqual 'go back: [index](index)', getline(8)
+  :AssertEqual '', getline(9)
+  :AssertEqual '# frontmatter and template', getline(10)
+  :AssertEqual '', getline(11)
+  :AssertEqual 'type: note', getline(12)
+

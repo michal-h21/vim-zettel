@@ -509,6 +509,13 @@ commit changes in wiki and synchronize them with external Git repository.
 
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
+
+2024-01-31  l1laxS
+
+* tests/*: added testing infrastructure.
+  https://github.com/michal-h21/vim-zettel/pull/146
+
+
 2024-01-11  rfhlmn
 
 * autoload/zettel/vimwiki.vim: make link paths relative to current file.

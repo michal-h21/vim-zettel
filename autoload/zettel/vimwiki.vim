@@ -403,7 +403,7 @@ endfunction
 " find title in the zettel file and return correct link to it
 function! zettel#vimwiki#get_link(filename)
   let title =zettel#vimwiki#get_title(a:filename)
-  let wikiname = fnamemodify(a:filename, ":t:r")
+  let wikiname = vimwiki#vars#get_bufferlocal('subdir') . substitute(fnamemodify(a:filename, ":t"), vimwiki#vars#get_wikilocal('ext', vimwiki#vars#get_bufferlocal('wiki_nr')) . '$' , '', '')
   if title == ""
     " use the Zettel filename as title if it is empty
     let title = wikiname

@@ -510,6 +510,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2024-04-25   Matthieu Talbot
+
+* autoload/zettel/vimwiki.vim: Fix link generation when wiki extension has multiple dots
+  https://github.com/michal-h21/vim-zettel/pull/149
+
 2024-01-31  l1laxS
 
 * tests/*: added testing infrastructure.

@@ -28,8 +28,8 @@ endfunction
 
 " get clean wiki name from a filename
 function! s:get_wiki_file(filename)
-   let fileparts = split(a:filename, '\V.')
-   return join(fileparts[0:-2],".")
+  return substitute(a:filename, vimwiki#vars#get_wikilocal('ext', vimwiki#vars#get_bufferlocal('wiki_nr')) . '$' , '', '')
+
 endfunction
 
 function! s:get_line_number(line)

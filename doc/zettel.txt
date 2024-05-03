@@ -510,6 +510,12 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+
+2024-04-29   Matthieu Talbot
+
+* autoload/zettel/fzf.vim: Directly use the wiki extension setting instead of removing last dot.
+  https://github.com/michal-h21/vim-zettel/pull/150
+
 2024-04-25   Matthieu Talbot
 
 * autoload/zettel/vimwiki.vim: Fix link generation when wiki extension has multiple dots

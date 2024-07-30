@@ -197,8 +197,8 @@ with the given order.
                                                    *Vim-Zettel_ZettelSearch*
                                                               *ZettelSearch*
 - `:ZettelSearch` command – search the content of your zettelkasten and
-   insert a link to the selected zettel in your current note.  Mapped to
-   `[[` in insert mode.
+   insert links to the selected zettels in your current note. Use
+   <shift><tab> to select multiple notes. Mapped to `[[` in insert mode.
 
                                              *Vim-Zettel_ZettelSelectBuffer*
                                                         *ZettelSelectBuffer*
@@ -510,13 +510,18 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2024-07-30  Michal Hoftich <michal.h21@gmail.com>
 
-2024-04-29   Matthieu Talbot
+* autoload/zettel/fzf.vim, 
+* ftplugin/vimwiki/zettel.vim: enable selection of multiple selected notes
+  https://github.com/michal-h21/vim-zettel/issues/151
+
+2024-04-29  Matthieu Talbot
 
 * autoload/zettel/fzf.vim: Directly use the wiki extension setting instead of removing last dot.
   https://github.com/michal-h21/vim-zettel/pull/150
 
-2024-04-25   Matthieu Talbot
+2024-04-25  Matthieu Talbot
 
 * autoload/zettel/vimwiki.vim: Fix link generation when wiki extension has multiple dots
   https://github.com/michal-h21/vim-zettel/pull/149

@@ -71,19 +71,26 @@ endfunction
 
 
 " insert link for the searched zettel in the current note
-function! zettel#fzf#wiki_search(line,...)
-  let filename = s:get_fzf_filename(a:line)
-  let title = s:get_zettel_title(filename)
-  " insert the filename and title into the current buffer
-  let wikiname = s:get_wiki_file(filename)
-  " if the title is empty, the link will be hidden by vimwiki, use the filename
-  " instead
-  if empty(title)
-    let title = wikiname
-  end
-  let link = zettel#vimwiki#format_search_link(wikiname, title)
-  let line = getline('.')
+function! zettel#fzf#wiki_search(lines,...)
+  let links = []
+  " create links for all selected notes
+  for line in zettel#fzf#get_files(a:lines)
+    let filename = s:get_fzf_filename(line)
+    let title = s:get_zettel_title(filename)
+    " insert the filename and title into the current buffer
+    let wikiname = s:get_wiki_file(filename)
+    " if the title is empty, the link will be hidden by vimwiki, use the filename
+    " instead
+    if empty(title)
+      let title = wikiname
+    end
+    let link = zettel#vimwiki#format_search_link(wikiname, title)
+    call add(links, link)
+  endfor
+  " join all selected links with a comma
+  let link = join(links, ", ")
   " replace the [[ with selected link and title
+  let line = getline('.')
   let caret = col('.')
   call setline('.', strpart(line, 0, caret - 2) . link .  strpart(line, caret))
   call cursor(line('.'), caret + len(link) - 2)
@@ -138,6 +145,20 @@ function! zettel#fzf#sink_onefile(params, sink_function,...)
   let additional_options = get(a:, 1, {})
   call zettel#fzf#execute_fzf(a:params,
       \'--skip-vcs-ignores', fzf#vim#with_preview(zettel#fzf#preview_options(a:sink_function, additional_options)))
+endfunction
+
+" call FZF with a function that expects multiple selected values
+function! zettel#fzf#sink_multifile(params, sink_function,...)
+  " get optional argument that should contain additional options for the fzf
+  " preview window
+  let additional_options = get(a:, 1, {})
+  " we must move the sink function to sink*, which supports multiple selected
+  " values
+  let options = zettel#fzf#preview_options(a:sink_function, additional_options)
+  unlet options.sink
+  let options["sink*"] = function(a:sink_function)
+  call zettel#fzf#execute_fzf(a:params,
+      \'--skip-vcs-ignores', fzf#vim#with_preview(options))
 endfunction
 
 " open wiki page using FZF search

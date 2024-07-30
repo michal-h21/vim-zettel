@@ -20,7 +20,7 @@ endfunction
 
 " use visually selected text as a text for a link to note returned by FZF
 
-command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#wiki_search')
+command! -bang -nargs=* ZettelSearch call zettel#fzf#sink_multifile(<q-args>, 'zettel#fzf#wiki_search')
 
 command! -bang -nargs=* ZettelTitleSelected call zettel#fzf#sink_onefile(<q-args>, 'zettel#fzf#title_selected')
 

@@ -456,7 +456,7 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
-    let command = 'vimgrep ' . a:pattern . 'j ' . path . "*" . ext
+    let command = 'vimgrep ' . a:pattern . 'j ' . path . "**/*" . ext
     noautocmd  execute  command
   catch /^Vim\%((\a\+)\)\=:E480/   " No Match
     "Ignore it, and move on to the next file

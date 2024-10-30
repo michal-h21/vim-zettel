@@ -116,7 +116,7 @@ if vimwiki#vars#get_wikilocal('syntax',  vimwiki#vars#get_bufferlocal('wiki_nr')
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
-  let s:grep_link_pattern = '/\(%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
+  let s:grep_link_pattern = '/\(.*%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
   let s:section_pattern = "# %s"
 else
   let s:link_format = "[[%link|%title]]"
@@ -124,7 +124,7 @@ else
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
-  let s:grep_link_pattern = '/\[%s[|#\]]/'
+  let s:grep_link_pattern = '/\[.*%s[|#\]]/'
   let s:section_pattern = "= %s ="
 endif
 
@@ -403,7 +403,8 @@ endfunction
 " find title in the zettel file and return correct link to it
 function! zettel#vimwiki#get_link(filename)
   let title =zettel#vimwiki#get_title(a:filename)
-  let wikiname = vimwiki#vars#get_bufferlocal('subdir') . substitute(fnamemodify(a:filename, ":t"), vimwiki#vars#get_wikilocal('ext', vimwiki#vars#get_bufferlocal('wiki_nr')) . '$' , '', '')
+  let wikiname = vimwiki#base#subdir(vimwiki#vars#get_wikilocal('path'), a:filename).
+    \ substitute(fnamemodify(a:filename, ':t'), vimwiki#vars#get_wikilocal('ext', vimwiki#vars#get_bufferlocal('wiki_nr')) . '$' , '', '')
   if title == ""
     " use the Zettel filename as title if it is empty
     let title = wikiname
@@ -456,7 +457,7 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   try
-    let command = 'vimgrep ' . a:pattern . 'j ' . path . "*" . ext
+    let command = 'vimgrep ' . a:pattern . 'j ' . path . "**/*" . ext
     noautocmd  execute  command
   catch /^Vim\%((\a\+)\)\=:E480/   " No Match
     "Ignore it, and move on to the next file

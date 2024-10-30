@@ -510,6 +510,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2024-10-29  Matthieu Talbot
+
+* autoload/zettel/vimwiki.vim: fixed support for backlinks in subfolders.
+  https://github.com/michal-h21/vim-zettel/pull/153
+
 2024-07-30  Michal Hoftich <michal.h21@gmail.com>
 
 * autoload/zettel/fzf.vim, 

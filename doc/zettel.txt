@@ -516,6 +516,9 @@ commit changes in wiki and synchronize them with external Git repository.
   `zettel_new_selected()`.
   https://github.com/michal-h21/vim-zettel/issues/155
 
+* autoload/zettel/vimwiki.vim: fixed issues with backlinks to and from
+  subdirectories.
+
 2024-10-29  Matthieu Talbot
 
 * autoload/zettel/vimwiki.vim: fixed support for backlinks in subfolders.

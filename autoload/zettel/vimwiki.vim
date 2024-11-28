@@ -404,7 +404,11 @@ endfunction
 " find title in the zettel file and return correct link to it
 function! zettel#vimwiki#get_link(filename)
   let title =zettel#vimwiki#get_title(a:filename)
-  let wikiname = vimwiki#base#subdir(vimwiki#vars#get_wikilocal('path'), a:filename).
+  let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
+  let wiki_path =  zettel#vimwiki#path(idx)
+  " we will use absolute path from the wiki root for backlinks. This should
+  " fix issues with relative paths from subdirectories or diary
+  let wikiname = "/" . vimwiki#base#subdir(wiki_path, fnamemodify(a:filename, ":p")).
     \ substitute(fnamemodify(a:filename, ':t'), vimwiki#vars#get_wikilocal('ext', vimwiki#vars#get_bufferlocal('wiki_nr')) . '$' , '', '')
   if title == ""
     " use the Zettel filename as title if it is empty

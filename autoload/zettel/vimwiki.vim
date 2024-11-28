@@ -125,6 +125,7 @@ else
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
   let s:grep_link_pattern = '/\[.*%s[|#\]]/'
+
   let s:section_pattern = "= %s ="
 endif
 
@@ -697,10 +698,18 @@ function! zettel#vimwiki#zettel_new_selected()
     let prefix =  zettel#vimwiki#get_option('rel_path', idx)
     let name = "/" . prefix . name
     let linktitle = prefix . linktitle
+    execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_link( name, linktitle) ."\<cr>\<C-o>"
+  else
+    " if we are in zettelkasten, we should get absolute path anyway, but we
+    " use format_search_link to get a relative path to the current file
+    " https://github.com/michal-h21/vim-zettel/issues/155
+    let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
+    let prefix =  zettel#vimwiki#get_option('rel_path', idx)
+    let name = zettel#vimwiki#path(idx) . prefix . name
+    execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_search_link( name, linktitle) ."\<cr>\<C-o>"
   endif
   " replace the visually selected text with a link to the new zettel
   " \\%V.*\\%V. should select the whole visual selection
-  execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_link( name, linktitle) ."\<cr>\<C-o>"
   call zettel#vimwiki#zettel_new(title, variables)
 endfunction
 

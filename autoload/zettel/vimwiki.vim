@@ -124,7 +124,7 @@ else
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
-  let s:grep_link_pattern = '/\[.*%s[|#\]]/'
+  let s:grep_link_pattern = '"\[\[.*%s.*\]\]"'
   let s:section_pattern = "= %s ="
 endif
 
@@ -456,17 +456,9 @@ function! zettel#vimwiki#wikigrep(pattern)
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
-  try
-    let command = 'vimgrep ' . a:pattern . 'j ' . path . "**/*" . ext
-    noautocmd  execute  command
-  catch /^Vim\%((\a\+)\)\=:E480/   " No Match
-    "Ignore it, and move on to the next file
-  endtry
-  for d in getqflist()
-    let filename = fnamemodify(bufname(d.bufnr), ":p")
-    call add(paths, filename)
-  endfor
-  call uniq(paths)
+  " Assume this grepprg has dash l flag
+  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  let paths = systemlist(command)
   return paths
 endfunction
 

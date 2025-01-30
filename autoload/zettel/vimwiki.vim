@@ -116,7 +116,7 @@ if vimwiki#vars#get_wikilocal('syntax',  vimwiki#vars#get_bufferlocal('wiki_nr')
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
-  let s:grep_link_pattern = '/\(.*%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
+  let s:grep_link_pattern = '\(.*%s\.?m?d?\)' " match filename in  parens. including optional .md extension
   let s:section_pattern = "# %s"
 else
   let s:link_format = "[[%link|%title]]"
@@ -124,8 +124,8 @@ else
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
-  let s:grep_link_pattern = '/\[.*%s[|#\]]/'
-
+  " match the wiki id, terminated by |, # or ], to prevent false matches 
+  let s:grep_link_pattern = '"\[\[.*%s[|#\]]"'
   let s:section_pattern = "= %s ="
 endif
 
@@ -461,17 +461,17 @@ function! zettel#vimwiki#wikigrep(pattern)
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
-  try
-    let command = 'vimgrep ' . a:pattern . 'j ' . path . "**/*" . ext
-    noautocmd  execute  command
-  catch /^Vim\%((\a\+)\)\=:E480/   " No Match
-    "Ignore it, and move on to the next file
-  endtry
-  for d in getqflist()
-    let filename = fnamemodify(bufname(d.bufnr), ":p")
-    call add(paths, filename)
+  " Assume this grepprg has dash l flag
+  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  echom("grep command: " . command)
+  let paths = systemlist(command)
+  for path in paths
+    let path = fnamemodify(path, ':t')
+    " check if file exists, because systemlist returns also files that don't
+    if !filereadable(zettel#vimwiki#path(idx) . path)
+      call remove(paths, path)
+    endif
   endfor
-  call uniq(paths)
   return paths
 endfunction
 

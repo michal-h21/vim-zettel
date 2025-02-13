@@ -18,6 +18,7 @@ CONTENTS                                                           *vim-zettel*
    `ZettelOpen`                               |Vim-Zettel_ZettelOpen|
    `ZettelInsertNote`                         |Vim-Zettel_ZettelInsertNote|
    `ZettelCapture`                            |Vim-Zettel_ZettelCapture|
+   `ZettelNewSelectedMap`                     |Vim-Zettel_ZettelNewSelectedMap|
    `ZettelSetActiveWiki`                      |Vim-Zettel_ZettelSetActiveWiki|
    `ZettelBackLinks`                          |Vim-Zettel_ZettelBackLinks|
    `ZettelInbox`                              |Vim-Zettel_ZettelInbox|
@@ -161,13 +162,29 @@ with the given order.
 >
       vim -c "ZettelCapture 1" filename
 <
+
+
+                                            *Vim-Zettel_ZettelNewSelectedMap*
+                                                       *ZettelNewSelectedMap*
+- `:ZettelNewSelectedMap` creates a new note with the selected title while
+  converting the selection as a link to the newly created zettel. If you want
+  to replace the selected text about foo with a new zettel containing the
+  selection, you can do 
+
+    1. select lines about foo
+    2. delete
+    3. write a title for the new note
+    4. select the title
+    5. press z, which calls `ZettelNewSelectedMap` and creates a new note
+       with the selected title
+    6. paste the deleted content
+
                                              *Vim-Zettel_ZettelSetActiveWiki*
                                                         *ZettelSetActiveWiki*
 
 - `:ZettelSetActiveWiki` command - select default wiki for commands that can
   operate when Vimwiki is not active, like `:ZettelOpen` or
   `:ZettelInsertNote`.
-
 
                                                  *Vim-Zettel_ZettelBackLinks*
                                                             *ZettelBackLinks*

@@ -701,7 +701,6 @@ function! zettel#vimwiki#zettel_new_selected()
     let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
     let prefix =  zettel#vimwiki#get_option('rel_path', idx)
     let name = "/" . prefix . name
-    let linktitle = prefix . linktitle
     execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_link( name, linktitle) ."\<cr>\<C-o>"
   else
     " if we are in zettelkasten, we should get absolute path anyway, but we

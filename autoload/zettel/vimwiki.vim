@@ -462,7 +462,7 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   " Assume this grepprg has dash l flag
-  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
   echom("grep command: " . command)
   let paths = systemlist(command)
   for path in paths

@@ -527,6 +527,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2025/02/18  Matthieu Talbot
+
+* autoload/zettel/vimwiki.vim,
+* ftplugin/vimwiki/zettel.vim: added `ZettelCaptureSelected` function.
+
 2025/02/18  Cameron Johnson
 
 * autoload/zettel/vimwiki.vim: fixed titles for external links.

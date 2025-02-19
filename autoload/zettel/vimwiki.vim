@@ -701,7 +701,6 @@ function! zettel#vimwiki#zettel_new_selected()
     let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
     let prefix =  zettel#vimwiki#get_option('rel_path', idx)
     let name = "/" . prefix . name
-    let linktitle = prefix . linktitle
     execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_link( name, linktitle) ."\<cr>\<C-o>"
   else
     " if we are in zettelkasten, we should get absolute path anyway, but we
@@ -717,6 +716,30 @@ function! zettel#vimwiki#zettel_new_selected()
   call zettel#vimwiki#zettel_new(title, variables)
 endfunction
 
+function! zettel#vimwiki#zettel_capture_selected(title)
+  let selection = zettel#vimwiki#get_visual_selection()
+  let title = a:title
+  let name = zettel#vimwiki#new_zettel_name(title)
+  " prepare_template_variables needs the file saved on disk
+  execute "write"
+  " make variables that will be available in the new page template
+  let variables = zettel#vimwiki#prepare_template_variables(expand("%"), title)
+  let linktitle = "\\\\0"
+  if match(vimwiki#path#current_wiki_file(), zettel#vimwiki#path()) != 0
+    " if we are NOT in the zettelkasten, we should use absolute (vimwiki
+    " root-relative absolute) paths for the name
+    let idx = a:0 ? a:1 : vimwiki#vars#get_bufferlocal('wiki_nr')
+    let prefix =  zettel#vimwiki#get_option('rel_path', idx)
+    let name = "/" . prefix . name
+    let linktitle = prefix . linktitle
+  endif
+  " replace the visually selected text with a link to the new zettel
+  " \\%V.*\\%V. should select the whole visual selection
+  execute "normal! :'<,'>s:\\%V.*\\%V.:" . zettel#vimwiki#format_link( name, linktitle) ."\<cr>\<C-o>"
+  call zettel#vimwiki#zettel_new(title, variables)
+  " paste selection at end of file
+  execute "normal! Go" . selection
+endfunction
 
 " prepare variables that will be available to expand in the new note template
 function! zettel#vimwiki#prepare_template_variables(filename, title)

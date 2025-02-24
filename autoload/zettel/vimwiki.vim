@@ -126,6 +126,7 @@ else
   let s:insert_mode_title_format = "h"
   " match the wiki id, terminated by |, # or ], to prevent false matches 
   let s:grep_link_pattern = '"\[\[.*%s[|#\]]"'
+  " let s:grep_link_pattern = '"\[\[.*%s.*\]\]"'
   let s:section_pattern = "= %s ="
 endif
 
@@ -462,7 +463,8 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   " Assume this grepprg has dash l flag
-  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
+  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  " let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
   echom("grep command: " . command)
   let paths = systemlist(command)
   for path in paths

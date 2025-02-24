@@ -168,16 +168,14 @@ with the given order.
                                                        *ZettelNewSelectedMap*
 - `:ZettelNewSelectedMap` creates a new note with the selected title while
   converting the selection as a link to the newly created zettel. If you want
-  to replace the selected text about foo with a new zettel containing the
-  selection, you can do 
+  the selection to be the note's content instead, see ZettelCaptureSelected.
 
-    1. select lines about foo
-    2. delete
-    3. write a title for the new note
-    4. select the title
-    5. press z, which calls `ZettelNewSelectedMap` and creates a new note
-       with the selected title
-    6. paste the deleted content
+                                           *Vim-Zettel_ZettelCaptureSelected*
+                                                      *ZettelCaptureSelected*
+- `:ZettelCaptureSelected(title)` creates a new note with the selected content
+  and the title passed as a parameter. The selection is converted to a link
+  to the newly created zettel. If you want the selected text to be the title
+  instead, see ZettelNewSelectedMap.
 
                                              *Vim-Zettel_ZettelSetActiveWiki*
                                                         *ZettelSetActiveWiki*

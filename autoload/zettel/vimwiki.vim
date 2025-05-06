@@ -463,7 +463,8 @@ function! zettel#vimwiki#wikigrep(pattern)
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   " Assume this grepprg has dash l flag
   let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
-  let paths = systemlist(command)
+  " Needs trimming on windows, see `:h systemlist`
+  let paths = systemlist(l:command)->map('trim(v:val)')
   return paths
 endfunction
 

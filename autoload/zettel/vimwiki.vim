@@ -462,7 +462,10 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   " Assume this grepprg has dash l flag
-  let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  " this is for ag, but I could not make ag works on windows because of output encoding
+  "let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
+  " this is for rg, and works great on windows
+  let l:command = &grepprg . ' -l ' . a:pattern . ' ' . path . " --glob=*" . ext
   " Needs trimming on windows, see `:h systemlist`
   let paths = systemlist(l:command)->map('trim(v:val)')
   return paths

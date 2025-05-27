@@ -474,9 +474,9 @@ function! zettel#vimwiki#wikigrep(pattern)
   for path in paths
     let path = fnamemodify(path, ':t')
     " check if file exists, because systemlist returns also files that don't
-    if !filereadable(zettel#vimwiki#path(idx) . path)
-      call remove(paths, path)
-    endif
+    " if !filereadable(zettel#vimwiki#path(idx) . path)
+      " call remove(paths, path)
+    " endif
   endfor
   return paths
 endfunction

@@ -462,11 +462,11 @@ function! zettel#vimwiki#wikigrep(pattern)
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
-  if match(&grepprg, 'ag') >= 0
+  if match(&grepprg, '^ag') >= 0
     " ag does not support --glob, so we need to use -g
     " let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
     let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . "*" . ext
-  elseif match(&grepprg, 'rg') >= 0
+  elseif match(&grepprg, '^rg') >= 0
     " rg supports --glob, so we can use it
     let l:command = &grepprg . ' -l ' . a:pattern . ' ' . path . " --glob=*" . ext
   else

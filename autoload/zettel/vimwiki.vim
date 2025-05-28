@@ -462,12 +462,17 @@ function! zettel#vimwiki#wikigrep(pattern)
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
-  " this is for ag, but I could not make ag works on windows because of output encoding
-  " Assume this grepprg has dash l flag
-  "let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " *" . ext
-  " this is for rg, and works great on windows
-  let l:command = &grepprg . ' -l ' . a:pattern . ' ' . path . " --glob=*" . ext
-  " let command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
+  if match(&grepprg, 'ag') >= 0
+    " ag does not support --glob, so we need to use -g
+    " let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
+    let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . "*" . ext
+  elseif match(&grepprg, 'rg') >= 0
+    " rg supports --glob, so we can use it
+    let l:command = &grepprg . ' -l ' . a:pattern . ' ' . path . " --glob=*" . ext
+  else
+    " use grep by default
+    let l:command = 'grep -l -P ' . a:pattern . ' -r ' . path . "*" . ext
+  endif
   echom("grep command: " . l:command)
   " Needs trimming on windows, see `:h systemlist`
   let paths = systemlist(l:command)->map('trim(v:val)')

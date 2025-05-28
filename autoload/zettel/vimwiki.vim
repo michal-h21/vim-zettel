@@ -465,10 +465,10 @@ function! zettel#vimwiki#wikigrep(pattern)
   if match(&grepprg, '^ag') >= 0
     " ag does not support --glob, so we need to use -g
     " let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
-    let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . "*" . ext
+    let l:command = 'ag -l ' . a:pattern . ' -r ' . path . "*" . ext
   elseif match(&grepprg, '^rg') >= 0
     " rg supports --glob, so we can use it
-    let l:command = &grepprg . ' -l ' . a:pattern . ' ' . path . " --glob=*" . ext
+    let l:command = 'rg -l ' . a:pattern . ' ' . path . " --glob=*" . ext
   else
     " use grep by default
     let l:command = 'grep -l -P ' . a:pattern . ' -r ' . path . "*" . ext

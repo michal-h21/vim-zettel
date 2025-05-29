@@ -456,6 +456,16 @@ function! s:get_links(wikifile, idx)
   return links
 endfunction
 
+
+function! zettel#vimwiki#format_wikigrep(format, pattern, path, ext)
+  " format string for use in the zettel#vimwiki#wikigrep function
+  " format is a string with %pattern, %path and %ext placeholders
+  let command = substitute(a:format, "%pattern", escape(a:pattern, '\'), "")
+  let command = substitute(command, "%path", a:path, "")
+  let command = substitute(command, "%ext", a:ext, "")
+  return command
+endfunction
+
 " return list of files that match a pattern
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
@@ -463,16 +473,17 @@ function! zettel#vimwiki#wikigrep(pattern)
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
   if match(&grepprg, '^ag') >= 0
-    " ag does not support --glob, so we need to use -g
-    " let l:command = &grepprg . ' -l ' . a:pattern . ' -r ' . path . " -g '*" . ext . "'"
-    let l:command = 'ag -l ' . a:pattern . ' -r ' . path . "*" . ext
+    " ag does not support --glob, so we need to include the extension pattern
+    " in the -r option
+    let l:command = 'ag -l %pattern -r %path*%ext'
   elseif match(&grepprg, '^rg') >= 0
     " rg supports --glob, so we can use it
-    let l:command = 'rg -l ' . a:pattern . ' ' . path . " --glob=*" . ext
+    let l:command = 'rg -l %pattern %path  --glob=*%ext'
   else
     " use grep by default
-    let l:command = 'grep -l -P ' . a:pattern . ' -r ' . path . "*" . ext
+    let l:command = 'grep -l -P %pattern  -r %path*%ext'
   endif
+  let l:command = zettel#vimwiki#format_wikigrep(l:command, a:pattern, path, ext)
   echom("grep command: " . l:command)
   " Needs trimming on windows, see `:h systemlist`
   let paths = systemlist(l:command)->map('trim(v:val)')

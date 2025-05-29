@@ -98,6 +98,7 @@ Vim-Zettel work to your liking:
 - |g:zettel_unlinked_notes_title_level|
 - |g:zettel_generated_tags_title|
 - |g:zettel_generated_tags_title_level|
+- |g:zettel_wikigrep_command|
 
 You can also supply a custom template for creating new zettels. See
 |Vim-Zettel-Templates|.
@@ -187,8 +188,20 @@ with the given order.
                                                  *Vim-Zettel_ZettelBackLinks*
                                                             *ZettelBackLinks*
 - `:ZettelBackLinks` command – insert list of notes that link to the current
-   note.
+   note. It uses a grep like command to collect files that link to the current
+   file. By default, it checks the `grepprg` option to detect the command. It
+   supports `ag`, `rg` and `grep`. You can change the used command using the
+   |g:zettel_wikigrep_command| variable:
 
+>
+      g:zettel_wikigrep_command = 'ag -l %pattern -r %path*%ext'
+
+The template supports following variables:
+>
+      %pattern  regular expression containing name of the current note
+      %path     root directory of the wiki
+      %ext      file extension of notes used in the current wiki
+< 
                                                      *Vim-Zettel_ZettelInbox*
                                                                 *ZettelInbox*
 - `:ZettelInbox` command – insert list of notes that are not reachable from

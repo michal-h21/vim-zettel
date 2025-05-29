@@ -485,6 +485,10 @@ function! zettel#vimwiki#wikigrep(pattern)
     " use grep by default
     let l:command = 'grep -l -P %pattern  -r %path*%ext'
   endif
+  if exists('g:zettel_wikigrep_command')
+    " use user defined command
+    let l:command = g:zettel_wikigrep_command
+  endif
   let l:command = zettel#vimwiki#format_wikigrep(l:command, a:pattern, path, ext)
   echom("grep command: " . l:command)
   " Needs trimming on windows, see `:h systemlist`

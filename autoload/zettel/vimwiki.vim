@@ -116,7 +116,7 @@ if vimwiki#vars#get_wikilocal('syntax',  vimwiki#vars#get_bufferlocal('wiki_nr')
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
-  let s:grep_link_pattern = '/\(.*%s\.\{-}m\{-}d\{-}\)/' " match filename in  parens. including optional .md extension
+  let s:grep_link_pattern = '\(.*%s\.?m?d?\)' " match filename in  parens. including optional .md extension
   let s:section_pattern = "# %s"
 else
   let s:link_format = "[[%link|%title]]"
@@ -124,8 +124,9 @@ else
   let s:header_format = "%%%s %s"
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
-  let s:grep_link_pattern = '/\[.*%s[|#\]]/'
-
+  " match the wiki id, terminated by |, # or ], to prevent false matches 
+  let s:grep_link_pattern = '"\[\[.*%s[|#\]]"'
+  " let s:grep_link_pattern = '"\[\[.*%s.*\]\]"'
   let s:section_pattern = "= %s ="
 endif
 
@@ -455,23 +456,50 @@ function! s:get_links(wikifile, idx)
   return links
 endfunction
 
+
+function! zettel#vimwiki#format_wikigrep(format, pattern, path, ext)
+  " format string for use in the zettel#vimwiki#wikigrep function
+  " format is a string with %pattern, %path and %ext placeholders
+  " the resulting command should accept regular expression in the pattern
+  " and only list matched files 
+  let command = substitute(a:format, "%pattern", escape(a:pattern, '\'), "")
+  let command = substitute(command, "%path", a:path, "")
+  let command = substitute(command, "%ext", a:ext, "")
+  return command
+endfunction
+
 " return list of files that match a pattern
 function! zettel#vimwiki#wikigrep(pattern)
   let paths = []
   let idx = vimwiki#vars#get_bufferlocal('wiki_nr')
   let path = fnameescape(zettel#vimwiki#path(idx))
   let ext = vimwiki#vars#get_wikilocal('ext', idx)
-  try
-    let command = 'vimgrep ' . a:pattern . 'j ' . path . "**/*" . ext
-    noautocmd  execute  command
-  catch /^Vim\%((\a\+)\)\=:E480/   " No Match
-    "Ignore it, and move on to the next file
-  endtry
-  for d in getqflist()
-    let filename = fnamemodify(bufname(d.bufnr), ":p")
-    call add(paths, filename)
+  if match(&grepprg, '^ag') >= 0
+    " ag does not support --glob, so we need to include the extension pattern
+    " in the -r option
+    let l:command = 'ag -l %pattern -r %path*%ext'
+  elseif match(&grepprg, '^rg') >= 0
+    " rg supports --glob, so we can use it
+    let l:command = 'rg -l %pattern %path  --glob=*%ext'
+  else
+    " use grep by default
+    let l:command = 'grep -l -P %pattern  -r %path*%ext'
+  endif
+  if exists('g:zettel_wikigrep_command')
+    " use user defined command
+    let l:command = g:zettel_wikigrep_command
+  endif
+  let l:command = zettel#vimwiki#format_wikigrep(l:command, a:pattern, path, ext)
+  echom("grep command: " . l:command)
+  " Needs trimming on windows, see `:h systemlist`
+  let paths = systemlist(l:command)->map('trim(v:val)')
+  for path in paths
+    let path = fnamemodify(path, ':t')
+    " check if file exists, because systemlist returns also files that don't
+    " if !filereadable(zettel#vimwiki#path(idx) . path)
+      " call remove(paths, path)
+    " endif
   endfor
-  call uniq(paths)
   return paths
 endfunction
 

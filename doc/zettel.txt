@@ -194,7 +194,7 @@ with the given order.
    |g:zettel_wikigrep_command| variable:
 
 >
-      g:zettel_wikigrep_command = 'ag -l %pattern -r %path*%ext'
+      let g:zettel_wikigrep_command = 'ag -l %pattern -r %path*%ext'
 
 The template supports following variables:
 >

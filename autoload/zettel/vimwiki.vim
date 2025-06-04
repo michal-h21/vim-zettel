@@ -463,7 +463,7 @@ function! zettel#vimwiki#format_wikigrep(format, pattern, path, ext)
   " the resulting command should accept regular expression in the pattern
   " and only list matched files 
   let command = substitute(a:format, "%pattern", escape(a:pattern, '\'), "")
-  let command = substitute(command, "%path", a:path, "")
+  let command = substitute(command, "%path", escape(a:path, '\'), "")
   let command = substitute(command, "%ext", a:ext, "")
   return command
 endfunction

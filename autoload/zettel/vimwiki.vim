@@ -116,7 +116,7 @@ if vimwiki#vars#get_wikilocal('syntax',  vimwiki#vars#get_bufferlocal('wiki_nr')
   let s:header_format = "%s: %s"
   let s:header_delimiter = "---"
   let s:insert_mode_title_format = "``l"
-  let s:grep_link_pattern = '\(.*%s\.?m?d?\)' " match filename in  parens. including optional .md extension
+  let s:grep_link_pattern = '"\(.*%s\.?m?d?\)"' " match filename in  parens. including optional .md extension
   let s:section_pattern = "# %s"
 else
   let s:link_format = "[[%link|%title]]"
@@ -125,7 +125,7 @@ else
   let s:header_delimiter = ""
   let s:insert_mode_title_format = "h"
   " match the wiki id, terminated by |, # or ], to prevent false matches 
-  let s:grep_link_pattern = '"\[\[.*%s[|#\]]"'
+  let s:grep_link_pattern = '"\[\[.*%s(\||#|\]\])"'
   " let s:grep_link_pattern = '"\[\[.*%s.*\]\]"'
   let s:section_pattern = "= %s ="
 endif
@@ -483,7 +483,7 @@ function! zettel#vimwiki#wikigrep(pattern)
     let l:command = 'rg -l %pattern %path  --glob=*%ext'
   else
     " use grep by default
-    let l:command = 'grep -l -P %pattern  -r %path*%ext'
+    let l:command = 'grep -l -E %pattern  -r %path*%ext'
   endif
   if exists('g:zettel_wikigrep_command')
     " use user defined command

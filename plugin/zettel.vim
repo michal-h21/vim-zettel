@@ -8,6 +8,10 @@ let g:loaded_zettel = 1
 command! -nargs=? -bang ZettelCapture
       \ call zettel#vimwiki#zettel_capture(<q-args>)
 
+command! -range -nargs=* ZettelCaptureSelected
+      \ call call('zettel#vimwiki#zettel_capture_selected',
+      \           empty(<q-args>) ? [] : [<q-args>])
+
 " make fulltext search in all VimWiki files using FZF
 " command! -bang -nargs=* ZettelSearch call fzf#vim#ag(<q-args>, 
 command! -bang -nargs=* ZettelInsertNote call zettel#fzf#execute_fzf(<q-args>, 
@@ -24,4 +28,3 @@ command! -bang -nargs=* ZettelOpen call zettel#fzf#sink_onefile(<q-args>, 'zette
 
 " crate new zettel using command
 command! -bang -nargs=* ZettelNew call zettel#vimwiki#zettel_new(<q-args>)
-

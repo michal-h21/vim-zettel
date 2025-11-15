@@ -49,7 +49,6 @@ nnoremap <silent> <Plug>ZettelSearchMap :ZettelSearch<cr>
 nnoremap <silent> <Plug>ZettelYankNameMap :ZettelYankName<cr> 
 nnoremap <silent> <Plug>ZettelReplaceFileWithLink :call <sid>replace_file_with_link()<cr> 
 xnoremap <silent> <Plug>ZettelNewSelectedMap :call zettel#vimwiki#zettel_new_selected()<CR>
-xnoremap <silent> <Plug>ZettelCaptureSelected :call zettel#vimwiki#zettel_capture_selected()<CR>
 
 " make fulltext search in all VimWiki files using FZF and insert link to the
 " found file

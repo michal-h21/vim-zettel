@@ -364,6 +364,10 @@ or `T` keys).
 Text used for `%title` formatting string in new Zettel filename if title was
 not provided.
 
+                                                *g:zettel_filename_sanitize*
+When non-zero, Vim-Zettel replaces consecutive whitespace characters with a
+single dash in newly generated filenames before checking for collisions.
+
                                                      *g:zettel_date_format*
 Date format used for date metadata in front matter for a new zettel. It will
 need to be supported by the `strftime()` function.

@@ -193,6 +193,9 @@ if !exists('g:zettel_generated_tags_title_level')
   let g:zettel_generated_tags_title_level = 1
 endif
 
+if !exists('g:zettel_filename_sanitize')
+  let g:zettel_filename_sanitize = 0
+endif
 " format of a new zettel filename
 if !exists('g:zettel_format')
   let g:zettel_format = "%y%m%d-%H%M"
@@ -389,7 +392,10 @@ function! zettel#vimwiki#new_zettel_name(...)
     " twice.
     let newformat = substitute(newformat, "%random", s:randomchars, "")
   endif
-  let final_format =  strftime(newformat)
+  let final_format = zettel#vimwiki#sanitize_filename(strftime(newformat))
+  if empty(final_format)
+    let final_format = zettel#vimwiki#escape_filename(g:zettel_default_title)
+  endif
   if !s:wiki_file_not_exists(final_format)
     " if the current file name is used, increase counter and add it as a
     " letter to the file name. this ensures that we don't reuse the filename
@@ -520,6 +526,17 @@ endfunction
 " use different link style for wiki and markdown syntaxes
 function! zettel#vimwiki#format_link(file, title)
   return zettel#vimwiki#format_file_title(s:link_format, a:file, a:title)
+endfunction
+
+function! zettel#vimwiki#sanitize_filename_whitespace(name) abort
+  return substitute(a:name, '\s\+', '-', 'g')
+endfunction
+
+function! zettel#vimwiki#sanitize_filename(name) abort
+  if !get(g:, 'zettel_filename_sanitize', 0)
+    return a:name
+  endif
+  return zettel#vimwiki#sanitize_filename_whitespace(a:name)
 endfunction
 
 function zettel#vimwiki#make_path_relative_to_curfile(targetfile, curfile)

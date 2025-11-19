@@ -58,7 +58,7 @@ function! zettel#fzf#execute_fzf(a, b, options)
     let l:fzf_command = g:zettel_fzf_command . ' --color --smart-case --nogroup --column ' . shellescape(query)  " --ignore-case --smart-case
   else
     " use grep method for other commands
-    let search_ext = "*" . vimwiki#vars#get_wikilocal('ext')
+    let search_ext = "**/*" . vimwiki#vars#get_wikilocal('ext')
     let l:fzf_command = g:zettel_fzf_command . " " . shellescape(a:a)
   endif
 

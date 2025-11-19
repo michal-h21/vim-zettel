@@ -542,6 +542,11 @@ commit changes in wiki and synchronize them with external Git repository.
 ==============================================================================
 8.  Changelog                                            *Vim-Zettel-ChangeLog*
 
+2025/11/19  Matthieu Talbot
+
+* autoload/zettel/vimwiki.vim: added `g:zettel_filename_sanitize` option to
+  replace spaces in filenames with dashes.
+
 2025/11/15  Matthieu Talbot
 
 * autoload/zettel/vimwiki.vim,
